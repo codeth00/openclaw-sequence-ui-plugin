@@ -1,0 +1,1164 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OpenClaw 执行时序图</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Sans+SC:wght@400;500;700&display=swap");
+
+    :root {
+      --bg-0: #091320;
+      --bg-1: #0f2338;
+      --line: rgba(145, 220, 236, 0.28);
+      --line-soft: rgba(145, 220, 236, 0.14);
+      --text: #ecf8ff;
+      --text-soft: #c7dbeb;
+      --a2a: #67e6c7;
+      --spawn: #ffcc7a;
+      --user: #80cfff;
+      --shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+      --header-h: 66px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: radial-gradient(circle at 12% 8%, #122943 0%, var(--bg-0) 46%), var(--bg-0);
+      color: var(--text);
+      font-family: "Noto Sans SC", sans-serif;
+    }
+
+    body { padding: 14px; }
+
+    .app {
+      max-width: 1520px;
+      margin: 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background: linear-gradient(180deg, rgba(10, 25, 42, 0.95), rgba(6, 15, 25, 0.95));
+      height: calc(100vh - 28px);
+      display: grid;
+      grid-template-rows: auto auto 1fr;
+      min-height: 620px;
+    }
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line-soft);
+      background: linear-gradient(90deg, rgba(10, 30, 48, 0.94), rgba(8, 22, 38, 0.9));
+    }
+
+    .title-wrap { display: grid; gap: 3px; }
+
+    .title {
+      margin: 0;
+      font-family: "ZCOOL XiaoWei", serif;
+      font-size: clamp(24px, 2.2vw, 34px);
+      letter-spacing: 0.3px;
+    }
+
+    .subtitle {
+      margin: 0;
+      font-size: 13px;
+      color: var(--text-soft);
+      opacity: 0.9;
+    }
+
+    .live-state {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(149, 227, 240, 0.35);
+      background: rgba(11, 35, 54, 0.58);
+      font-size: 11px;
+      color: #def6ff;
+      white-space: nowrap;
+    }
+
+    .live-state[data-state="online"] {
+      border-color: rgba(103, 230, 199, 0.62);
+      color: #c7ffef;
+      background: rgba(29, 84, 72, 0.5);
+    }
+
+    .live-state[data-state="reconnecting"] {
+      border-color: rgba(255, 204, 122, 0.7);
+      color: #ffe7c0;
+      background: rgba(88, 58, 23, 0.56);
+    }
+
+    .controls {
+      padding: 10px 14px;
+      border-bottom: 1px solid var(--line-soft);
+      display: grid;
+      grid-template-columns: repeat(5, auto) minmax(180px, 240px) minmax(220px, 1fr);
+      gap: 10px;
+      align-items: center;
+      background: rgba(8, 21, 34, 0.88);
+    }
+
+    .button {
+      border: 1px solid rgba(160, 236, 248, 0.33);
+      color: var(--text);
+      background: rgba(34, 80, 108, 0.55);
+      border-radius: 999px;
+      padding: 8px 13px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 120ms ease, background 120ms ease;
+    }
+
+    .button:hover { transform: translateY(-1px); background: rgba(45, 102, 133, 0.66); }
+    .button:active { transform: translateY(1px); }
+    .button:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
+
+    .button.is-primary {
+      background: linear-gradient(90deg, rgba(79, 210, 252, 0.3), rgba(143, 252, 217, 0.26));
+      border-color: rgba(154, 247, 255, 0.65);
+    }
+
+    .slider-wrap,
+    .progress-wrap {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(141, 222, 235, 0.23);
+      border-radius: 10px;
+      background: rgba(17, 44, 65, 0.54);
+      padding: 6px 9px;
+      min-width: 0;
+    }
+
+    .slider-wrap label,
+    .progress-wrap label {
+      font-size: 12px;
+      color: var(--text-soft);
+      opacity: 0.92;
+      white-space: nowrap;
+    }
+
+    .slider-wrap input,
+    .progress-wrap input {
+      width: 100%;
+      min-width: 0;
+    }
+
+    .slider-wrap span,
+    .progress-wrap span {
+      font-size: 12px;
+      color: var(--text);
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .board {
+      min-height: 0;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(7, 18, 30, 0.96), rgba(5, 12, 21, 0.98));
+    }
+
+    .diagram-scroll {
+      position: relative;
+      min-height: 100%;
+      height: 100%;
+      overflow: auto;
+      scrollbar-gutter: stable both-edges;
+    }
+
+    .diagram-header {
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      backdrop-filter: blur(3px);
+      background: linear-gradient(180deg, rgba(7, 20, 34, 0.96), rgba(7, 20, 34, 0.88));
+      border-bottom: 1px solid var(--line-soft);
+    }
+
+    #diagram-header-svg {
+      display: block;
+      height: var(--header-h);
+    }
+
+    #diagram {
+      display: block;
+      min-width: 100%;
+      height: auto;
+    }
+
+    .hover-pop {
+      position: absolute;
+      z-index: 6;
+      display: none;
+      max-width: min(520px, 72vw);
+      max-height: 56vh;
+      overflow: auto;
+      border: 1px solid rgba(149, 227, 240, 0.4);
+      border-radius: 10px;
+      background: rgba(7, 24, 39, 0.96);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.52);
+      padding: 10px 10px 9px;
+      pointer-events: none;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .hover-pop-meta {
+      font-size: 11px;
+      color: #cde8f7;
+      opacity: 0.9;
+      margin-bottom: 6px;
+    }
+
+    .hover-pop-body {
+      font-size: 12px;
+      line-height: 1.48;
+      color: #f2fbff;
+    }
+
+    @media (max-width: 1220px) {
+      .controls {
+        grid-template-columns: repeat(5, auto) minmax(170px, 1fr);
+      }
+      .progress-wrap { grid-column: 1 / -1; }
+    }
+
+    @media (max-width: 760px) {
+      body { padding: 8px; }
+      .app { height: calc(100vh - 16px); }
+      .controls {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .slider-wrap,
+      .progress-wrap { grid-column: 1 / -1; }
+      .button { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="title-wrap">
+        <h1 class="title">OpenClaw 执行时序图</h1>
+        <p class="subtitle">自动读取历史 session，动态渲染 人 / main / 子agent 的交互流程</p>
+      </div>
+      <span class="live-state" id="live-state" data-state="connecting">连接中</span>
+    </header>
+
+    <section class="controls">
+      <button class="button is-primary" id="toggle">暂停播放</button>
+      <button class="button" id="prev-step">上一步</button>
+      <button class="button" id="next-step">下一步</button>
+      <button class="button" id="reload">重载历史</button>
+      <button class="button" id="toggle-process">显示过程信息</button>
+
+      <div class="slider-wrap">
+        <label for="speed">速度</label>
+        <input id="speed" type="range" min="0.5" max="3" value="1" step="0.1" />
+        <span id="speed-value">1.0x</span>
+      </div>
+
+      <div class="progress-wrap">
+        <label for="progress">进度</label>
+        <input id="progress" type="range" min="0" max="0" value="0" step="1" />
+        <span id="progress-text">0 / 0</span>
+      </div>
+    </section>
+
+    <main class="board">
+      <div class="diagram-scroll" id="diagram-scroll">
+        <div class="diagram-header" id="diagram-header">
+          <svg id="diagram-header-svg" aria-hidden="true"></svg>
+        </div>
+        <svg id="diagram" aria-label="OpenClaw 时序图"></svg>
+        <div class="hover-pop" id="hover-pop" aria-hidden="true">
+          <div class="hover-pop-meta" id="hover-pop-meta"></div>
+          <div class="hover-pop-body" id="hover-pop-body"></div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    (() => {
+      const NS = "http://www.w3.org/2000/svg";
+      const HEADER_H = 66;
+
+      const liveStateEl = document.getElementById("live-state");
+      const toggleBtn = document.getElementById("toggle");
+      const prevBtn = document.getElementById("prev-step");
+      const nextBtn = document.getElementById("next-step");
+      const reloadBtn = document.getElementById("reload");
+      const processBtn = document.getElementById("toggle-process");
+
+      const speedInput = document.getElementById("speed");
+      const speedValueEl = document.getElementById("speed-value");
+      const progressInput = document.getElementById("progress");
+      const progressTextEl = document.getElementById("progress-text");
+
+      const diagramScroll = document.getElementById("diagram-scroll");
+      const diagramHeaderSvg = document.getElementById("diagram-header-svg");
+      const diagram = document.getElementById("diagram");
+      const hoverPop = document.getElementById("hover-pop");
+      const hoverPopMeta = document.getElementById("hover-pop-meta");
+      const hoverPopBody = document.getElementById("hover-pop-body");
+
+      const measureCanvas = document.createElement("canvas");
+      const measureCtx = measureCanvas.getContext("2d");
+      measureCtx.font = '12px "Noto Sans SC", sans-serif';
+
+      const state = {
+        timeline: [],
+        agents: [],
+        idSet: new Set(),
+        cursor: 0,
+        running: true,
+        speed: Number(speedInput.value || 1),
+        timer: null,
+        source: null,
+        forceBottom: false,
+        showInternal: false
+      };
+
+      const modeColor = {
+        user: "#80cfff",
+        spawn: "#ffcc7a",
+        a2a: "#67e6c7",
+        internal: "#ff9ac1"
+      };
+
+      function setLiveState(kind, text) {
+        liveStateEl.dataset.state = kind;
+        liveStateEl.textContent = text;
+      }
+
+      function setToggleText() {
+        toggleBtn.textContent = state.running ? "暂停播放" : "继续播放";
+      }
+
+      function safeMode(mode) {
+        return ["user", "spawn", "a2a", "internal"].includes(mode) ? mode : "a2a";
+      }
+
+      function extractSessionTag(raw, id) {
+        if (raw && raw.meta && typeof raw.meta.sessionRef === "string" && raw.meta.sessionRef.trim()) {
+          return raw.meta.sessionRef.trim();
+        }
+        if (!id || typeof id !== "string") return "";
+        const idx = id.indexOf(":");
+        if (idx <= 0) return "";
+        return id.slice(0, idx);
+      }
+
+      function normalizeEvent(raw) {
+        if (!raw || typeof raw !== "object") return null;
+        if (typeof raw.from !== "string" || typeof raw.to !== "string") return null;
+
+        const mode = safeMode(raw.mode);
+        const meta = raw.meta && typeof raw.meta === "object" ? raw.meta : {};
+        const text = typeof raw.text === "string" && raw.text.trim() ? raw.text.trim() : "(空消息)";
+        const ts = Number(raw.ts) || Date.now();
+        const id = String(raw.id || `${raw.seq || ""}-${ts}-${Math.random().toString(36).slice(2)}`);
+        const mechanism =
+          typeof meta.tool === "string" && meta.tool.trim()
+            ? meta.tool.trim()
+            : mode === "spawn"
+              ? "sessions_spawn"
+              : mode === "a2a"
+                ? "sessions_send"
+                : mode === "internal"
+                  ? (typeof meta.module === "string" && meta.module.trim() ? meta.module.trim() : "process")
+                  : "user_message";
+        const stage = typeof meta.stage === "string" ? meta.stage.trim() : "";
+
+        return {
+          id,
+          ts,
+          mode,
+          from: raw.from,
+          to: raw.to,
+          text,
+          sessionTag: extractSessionTag(raw, id),
+          mechanism,
+          stage
+        };
+      }
+
+      function displayAgent(id) {
+        return id === "user" ? "人" : id;
+      }
+
+      function modeName(mode) {
+        if (mode === "spawn") return "SPAWN";
+        if (mode === "user") return "USER";
+        if (mode === "internal") return "PROC";
+        return "A2A";
+      }
+
+      function formatTime(ts) {
+        return new Date(ts).toLocaleTimeString();
+      }
+
+      function addAgent(agentId) {
+        if (!agentId || state.agents.includes(agentId)) return;
+
+        if (agentId === "user") {
+          state.agents.unshift(agentId);
+          return;
+        }
+
+        if (agentId === "main") {
+          const idx = state.agents.includes("user") ? 1 : 0;
+          state.agents.splice(idx, 0, agentId);
+          return;
+        }
+
+        state.agents.push(agentId);
+      }
+
+      function wrapText(text, maxWidth, maxLines) {
+        const lines = [];
+        const parts = String(text || "").split(/\r?\n/);
+
+        for (let p = 0; p < parts.length; p += 1) {
+          const part = parts[p];
+          if (!part) {
+            if (lines.length < maxLines) lines.push("");
+            if (lines.length >= maxLines) break;
+            continue;
+          }
+
+          let line = "";
+          for (const ch of part) {
+            const next = line + ch;
+            if (measureCtx.measureText(next).width <= maxWidth || line.length === 0) {
+              line = next;
+            } else {
+              lines.push(line);
+              line = ch;
+              if (lines.length >= maxLines) break;
+            }
+          }
+
+          if (lines.length >= maxLines) break;
+          if (line) lines.push(line);
+          if (lines.length >= maxLines) break;
+        }
+
+        if (!lines.length) lines.push("(空)");
+        if (lines.length > maxLines) lines.length = maxLines;
+        return lines;
+      }
+
+      function mechanismLabel(evt) {
+        if (!evt || typeof evt.mechanism !== "string") return "";
+        if (!evt.mechanism.startsWith("sessions_")) return "";
+        if (evt.stage) return `${evt.mechanism} (${evt.stage})`;
+        return evt.mechanism;
+      }
+
+      function buildEventMetrics(evt, y, labelMaxW, totalLines) {
+        const metaText = `${formatTime(evt.ts)} · ${modeName(evt.mode)} · ${displayAgent(evt.from)} -> ${displayAgent(evt.to)}`;
+        const shortBody = evt.text.length > 320 ? `${evt.text.slice(0, 317)}...` : evt.text;
+        const metaLines = wrapText(metaText, labelMaxW - 18, 2);
+        const bodyLines = wrapText(shortBody, labelMaxW - 18, Math.max(2, totalLines - metaLines.length));
+        const lines = [...metaLines, ...bodyLines];
+        const textH = lines.length * 15 + 12;
+        const arrowY = y + textH + 9;
+        const rowH = textH + 24;
+        const lineW = Math.max(...lines.map((line) => measureCtx.measureText(line).width));
+        const boxW = clamp(Math.ceil(lineW + 22), 170, labelMaxW);
+        return { evt, lines, y, textH, arrowY, h: rowH, boxW, metaText };
+      }
+
+      function isParallelSpawnSeed(evt) {
+        return Boolean(
+          evt &&
+          evt.mode === "spawn" &&
+          evt.from === "main" &&
+          evt.mechanism === "sessions_spawn" &&
+          evt.stage === "call"
+        );
+      }
+
+      function hideHoverPop() {
+        hoverPop.style.display = "none";
+      }
+
+      function positionHoverPop(e) {
+        if (hoverPop.style.display !== "block") return;
+        const rect = diagramScroll.getBoundingClientRect();
+        const sx = diagramScroll.scrollLeft;
+        const sy = diagramScroll.scrollTop;
+        const margin = 12;
+
+        let left = sx + (e.clientX - rect.left) + 14;
+        let top = sy + (e.clientY - rect.top) + 14;
+
+        const maxLeft = sx + rect.width - hoverPop.offsetWidth - margin;
+        const maxTop = sy + rect.height - hoverPop.offsetHeight - margin;
+
+        if (left > maxLeft) left = Math.max(sx + margin, maxLeft);
+        if (top > maxTop) top = Math.max(sy + margin, maxTop);
+
+        hoverPop.style.left = `${left}px`;
+        hoverPop.style.top = `${top}px`;
+      }
+
+      function showHoverPop(e, meta, body) {
+        hoverPopMeta.textContent = meta;
+        hoverPopBody.textContent = body;
+        hoverPop.style.display = "block";
+        positionHoverPop(e);
+      }
+
+      function clearTimer() {
+        if (state.timer) {
+          clearTimeout(state.timer);
+          state.timer = null;
+        }
+      }
+
+      function scheduleTick() {
+        clearTimer();
+        if (!state.running) return;
+        if (state.cursor >= state.timeline.length) return;
+        const delay = Math.max(120, 900 / state.speed);
+        state.timer = setTimeout(tick, delay);
+      }
+
+      function tick() {
+        if (!state.running) return;
+        if (state.cursor < state.timeline.length) {
+          state.cursor += 1;
+          if (state.cursor >= state.timeline.length) state.forceBottom = true;
+          render();
+        }
+        scheduleTick();
+      }
+
+      function clamp(num, min, max) {
+        return Math.max(min, Math.min(max, num));
+      }
+
+      function addEvent(evt, renderNow = true) {
+        if (!evt || state.idSet.has(evt.id)) return false;
+        state.idSet.add(evt.id);
+
+        const previousTotal = state.timeline.length;
+        const atTail = state.cursor >= previousTotal;
+
+        state.timeline.push(evt);
+        addAgent(evt.from);
+        addAgent(evt.to);
+
+        if (atTail && state.running) {
+          state.cursor = state.timeline.length;
+          state.forceBottom = true;
+        }
+
+        if (renderNow) render();
+        if (!atTail && state.running) scheduleTick();
+        return true;
+      }
+
+      function rebuildFromHistory(items) {
+        clearTimer();
+
+        state.timeline.length = 0;
+        state.agents.length = 0;
+        state.idSet.clear();
+
+        const sorted = [...items].sort((a, b) => (Number(a.ts) || 0) - (Number(b.ts) || 0));
+        sorted.forEach((raw) => {
+          const evt = normalizeEvent(raw);
+          if (evt) addEvent(evt, false);
+        });
+
+        state.cursor = state.timeline.length;
+        state.forceBottom = true;
+        render();
+      }
+
+      async function loadHistory() {
+        const query = new URLSearchParams({
+          limit: "1200",
+          includeInternal: state.showInternal ? "1" : "0"
+        });
+        const res = await fetch(`/api/history?${query.toString()}`, { cache: "no-store" });
+        if (!res.ok) throw new Error(`history:${res.status}`);
+        const payload = await res.json();
+        return Array.isArray(payload.items) ? payload.items : [];
+      }
+
+      function computeLayout(visible) {
+        const agents = state.agents.length ? state.agents : ["main"];
+        const viewportW = Math.max(760, diagramScroll.clientWidth || 1020);
+        const viewportH = Math.max(460, diagramScroll.clientHeight || 560);
+
+        const side = 110;
+        let gap = 0;
+
+        if (agents.length > 1) {
+          const adaptive = Math.floor((viewportW - side * 2) / (agents.length - 1));
+          gap = Math.max(180, adaptive);
+        }
+
+        const width = Math.max(viewportW, side * 2 + gap * Math.max(agents.length - 1, 0) + 10);
+        const xMap = new Map();
+
+        agents.forEach((agentId, idx) => {
+          xMap.set(agentId, side + idx * gap);
+        });
+
+        const labelMaxW = Math.min(420, Math.max(220, agents.length > 1 ? gap * 1.3 : 320));
+
+        const rows = [];
+        let y = 14;
+        let prevSession = "";
+        let i = 0;
+        const PARALLEL_WINDOW_MS = 1800;
+
+        while (i < visible.length) {
+          const evt = visible[i];
+          const currentSession = evt.sessionTag || "";
+          if (prevSession && currentSession && currentSession !== prevSession) {
+            rows.push({
+              type: "separator",
+              y,
+              h: 26,
+              text: "新会话"
+            });
+            y += 32;
+          }
+          prevSession = currentSession || prevSession;
+
+          if (isParallelSpawnSeed(evt)) {
+            const group = [evt];
+            let j = i + 1;
+            while (j < visible.length) {
+              const next = visible[j];
+              if (!isParallelSpawnSeed(next)) break;
+              if (next.from !== evt.from) break;
+              if ((next.sessionTag || "") !== (evt.sessionTag || "")) break;
+              if ((next.ts - evt.ts) > PARALLEL_WINDOW_MS) break;
+              group.push(next);
+              j += 1;
+            }
+
+            if (group.length >= 2) {
+              const gapY = 8;
+              let gy = y + 26;
+              const items = group.map((entry) => {
+                const metrics = buildEventMetrics(entry, gy, labelMaxW, 5);
+                gy += metrics.h + gapY;
+                return metrics;
+              });
+              const blockH = Math.max(56, gy - y + 10);
+              rows.push({
+                type: "parallel",
+                y,
+                h: blockH,
+                title: `并行 sessions_spawn ×${group.length}`,
+                items
+              });
+              y += blockH + 14;
+              i = j;
+              continue;
+            }
+          }
+
+          const metrics = buildEventMetrics(evt, y, labelMaxW, 6);
+          rows.push({
+            type: "event",
+            ...metrics
+          });
+          y += metrics.h + 14;
+          i += 1;
+        }
+
+        const height = Math.max(viewportH - HEADER_H, y + 36);
+
+        return {
+          agents,
+          width,
+          height,
+          xMap,
+          rows
+        };
+      }
+
+      function drawHeader(layout) {
+        const { agents, width, xMap } = layout;
+
+        diagramHeaderSvg.setAttribute("width", String(width));
+        diagramHeaderSvg.setAttribute("height", String(HEADER_H));
+        diagramHeaderSvg.setAttribute("viewBox", `0 0 ${width} ${HEADER_H}`);
+        diagramHeaderSvg.textContent = "";
+
+        const bg = document.createElementNS(NS, "rect");
+        bg.setAttribute("x", "0");
+        bg.setAttribute("y", "0");
+        bg.setAttribute("width", String(width));
+        bg.setAttribute("height", String(HEADER_H));
+        bg.setAttribute("fill", "rgba(8, 20, 34, 0.88)");
+        diagramHeaderSvg.appendChild(bg);
+
+        agents.forEach((agentId) => {
+          const x = xMap.get(agentId);
+
+          const box = document.createElementNS(NS, "rect");
+          box.setAttribute("x", String(x - 68));
+          box.setAttribute("y", "14");
+          box.setAttribute("width", "136");
+          box.setAttribute("height", "36");
+          box.setAttribute("rx", "10");
+          box.setAttribute("fill", "rgba(11, 35, 54, 0.86)");
+          box.setAttribute("stroke", "rgba(149, 227, 240, 0.42)");
+          diagramHeaderSvg.appendChild(box);
+
+          const label = document.createElementNS(NS, "text");
+          label.setAttribute("x", String(x));
+          label.setAttribute("y", "37");
+          label.setAttribute("text-anchor", "middle");
+          label.setAttribute("fill", "#e9f8ff");
+          label.setAttribute("font-size", "14");
+          label.setAttribute("font-weight", "700");
+          label.textContent = displayAgent(agentId);
+          diagramHeaderSvg.appendChild(label);
+        });
+      }
+
+      function drawBody(layout) {
+        const { agents, width, height, xMap, rows } = layout;
+        hideHoverPop();
+
+        diagram.setAttribute("width", String(width));
+        diagram.setAttribute("height", String(height));
+        diagram.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        diagram.textContent = "";
+
+        const defs = document.createElementNS(NS, "defs");
+        const markerData = [
+          ["arr-user", "#80cfff"],
+          ["arr-spawn", "#ffcc7a"],
+          ["arr-a2a", "#67e6c7"],
+          ["arr-internal", "#ff9ac1"]
+        ];
+
+        markerData.forEach(([id, color]) => {
+          const marker = document.createElementNS(NS, "marker");
+          marker.setAttribute("id", id);
+          marker.setAttribute("markerWidth", "9");
+          marker.setAttribute("markerHeight", "9");
+          marker.setAttribute("refX", "7");
+          marker.setAttribute("refY", "4.5");
+          marker.setAttribute("orient", "auto");
+
+          const poly = document.createElementNS(NS, "polygon");
+          poly.setAttribute("points", "0 0, 9 4.5, 0 9");
+          poly.setAttribute("fill", color);
+          marker.appendChild(poly);
+          defs.appendChild(marker);
+        });
+
+        diagram.appendChild(defs);
+
+        agents.forEach((agentId) => {
+          const x = xMap.get(agentId);
+
+          const lane = document.createElementNS(NS, "line");
+          lane.setAttribute("x1", String(x));
+          lane.setAttribute("x2", String(x));
+          lane.setAttribute("y1", "0");
+          lane.setAttribute("y2", String(height));
+          lane.setAttribute("stroke", "rgba(148, 224, 240, 0.28)");
+          lane.setAttribute("stroke-width", "1.4");
+          lane.setAttribute("stroke-dasharray", "6 6");
+          diagram.appendChild(lane);
+        });
+
+        let alt = false;
+        rows.forEach((row) => {
+          if (row.type !== "event" && row.type !== "parallel") return;
+          alt = !alt;
+          if (!alt) return;
+          const bg = document.createElementNS(NS, "rect");
+          bg.setAttribute("x", "0");
+          bg.setAttribute("y", String(row.y - 6));
+          bg.setAttribute("width", String(width));
+          bg.setAttribute("height", String(row.h + 12));
+          bg.setAttribute("fill", "rgba(120, 208, 230, 0.03)");
+          diagram.appendChild(bg);
+        });
+
+        let lastEventAnchor = null;
+
+        const drawMechanismBadge = (x, y, text, color) => {
+          if (!text) return;
+          const w = Math.ceil(measureCtx.measureText(text).width + 14);
+          const rx = x - w / 2;
+          const badge = document.createElementNS(NS, "rect");
+          badge.setAttribute("x", String(rx));
+          badge.setAttribute("y", String(y - 19));
+          badge.setAttribute("width", String(w));
+          badge.setAttribute("height", "16");
+          badge.setAttribute("rx", "8");
+          badge.setAttribute("fill", "rgba(8, 22, 35, 0.94)");
+          badge.setAttribute("stroke", color);
+          badge.setAttribute("stroke-width", "1");
+          diagram.appendChild(badge);
+
+          const label = document.createElementNS(NS, "text");
+          label.setAttribute("x", String(x));
+          label.setAttribute("y", String(y - 7));
+          label.setAttribute("text-anchor", "middle");
+          label.setAttribute("fill", color);
+          label.setAttribute("font-size", "10.5");
+          label.setAttribute("font-weight", "700");
+          label.textContent = text;
+          diagram.appendChild(label);
+        };
+
+        const drawEventItem = (item, options = {}) => {
+          const evt = item.evt;
+          const color = modeColor[evt.mode] || "#67e6c7";
+          const fromX = xMap.get(evt.from);
+          const toX = xMap.get(evt.to);
+          const markerId =
+            evt.mode === "spawn"
+              ? "arr-spawn"
+              : evt.mode === "user"
+                ? "arr-user"
+                : evt.mode === "internal"
+                  ? "arr-internal"
+                  : "arr-a2a";
+
+          let boxX;
+          if (fromX === toX) {
+            boxX = clamp(fromX + 28, 8, width - item.boxW - 8);
+          } else {
+            boxX = clamp((fromX + toX) / 2 - item.boxW / 2, 8, width - item.boxW - 8);
+          }
+
+          const labelBox = document.createElementNS(NS, "rect");
+          labelBox.setAttribute("x", String(boxX));
+          labelBox.setAttribute("y", String(item.y));
+          labelBox.setAttribute("width", String(item.boxW));
+          labelBox.setAttribute("height", String(item.textH));
+          labelBox.setAttribute("rx", "8");
+          labelBox.setAttribute("fill", "rgba(7, 24, 39, 0.9)");
+          labelBox.setAttribute("stroke", "rgba(150, 225, 240, 0.25)");
+          labelBox.style.cursor = "pointer";
+
+          const fullMeta = `${formatTime(evt.ts)} · ${modeName(evt.mode)} · ${displayAgent(evt.from)} -> ${displayAgent(evt.to)}`;
+          labelBox.addEventListener("mouseenter", (e) => showHoverPop(e, fullMeta, evt.text));
+          labelBox.addEventListener("mousemove", positionHoverPop);
+          labelBox.addEventListener("mouseleave", hideHoverPop);
+          diagram.appendChild(labelBox);
+
+          item.lines.forEach((line, lineIdx) => {
+            const t = document.createElementNS(NS, "text");
+            t.setAttribute("x", String(boxX + 10));
+            t.setAttribute("y", String(item.y + 16 + lineIdx * 15));
+            t.setAttribute("fill", lineIdx === 0 ? "#dff5ff" : "#f5fcff");
+            t.setAttribute("font-size", lineIdx === 0 ? "11" : "12");
+            t.setAttribute("pointer-events", "none");
+            t.textContent = line;
+            diagram.appendChild(t);
+          });
+
+          if (fromX === toX) {
+            const loopPath = document.createElementNS(NS, "path");
+            const d = `M ${fromX} ${item.arrowY} H ${fromX + 52} V ${item.arrowY + 22} H ${fromX + 7}`;
+            loopPath.setAttribute("d", d);
+            loopPath.setAttribute("fill", "none");
+            loopPath.setAttribute("stroke", color);
+            loopPath.setAttribute("stroke-width", "2");
+            loopPath.setAttribute("marker-end", `url(#${markerId})`);
+            diagram.appendChild(loopPath);
+            drawMechanismBadge(fromX + 30, item.arrowY, mechanismLabel(evt), color);
+          } else {
+            const arrow = document.createElementNS(NS, "line");
+            arrow.setAttribute("x1", String(fromX));
+            arrow.setAttribute("y1", String(item.arrowY));
+            arrow.setAttribute("x2", String(toX));
+            arrow.setAttribute("y2", String(item.arrowY));
+            arrow.setAttribute("stroke", color);
+            arrow.setAttribute("stroke-width", "2");
+            arrow.setAttribute("marker-end", `url(#${markerId})`);
+            diagram.appendChild(arrow);
+            drawMechanismBadge((fromX + toX) / 2, item.arrowY, mechanismLabel(evt), color);
+          }
+
+          const dot = document.createElementNS(NS, "circle");
+          dot.setAttribute("cx", String(fromX));
+          dot.setAttribute("cy", String(item.arrowY));
+          dot.setAttribute("r", "3.2");
+          dot.setAttribute("fill", color);
+          diagram.appendChild(dot);
+
+          if (options.markAsLast) {
+            lastEventAnchor = { y: item.y, h: item.h };
+          }
+        };
+
+        rows.forEach((row) => {
+          if (row.type === "separator") {
+            const sepY = row.y + 11;
+
+            const sep = document.createElementNS(NS, "line");
+            sep.setAttribute("x1", "16");
+            sep.setAttribute("x2", String(width - 16));
+            sep.setAttribute("y1", String(sepY));
+            sep.setAttribute("y2", String(sepY));
+            sep.setAttribute("stroke", "rgba(255, 204, 122, 0.55)");
+            sep.setAttribute("stroke-width", "1.4");
+            sep.setAttribute("stroke-dasharray", "8 6");
+            diagram.appendChild(sep);
+
+            const labelBg = document.createElementNS(NS, "rect");
+            labelBg.setAttribute("x", String(width / 2 - 40));
+            labelBg.setAttribute("y", String(sepY - 10));
+            labelBg.setAttribute("width", "80");
+            labelBg.setAttribute("height", "20");
+            labelBg.setAttribute("rx", "8");
+            labelBg.setAttribute("fill", "rgba(33, 24, 10, 0.9)");
+            labelBg.setAttribute("stroke", "rgba(255, 204, 122, 0.45)");
+            diagram.appendChild(labelBg);
+
+            const label = document.createElementNS(NS, "text");
+            label.setAttribute("x", String(width / 2));
+            label.setAttribute("y", String(sepY + 4));
+            label.setAttribute("text-anchor", "middle");
+            label.setAttribute("fill", "#ffe7bf");
+            label.setAttribute("font-size", "11");
+            label.setAttribute("font-weight", "700");
+            label.textContent = row.text;
+            diagram.appendChild(label);
+            return;
+          }
+
+          if (row.type === "parallel") {
+            const block = document.createElementNS(NS, "rect");
+            block.setAttribute("x", "6");
+            block.setAttribute("y", String(row.y + 2));
+            block.setAttribute("width", String(width - 12));
+            block.setAttribute("height", String(row.h - 4));
+            block.setAttribute("rx", "10");
+            block.setAttribute("fill", "rgba(66, 49, 18, 0.18)");
+            block.setAttribute("stroke", "rgba(255, 204, 122, 0.45)");
+            block.setAttribute("stroke-dasharray", "5 4");
+            diagram.appendChild(block);
+
+            const pLabel = document.createElementNS(NS, "text");
+            pLabel.setAttribute("x", "16");
+            pLabel.setAttribute("y", String(row.y + 18));
+            pLabel.setAttribute("fill", "#ffe6bc");
+            pLabel.setAttribute("font-size", "11.5");
+            pLabel.setAttribute("font-weight", "700");
+            pLabel.textContent = row.title;
+            diagram.appendChild(pLabel);
+
+            row.items.forEach((item, idx) => {
+              const markAsLast =
+                rows.indexOf(row) === rows.length - 1 &&
+                idx === row.items.length - 1;
+              drawEventItem(item, { markAsLast });
+            });
+            return;
+          }
+
+          if (row.type === "event") {
+            const markAsLast = rows.indexOf(row) === rows.length - 1;
+            drawEventItem(row, { markAsLast });
+          }
+        });
+
+        if (lastEventAnchor) {
+          const focus = document.createElementNS(NS, "rect");
+          focus.setAttribute("x", "2");
+          focus.setAttribute("y", String(lastEventAnchor.y - 8));
+          focus.setAttribute("width", String(width - 4));
+          focus.setAttribute("height", String(lastEventAnchor.h + 16));
+          focus.setAttribute("fill", "none");
+          focus.setAttribute("stroke", "rgba(110, 225, 245, 0.32)");
+          focus.setAttribute("stroke-width", "1");
+          focus.setAttribute("rx", "8");
+          diagram.appendChild(focus);
+        }
+
+        const hasEvent = rows.some((row) => row.type === "event" || row.type === "parallel");
+        if (!hasEvent) {
+          const hint = document.createElementNS(NS, "text");
+          hint.setAttribute("x", "50%");
+          hint.setAttribute("y", "50%");
+          hint.setAttribute("text-anchor", "middle");
+          hint.setAttribute("fill", "rgba(212, 238, 251, 0.72)");
+          hint.setAttribute("font-size", "15");
+          hint.textContent = "暂无可视化事件，等待历史加载或新消息...";
+          diagram.appendChild(hint);
+        }
+      }
+
+      function renderControls() {
+        const total = state.timeline.length;
+        const shown = state.cursor;
+
+        progressInput.max = String(Math.max(0, total));
+        progressInput.value = String(shown);
+        progressTextEl.textContent = `${shown} / ${total}`;
+
+        prevBtn.disabled = shown <= 0;
+        nextBtn.disabled = shown >= total;
+        processBtn.textContent = state.showInternal ? "隐藏过程信息" : "显示过程信息";
+        processBtn.classList.toggle("is-primary", state.showInternal);
+
+        setToggleText();
+      }
+
+      function render() {
+        renderControls();
+
+        const visible = state.timeline.slice(0, state.cursor);
+        const layout = computeLayout(visible);
+        drawHeader(layout);
+        drawBody(layout);
+
+        if (state.forceBottom || (state.running && state.cursor >= state.timeline.length)) {
+          requestAnimationFrame(() => {
+            diagramScroll.scrollTop = diagramScroll.scrollHeight;
+          });
+          state.forceBottom = false;
+        }
+      }
+
+      function setRunning(next) {
+        state.running = next;
+        renderControls();
+        if (state.running) {
+          scheduleTick();
+        } else {
+          clearTimer();
+        }
+      }
+
+      function stepBy(delta) {
+        const total = state.timeline.length;
+        if (!total) return;
+
+        if (state.running) setRunning(false);
+        state.cursor = clamp(state.cursor + delta, 0, total);
+        render();
+      }
+
+      function seekTo(target) {
+        const total = state.timeline.length;
+        if (state.running) setRunning(false);
+        state.cursor = clamp(target, 0, total);
+        render();
+      }
+
+      function connectEvents() {
+        if (state.source) {
+          state.source.close();
+          state.source = null;
+        }
+
+        setLiveState("connecting", "连接中");
+
+        const source = new EventSource(`/api/events?includeInternal=${state.showInternal ? "1" : "0"}`);
+        state.source = source;
+
+        source.onopen = () => setLiveState("online", "已连接");
+        source.onmessage = (event) => {
+          try {
+            const parsed = JSON.parse(event.data);
+            const evt = normalizeEvent(parsed);
+            addEvent(evt, true);
+          } catch {
+            // Ignore malformed event payloads.
+          }
+        };
+        source.onerror = () => {
+          setLiveState("reconnecting", "重连中");
+        };
+      }
+
+      async function initialize() {
+        try {
+          const items = await loadHistory();
+          rebuildFromHistory(items);
+          setLiveState("online", "已连接");
+        } catch (err) {
+          console.error(err);
+          setLiveState("reconnecting", "历史读取失败");
+          render();
+        }
+
+        connectEvents();
+      }
+
+      toggleBtn.addEventListener("click", () => setRunning(!state.running));
+      prevBtn.addEventListener("click", () => stepBy(-1));
+      nextBtn.addEventListener("click", () => stepBy(1));
+
+      reloadBtn.addEventListener("click", async () => {
+        try {
+          const items = await loadHistory();
+          rebuildFromHistory(items);
+        } catch {
+          setLiveState("reconnecting", "历史读取失败");
+        }
+      });
+
+      processBtn.addEventListener("click", async () => {
+        state.showInternal = !state.showInternal;
+        try {
+          const items = await loadHistory();
+          rebuildFromHistory(items);
+          connectEvents();
+        } catch {
+          setLiveState("reconnecting", "历史读取失败");
+          renderControls();
+        }
+      });
+
+      speedInput.addEventListener("input", () => {
+        state.speed = Number(speedInput.value || 1);
+        speedValueEl.textContent = `${state.speed.toFixed(1)}x`;
+        if (state.running) scheduleTick();
+      });
+
+      progressInput.addEventListener("input", () => {
+        seekTo(Number(progressInput.value || 0));
+      });
+
+      diagramScroll.addEventListener("scroll", () => {
+        hideHoverPop();
+      });
+
+      window.addEventListener("resize", () => {
+        render();
+      });
+
+      speedValueEl.textContent = `${state.speed.toFixed(1)}x`;
+      render();
+      initialize();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "name": "openclaw-sequence-dashboard-plugin",
+  "version": "0.1.0",
+  "description": "OpenClaw plugin: auto-start sequence dashboard for multi-agent session timeline visualization.",
+  "private": false,
+  "license": "MIT",
+  "type": "commonjs",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "openclaw.plugin.json",
+    "dashboard",
+    "examples",
+    "scripts/configure-openclaw.js"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.js"
+    ]
+  },
+  "scripts": {
+    "check": "node --check index.js && node --check dashboard/live-dashboard-server.js && node --check scripts/configure-openclaw.js",
+    "pack:local": "npm pack"
+  },
+  "keywords": [
+    "openclaw",
+    "plugin",
+    "dashboard",
+    "timeline",
+    "a2a",
+    "sessions_spawn"
+  ]
+}

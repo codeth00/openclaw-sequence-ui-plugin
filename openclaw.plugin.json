@@ -1,0 +1,33 @@
+{
+  "id": "openclaw-sequence-dashboard-plugin",
+  "name": "OpenClaw Sequence Dashboard",
+  "description": "Starts a local timeline dashboard that visualizes user/main/subagent interactions from session history.",
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "host": {
+        "type": "string",
+        "default": "127.0.0.1",
+        "description": "Dashboard HTTP bind host"
+      },
+      "port": {
+        "type": "integer",
+        "default": 8787,
+        "minimum": 1,
+        "maximum": 65535,
+        "description": "Dashboard HTTP bind port"
+      },
+      "openclawHome": {
+        "type": "string",
+        "default": "~/.openclaw",
+        "description": "OpenClaw home directory that contains agents/*/sessions"
+      },
+      "agentsDir": {
+        "type": "string",
+        "default": "",
+        "description": "Optional override for agents directory; if empty use <openclawHome>/agents"
+      }
+    },
+    "additionalProperties": false
+  }
+}
