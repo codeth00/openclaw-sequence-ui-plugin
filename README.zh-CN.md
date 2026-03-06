@@ -10,17 +10,37 @@
 - 可切换 `显示过程信息`（工具调用/结果等过程事件）
 - 修复子任务回传漏显（spawn completion fallback）
 
-## 快速安装（GitHub）
+## 安装步骤
 
 ```bash
-git clone https://github.com/<YOUR_ORG>/openclaw-sequence-dashboard-plugin.git
-cd openclaw-sequence-dashboard-plugin
-openclaw plugins install .
-node scripts/configure-openclaw.js
+git clone https://github.com/codeth00/openclaw-sequence-ui-plugin /tmp/openclaw-sequence-ui-plugin
+cd /tmp/openclaw-sequence-ui-plugin
+npm run check
+openclaw plugins install /tmp/openclaw-sequence-ui-plugin
+node /tmp/openclaw-sequence-ui-plugin/scripts/configure-openclaw.js
+openclaw gateway restart
 ```
 
-然后重启 Gateway，访问：
+说明：
+- 请使用本地可写目录，`/tmp` 是一个安全默认值。
+- `openclaw plugins install` 需要本地路径，所以要先 `git clone`，再从 clone 目录安装。
+
+## 使用
+
+完成后访问：
 - `http://127.0.0.1:8787`
+
+## 验证
+
+```bash
+curl http://127.0.0.1:8787/healthz
+openclaw gateway status
+```
+
+预期结果：
+- `healthz` 返回 `{"ok":true,...}`
+- Gateway 监听 `127.0.0.1:18789`
+- 插件看板监听 `127.0.0.1:8787`
 
 ## 配置
 
@@ -48,6 +68,11 @@ node scripts/configure-openclaw.js
 ```
 
 说明：安装时若提示 `child_process` 风险告警，这是预期行为，因为插件需要启动本地 Node 侧车服务。
+
+## 故障排查
+
+- 如果出现 `EADDRINUSE`，说明端口被占用。先停止已有进程，或修改 `plugins.entries.openclaw-sequence-dashboard-plugin.config.port` 后重启 Gateway。
+- 如果 Gateway 重启后插件没有加载，执行 `openclaw gateway status`，并查看 `~/.openclaw/logs/gateway.log` 和 `~/.openclaw/logs/gateway.err.log`。
 
 ## 官方文档
 

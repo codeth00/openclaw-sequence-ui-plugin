@@ -22,17 +22,37 @@ It renders interactions among:
 - OpenClaw Gateway with Plugin support
 - Node.js >= 18
 
-## Quick Install (GitHub)
+## Install
 
 ```bash
-git clone https://github.com/<YOUR_ORG>/openclaw-sequence-dashboard-plugin.git
-cd openclaw-sequence-dashboard-plugin
-openclaw plugins install .
-node scripts/configure-openclaw.js
+git clone https://github.com/codeth00/openclaw-sequence-ui-plugin /tmp/openclaw-sequence-ui-plugin
+cd /tmp/openclaw-sequence-ui-plugin
+npm run check
+openclaw plugins install /tmp/openclaw-sequence-ui-plugin
+node /tmp/openclaw-sequence-ui-plugin/scripts/configure-openclaw.js
+openclaw gateway restart
 ```
+
+Notes:
+- Use any writable local directory. `/tmp` is a safe default.
+- `openclaw plugins install` expects a local path. Clone first, then install from that path.
+
+## Use
 
 After Gateway restart, open:
 - `http://127.0.0.1:8787`
+
+## Verify
+
+```bash
+curl http://127.0.0.1:8787/healthz
+openclaw gateway status
+```
+
+Expected:
+- `healthz` returns JSON like `{"ok":true,...}`
+- Gateway is listening on `127.0.0.1:18789`
+- Dashboard is listening on `127.0.0.1:8787`
 
 ## Configuration
 
@@ -84,6 +104,8 @@ node dashboard/live-dashboard-server.js
 - Blank timeline: verify `openclawHome` / `agentsDir` points to valid `agents/*/sessions`.
 - No process events: click `显示过程信息` in UI.
 - Install warning about `child_process`: expected; this plugin intentionally starts a local Node sidecar service.
+- If the dashboard port is already occupied, either stop the existing process or change `plugins.entries.openclaw-sequence-dashboard-plugin.config.port` and restart Gateway.
+- If Gateway restarts but the plugin does not load, run `openclaw gateway status` and inspect `~/.openclaw/logs/gateway.log` and `~/.openclaw/logs/gateway.err.log`.
 
 ## Official References
 
