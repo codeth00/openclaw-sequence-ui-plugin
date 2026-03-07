@@ -1,12 +1,13 @@
-# OpenClaw 时序图插件
+# OpenClaw 运行看板插件
 
-这是一个可直接发布到 GitHub 的 OpenClaw 插件，用于自动启动本地时序图看板，展示多智能体执行流程。
+这是一个可直接发布到 GitHub 的 OpenClaw 插件，用于自动启动本地运行看板，展示多智能体执行流程。
 
 ## 能力
 
 - 读取 `agents/*/sessions/*.jsonl` 历史并实时渲染
-- 展示 `user -> main`、`sessions_spawn`、`sessions_send`
-- 并行 `sessions_spawn` 分组展示
+- 展示执行总览、问题列表、Agent 活跃度和会话摘要
+- 展示 `user -> main`、`sessions_spawn`、`sessions_send` 的组内时序回放
+- 支持按 `groupId`、Agent、模式、关键词过滤历史
 - 可切换 `显示过程信息`（工具调用/结果等过程事件）
 - 修复子任务回传漏显（spawn completion fallback）
 
@@ -34,6 +35,7 @@ openclaw gateway restart
 
 ```bash
 curl http://127.0.0.1:8787/healthz
+curl http://127.0.0.1:8787/api/overview
 openclaw gateway status
 ```
 
@@ -68,6 +70,24 @@ openclaw gateway status
 ```
 
 说明：安装时若提示 `child_process` 风险告警，这是预期行为，因为插件需要启动本地 Node 侧车服务。
+
+## 本地开发
+
+```bash
+npm run check
+npm --prefix dashboard-ui install
+npm --prefix dashboard-ui run build
+node dashboard/live-dashboard-server.js
+```
+
+## 仓库结构
+
+- `openclaw.plugin.json`：插件元数据与配置 schema
+- `index.js`：插件入口，负责启动/停止侧车服务
+- `dashboard/live-dashboard-server.js`：会话解析、执行分组、只读 API、静态资源托管
+- `dashboard/dist`：构建后的运行看板静态资源
+- `dashboard-ui`：React + Vite 前端源码
+- `examples/openclaw.json`：示例配置
 
 ## 故障排查
 

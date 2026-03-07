@@ -1,28 +1,26 @@
-# OpenClaw Sequence Dashboard Plugin
+# OpenClaw 运行看板插件
 
-A production-ready OpenClaw plugin that auto-starts a local timeline dashboard for multi-agent execution visualization.
+这是一个 OpenClaw 插件，用于自动启动本地运行看板，展示多智能体执行过程。
 
-It renders interactions among:
-- user -> main
-- main <-> subagents (`sessions_spawn`)
-- agent <-> agent (`sessions_send`)
-- optional internal process events (tool calls/results and process markers)
+新版看板是双视图只读控制台：
+- `运行总览`：执行分组、问题列表、Agent 活跃度、会话摘要
+- `时序图`：按执行分组回放 `user -> main`、`sessions_spawn`、`sessions_send`
 
-## Features
+## 能力
 
-- Reads real OpenClaw session history from `agents/*/sessions/*.jsonl`
-- Real-time updates via SSE (`/api/events`)
-- Sequence diagram with sticky headers and session separators
-- Parallel `sessions_spawn` grouping
-- `显示过程信息` toggle for internal process events
-- Spawn completion fallback parsing (prevents lost child-task completion visualization)
+- 读取 `agents/*/sessions/*.jsonl` 历史并实时渲染
+- 基于事件自动聚合执行分组，生成总览摘要和问题提示
+- 支持按 `groupId`、Agent、模式、关键词过滤历史
+- 提供只读接口：
+  - `GET /api/overview`
+  - `GET /api/executions`
+  - `GET /api/executions/:id`
+  - `GET /api/history`
+  - `GET /api/events`
+- 可切换 `显示过程信息`，查看工具调用、工具结果和过程事件
+- 修复子任务回传漏显（spawn completion fallback）
 
-## Requirements
-
-- OpenClaw Gateway with Plugin support
-- Node.js >= 18
-
-## Install
+## 安装步骤
 
 ```bash
 git clone https://github.com/codeth00/openclaw-sequence-ui-plugin /tmp/openclaw-sequence-ui-plugin
@@ -33,30 +31,36 @@ node /tmp/openclaw-sequence-ui-plugin/scripts/configure-openclaw.js
 openclaw gateway restart
 ```
 
-Notes:
-- Use any writable local directory. `/tmp` is a safe default.
-- `openclaw plugins install` expects a local path. Clone first, then install from that path.
+说明：
+- 请使用本地可写目录，`/tmp` 是一个安全默认值。
+- `openclaw plugins install` 需要本地路径，所以要先 `git clone`，再从 clone 目录安装。
 
-## Use
+## 使用
 
-After Gateway restart, open:
+完成后访问：
 - `http://127.0.0.1:8787`
 
-## Verify
+## 验证
 
 ```bash
 curl http://127.0.0.1:8787/healthz
+curl http://127.0.0.1:8787/api/overview
+curl 'http://127.0.0.1:8787/api/executions?limit=5'
 openclaw gateway status
 ```
 
-Expected:
-- `healthz` returns JSON like `{"ok":true,...}`
-- Gateway is listening on `127.0.0.1:18789`
-- Dashboard is listening on `127.0.0.1:8787`
+预期结果：
+- `healthz` 返回 `{"ok":true,...}`
+- `/api/overview` 返回执行总览 JSON
+- `/api/executions` 返回执行分组列表
+- Gateway 监听 `127.0.0.1:18789`
+- 插件看板监听 `127.0.0.1:8787`
 
-## Configuration
+## 配置
 
-Add (or merge) into `~/.openclaw/openclaw.json`:
+参考：`examples/openclaw.json`
+
+把以下内容并入 `~/.openclaw/openclaw.json`：
 
 ```json
 {
@@ -77,43 +81,48 @@ Add (or merge) into `~/.openclaw/openclaw.json`:
 }
 ```
 
-Config fields:
-- `host`: bind host
-- `port`: bind port
-- `openclawHome`: OpenClaw home root
-- `agentsDir`: optional direct `agents` path override
+配置项说明：
+- `host`：看板监听地址
+- `port`：看板监听端口
+- `openclawHome`：OpenClaw 根目录
+- `agentsDir`：可选，直接指定 `agents` 目录
 
-## Local Development
+说明：安装时若提示 `child_process` 风险告警，这是预期行为，因为插件会启动本地 Node 侧车服务。
+
+## 本地开发
 
 ```bash
+npm --prefix dashboard-ui install
 npm run check
 node dashboard/live-dashboard-server.js
 ```
 
-## Repository Structure
+如果只想单独构建前端：
 
-- `openclaw.plugin.json`: plugin metadata and config schema
-- `index.js`: plugin entry (`registerService` to start/stop sidecar)
-- `dashboard/index.html`: sequence diagram UI
-- `dashboard/live-dashboard-server.js`: session parser + SSE server
-- `examples/openclaw.json`: sample gateway plugin config
+```bash
+npm run build:ui
+```
 
-## Troubleshooting
+## 仓库结构
 
-- `EADDRINUSE` on startup: change plugin `port`.
-- Blank timeline: verify `openclawHome` / `agentsDir` points to valid `agents/*/sessions`.
-- No process events: click `显示过程信息` in UI.
-- Install warning about `child_process`: expected; this plugin intentionally starts a local Node sidecar service.
-- If the dashboard port is already occupied, either stop the existing process or change `plugins.entries.openclaw-sequence-dashboard-plugin.config.port` and restart Gateway.
-- If Gateway restarts but the plugin does not load, run `openclaw gateway status` and inspect `~/.openclaw/logs/gateway.log` and `~/.openclaw/logs/gateway.err.log`.
+- `openclaw.plugin.json`：插件元数据与配置 schema
+- `index.js`：插件入口，负责启动/停止侧车服务
+- `dashboard/live-dashboard-server.js`：会话解析、执行分组、只读 API、静态资源托管
+- `dashboard/dist`：构建后的运行看板静态资源
+- `dashboard-ui`：React + Vite 前端源码
+- `tests/live-dashboard-server.test.js`：事件分组和 API 契约测试
+- `examples/openclaw.json`：示例配置
 
-## Official References
+## 故障排查
 
-- Plugin overview: [docs.openclaw.ai/plugins/overview](https://docs.openclaw.ai/plugins/overview)
-- Plugin API (`registerService`): [docs.openclaw.ai/plugins/plugin-api-reference](https://docs.openclaw.ai/plugins/plugin-api-reference)
-- Gateway config (`plugins.enabled`, `plugins.entries`): [docs.openclaw.ai/gateway/configuration-reference](https://docs.openclaw.ai/gateway/configuration-reference)
-- Hook events (`gateway:startup`): [docs.openclaw.ai/hooks/events-and-payloads](https://docs.openclaw.ai/hooks/events-and-payloads)
+- 如果出现 `EADDRINUSE`，说明端口被占用。先停止已有进程，或修改 `plugins.entries.openclaw-sequence-dashboard-plugin.config.port` 后重启 Gateway。
+- 如果页面是旧版时序图，说明当前跑的是旧插件副本；重新安装插件或直接用当前仓库启动服务。
+- 如果 `/api/overview` 返回 `404`，说明当前运行的不是 V2 服务。
+- 如果看板空白，先确认 `openclawHome` / `agentsDir` 指向有效的 `agents/*/sessions`。
+- 如果 Gateway 重启后插件没有加载，执行 `openclaw gateway status`，并查看 `~/.openclaw/logs/gateway.log` 和 `~/.openclaw/logs/gateway.err.log`。
 
-## License
+## 官方文档
 
-MIT
+- 插件总览：<https://docs.openclaw.ai/plugins/overview>
+- 插件 API：<https://docs.openclaw.ai/plugins/plugin-api-reference>
+- Gateway 配置：<https://docs.openclaw.ai/gateway/configuration-reference>

@@ -103,7 +103,7 @@
       padding: 10px 14px;
       border-bottom: 1px solid var(--line-soft);
       display: grid;
-      grid-template-columns: repeat(5, auto) minmax(180px, 240px) minmax(220px, 1fr);
+      grid-template-columns: repeat(4, auto) minmax(220px, 300px) minmax(220px, 1fr);
       gap: 10px;
       align-items: center;
       background: rgba(8, 21, 34, 0.88);
@@ -130,10 +130,10 @@
       border-color: rgba(154, 247, 255, 0.65);
     }
 
-    .slider-wrap,
+    .filter-wrap,
     .progress-wrap {
       display: grid;
-      grid-template-columns: auto 1fr auto;
+      grid-template-columns: auto 1fr;
       align-items: center;
       gap: 8px;
       border: 1px solid rgba(141, 222, 235, 0.23);
@@ -143,7 +143,7 @@
       min-width: 0;
     }
 
-    .slider-wrap label,
+    .filter-wrap label,
     .progress-wrap label {
       font-size: 12px;
       color: var(--text-soft);
@@ -151,18 +151,27 @@
       white-space: nowrap;
     }
 
-    .slider-wrap input,
+    .filter-wrap select,
     .progress-wrap input {
       width: 100%;
       min-width: 0;
     }
 
-    .slider-wrap span,
     .progress-wrap span {
       font-size: 12px;
       color: var(--text);
       font-variant-numeric: tabular-nums;
       white-space: nowrap;
+    }
+
+    .filter-wrap select {
+      min-height: 34px;
+      border: 1px solid rgba(160, 236, 248, 0.24);
+      border-radius: 8px;
+      color: var(--text);
+      background: rgba(10, 30, 48, 0.92);
+      padding: 6px 10px;
+      outline: none;
     }
 
     .board {
@@ -231,8 +240,9 @@
 
     @media (max-width: 1220px) {
       .controls {
-        grid-template-columns: repeat(5, auto) minmax(170px, 1fr);
+        grid-template-columns: repeat(4, auto) minmax(170px, 1fr);
       }
+      .filter-wrap,
       .progress-wrap { grid-column: 1 / -1; }
     }
 
@@ -242,7 +252,7 @@
       .controls {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-      .slider-wrap,
+      .filter-wrap,
       .progress-wrap { grid-column: 1 / -1; }
       .button { width: 100%; }
     }
@@ -259,16 +269,16 @@
     </header>
 
     <section class="controls">
-      <button class="button is-primary" id="toggle">暂停播放</button>
       <button class="button" id="prev-step">上一步</button>
       <button class="button" id="next-step">下一步</button>
       <button class="button" id="reload">重载历史</button>
       <button class="button" id="toggle-process">显示过程信息</button>
 
-      <div class="slider-wrap">
-        <label for="speed">速度</label>
-        <input id="speed" type="range" min="0.5" max="3" value="1" step="0.1" />
-        <span id="speed-value">1.0x</span>
+      <div class="filter-wrap">
+        <label for="session-filter">会话筛选</label>
+        <select id="session-filter">
+          <option value="all">全部会话</option>
+        </select>
       </div>
 
       <div class="progress-wrap">
@@ -298,14 +308,12 @@
       const HEADER_H = 66;
 
       const liveStateEl = document.getElementById("live-state");
-      const toggleBtn = document.getElementById("toggle");
       const prevBtn = document.getElementById("prev-step");
       const nextBtn = document.getElementById("next-step");
       const reloadBtn = document.getElementById("reload");
       const processBtn = document.getElementById("toggle-process");
+      const sessionFilterEl = document.getElementById("session-filter");
 
-      const speedInput = document.getElementById("speed");
-      const speedValueEl = document.getElementById("speed-value");
       const progressInput = document.getElementById("progress");
       const progressTextEl = document.getElementById("progress-text");
 
@@ -321,16 +329,13 @@
       measureCtx.font = '12px "Noto Sans SC", sans-serif';
 
       const state = {
-        timeline: [],
-        agents: [],
+        allTimeline: [],
         idSet: new Set(),
         cursor: 0,
-        running: true,
-        speed: Number(speedInput.value || 1),
-        timer: null,
         source: null,
         forceBottom: false,
-        showInternal: false
+        showInternal: false,
+        sessionFilter: "all"
       };
 
       const modeColor = {
@@ -345,10 +350,6 @@
         liveStateEl.textContent = text;
       }
 
-      function setToggleText() {
-        toggleBtn.textContent = state.running ? "暂停播放" : "继续播放";
-      }
-
       function safeMode(mode) {
         return ["user", "spawn", "a2a", "internal"].includes(mode) ? mode : "a2a";
       }
@@ -361,6 +362,12 @@
         const idx = id.indexOf(":");
         if (idx <= 0) return "";
         return id.slice(0, idx);
+      }
+
+      function parseAgentFromSessionTag(sessionTag) {
+        if (!sessionTag || typeof sessionTag !== "string") return "";
+        const match = /^agent:([^:]+):/.exec(sessionTag.trim());
+        return match ? match[1] : "";
       }
 
       function normalizeEvent(raw) {
@@ -392,6 +399,12 @@
           to: raw.to,
           text,
           sessionTag: extractSessionTag(raw, id),
+          sessionAgent:
+            typeof raw.sessionAgent === "string" && raw.sessionAgent.trim()
+              ? raw.sessionAgent.trim()
+              : typeof meta.sessionAgent === "string" && meta.sessionAgent.trim()
+                ? meta.sessionAgent.trim()
+                : "",
           mechanism,
           stage
         };
@@ -412,21 +425,131 @@
         return new Date(ts).toLocaleTimeString();
       }
 
-      function addAgent(agentId) {
-        if (!agentId || state.agents.includes(agentId)) return;
+      function formatDayKey(ts) {
+        const date = new Date(Number(ts) || Date.now());
+        const year = String(date.getFullYear());
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        return `${year}-${month}-${day}`;
+      }
 
-        if (agentId === "user") {
-          state.agents.unshift(agentId);
-          return;
+      function formatDayLabel(dayKey) {
+        const date = new Date(`${dayKey}T00:00:00`);
+        if (Number.isNaN(date.getTime())) return dayKey;
+        return date.toLocaleDateString("zh-CN", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          weekday: "short"
+        });
+      }
+
+      function buildAgentList(events) {
+        const agents = [];
+
+        const addAgent = (agentId) => {
+          if (!agentId || agents.includes(agentId)) return;
+          if (agentId === "user") {
+            agents.unshift(agentId);
+            return;
+          }
+          if (agentId === "main") {
+            const idx = agents.includes("user") ? 1 : 0;
+            agents.splice(idx, 0, agentId);
+            return;
+          }
+          agents.push(agentId);
+        };
+
+        events.forEach((evt) => {
+          addAgent(evt.from);
+          addAgent(evt.to);
+        });
+
+        return agents.length ? agents : ["main"];
+      }
+
+      function eventMatchesCurrentFilter(evt) {
+        if (!evt) return false;
+        if (state.sessionFilter === "all") return true;
+        if (state.sessionFilter.startsWith("session:")) {
+          return evt.sessionTag === state.sessionFilter.slice("session:".length);
+        }
+        if (state.sessionFilter.startsWith("day:")) {
+          return formatDayKey(evt.ts) === state.sessionFilter.slice("day:".length);
+        }
+        return true;
+      }
+
+      function getFilteredTimeline() {
+        return state.allTimeline.filter((evt) => eventMatchesCurrentFilter(evt));
+      }
+
+      function syncSessionFilterOptions() {
+        const previous = state.sessionFilter;
+        const sessions = [];
+        const sessionSeen = new Set();
+        const days = [];
+        const daySeen = new Set();
+
+        [...state.allTimeline]
+          .sort((a, b) => b.ts - a.ts)
+          .forEach((evt) => {
+            if (evt.sessionTag && !sessionSeen.has(evt.sessionTag)) {
+              sessionSeen.add(evt.sessionTag);
+              sessions.push({
+                value: `session:${evt.sessionTag}`,
+                label: `${displayAgent(evt.sessionAgent || parseAgentFromSessionTag(evt.sessionTag) || "unknown")} · ${evt.sessionTag}`
+              });
+            }
+
+            const dayKey = formatDayKey(evt.ts);
+            if (!daySeen.has(dayKey)) {
+              daySeen.add(dayKey);
+              days.push({
+                value: `day:${dayKey}`,
+                label: formatDayLabel(dayKey)
+              });
+            }
+          });
+
+        const options = [{ value: "all" }, ...sessions, ...days];
+        if (!options.some((item) => item.value === previous)) {
+          state.sessionFilter = "all";
         }
 
-        if (agentId === "main") {
-          const idx = state.agents.includes("user") ? 1 : 0;
-          state.agents.splice(idx, 0, agentId);
-          return;
+        sessionFilterEl.textContent = "";
+
+        const allOption = document.createElement("option");
+        allOption.value = "all";
+        allOption.textContent = "全部会话";
+        sessionFilterEl.appendChild(allOption);
+
+        if (sessions.length) {
+          const sessionGroup = document.createElement("optgroup");
+          sessionGroup.label = "单个会话";
+          sessions.forEach((item) => {
+            const option = document.createElement("option");
+            option.value = item.value;
+            option.textContent = item.label;
+            sessionGroup.appendChild(option);
+          });
+          sessionFilterEl.appendChild(sessionGroup);
         }
 
-        state.agents.push(agentId);
+        if (days.length) {
+          const dayGroup = document.createElement("optgroup");
+          dayGroup.label = "按天";
+          days.forEach((item) => {
+            const option = document.createElement("option");
+            option.value = item.value;
+            option.textContent = item.label;
+            dayGroup.appendChild(option);
+          });
+          sessionFilterEl.appendChild(dayGroup);
+        }
+
+        sessionFilterEl.value = state.sessionFilter;
       }
 
       function wrapText(text, maxWidth, maxLines) {
@@ -525,31 +648,6 @@
         positionHoverPop(e);
       }
 
-      function clearTimer() {
-        if (state.timer) {
-          clearTimeout(state.timer);
-          state.timer = null;
-        }
-      }
-
-      function scheduleTick() {
-        clearTimer();
-        if (!state.running) return;
-        if (state.cursor >= state.timeline.length) return;
-        const delay = Math.max(120, 900 / state.speed);
-        state.timer = setTimeout(tick, delay);
-      }
-
-      function tick() {
-        if (!state.running) return;
-        if (state.cursor < state.timeline.length) {
-          state.cursor += 1;
-          if (state.cursor >= state.timeline.length) state.forceBottom = true;
-          render();
-        }
-        scheduleTick();
-      }
-
       function clamp(num, min, max) {
         return Math.max(min, Math.min(max, num));
       }
@@ -558,37 +656,38 @@
         if (!evt || state.idSet.has(evt.id)) return false;
         state.idSet.add(evt.id);
 
-        const previousTotal = state.timeline.length;
+        const previousTotal = getFilteredTimeline().length;
         const atTail = state.cursor >= previousTotal;
 
-        state.timeline.push(evt);
-        addAgent(evt.from);
-        addAgent(evt.to);
+        state.allTimeline.push(evt);
+        syncSessionFilterOptions();
 
-        if (atTail && state.running) {
-          state.cursor = state.timeline.length;
-          state.forceBottom = true;
+        if (atTail) {
+          const nextTotal = getFilteredTimeline().length;
+          state.cursor = nextTotal;
+          if (eventMatchesCurrentFilter(evt)) {
+            state.forceBottom = true;
+          }
         }
 
         if (renderNow) render();
-        if (!atTail && state.running) scheduleTick();
         return true;
       }
 
       function rebuildFromHistory(items) {
-        clearTimer();
-
-        state.timeline.length = 0;
-        state.agents.length = 0;
+        state.allTimeline.length = 0;
         state.idSet.clear();
 
         const sorted = [...items].sort((a, b) => (Number(a.ts) || 0) - (Number(b.ts) || 0));
         sorted.forEach((raw) => {
           const evt = normalizeEvent(raw);
-          if (evt) addEvent(evt, false);
+          if (!evt || state.idSet.has(evt.id)) return;
+          state.idSet.add(evt.id);
+          state.allTimeline.push(evt);
         });
 
-        state.cursor = state.timeline.length;
+        syncSessionFilterOptions();
+        state.cursor = getFilteredTimeline().length;
         state.forceBottom = true;
         render();
       }
@@ -605,7 +704,7 @@
       }
 
       function computeLayout(visible) {
-        const agents = state.agents.length ? state.agents : ["main"];
+        const agents = buildAgentList(visible);
         const viewportW = Math.max(760, diagramScroll.clientWidth || 1020);
         const viewportH = Math.max(460, diagramScroll.clientHeight || 560);
 
@@ -1015,7 +1114,7 @@
       }
 
       function renderControls() {
-        const total = state.timeline.length;
+        const total = getFilteredTimeline().length;
         const shown = state.cursor;
 
         progressInput.max = String(Math.max(0, total));
@@ -1026,19 +1125,20 @@
         nextBtn.disabled = shown >= total;
         processBtn.textContent = state.showInternal ? "隐藏过程信息" : "显示过程信息";
         processBtn.classList.toggle("is-primary", state.showInternal);
-
-        setToggleText();
+        sessionFilterEl.value = state.sessionFilter;
       }
 
       function render() {
+        const filtered = getFilteredTimeline();
+        state.cursor = clamp(state.cursor, 0, filtered.length);
         renderControls();
 
-        const visible = state.timeline.slice(0, state.cursor);
+        const visible = filtered.slice(0, state.cursor);
         const layout = computeLayout(visible);
         drawHeader(layout);
         drawBody(layout);
 
-        if (state.forceBottom || (state.running && state.cursor >= state.timeline.length)) {
+        if (state.forceBottom || state.cursor >= filtered.length) {
           requestAnimationFrame(() => {
             diagramScroll.scrollTop = diagramScroll.scrollHeight;
           });
@@ -1046,28 +1146,16 @@
         }
       }
 
-      function setRunning(next) {
-        state.running = next;
-        renderControls();
-        if (state.running) {
-          scheduleTick();
-        } else {
-          clearTimer();
-        }
-      }
-
       function stepBy(delta) {
-        const total = state.timeline.length;
+        const total = getFilteredTimeline().length;
         if (!total) return;
 
-        if (state.running) setRunning(false);
         state.cursor = clamp(state.cursor + delta, 0, total);
         render();
       }
 
       function seekTo(target) {
-        const total = state.timeline.length;
-        if (state.running) setRunning(false);
+        const total = getFilteredTimeline().length;
         state.cursor = clamp(target, 0, total);
         render();
       }
@@ -1112,7 +1200,6 @@
         connectEvents();
       }
 
-      toggleBtn.addEventListener("click", () => setRunning(!state.running));
       prevBtn.addEventListener("click", () => stepBy(-1));
       nextBtn.addEventListener("click", () => stepBy(1));
 
@@ -1137,10 +1224,11 @@
         }
       });
 
-      speedInput.addEventListener("input", () => {
-        state.speed = Number(speedInput.value || 1);
-        speedValueEl.textContent = `${state.speed.toFixed(1)}x`;
-        if (state.running) scheduleTick();
+      sessionFilterEl.addEventListener("change", () => {
+        state.sessionFilter = sessionFilterEl.value || "all";
+        state.cursor = getFilteredTimeline().length;
+        state.forceBottom = true;
+        render();
       });
 
       progressInput.addEventListener("input", () => {
@@ -1155,7 +1243,7 @@
         render();
       });
 
-      speedValueEl.textContent = `${state.speed.toFixed(1)}x`;
+      syncSessionFilterOptions();
       render();
       initialize();
     })();
