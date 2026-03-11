@@ -1042,7 +1042,7 @@ function parseEventsFromMessage(entry, currentAgent, fileKey) {
             mode: "internal",
             from: currentAgent,
             to: currentAgent,
-            text: "【思考模块】\n生成中间推理（内容已省略）",
+            text: `【思考模块】\n${part.thinking.trim()}`,
             meta: { stage: "thinking", internal: true, module: "思考模块" }
           })
         );
@@ -1155,8 +1155,8 @@ function parseEventsFromMessage(entry, currentAgent, fileKey) {
         id: `${root}:spawn-result:${msg.toolCallId || "unknown"}`,
         ts,
         mode: "spawn",
-        from: currentAgent,
-        to: target,
+        from: target,
+        to: currentAgent,
         text: `接单状态: ${status}${note}`,
         meta: {
           stage: "result",

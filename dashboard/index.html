@@ -5,20 +5,137 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>OpenClaw 执行时序图</title>
   <style>
-    @import url("https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&family=Noto+Sans+SC:wght@400;500;700&display=swap");
+    @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap");
 
     :root {
+      color-scheme: dark;
       --bg-0: #091320;
       --bg-1: #0f2338;
-      --line: rgba(145, 220, 236, 0.28);
-      --line-soft: rgba(145, 220, 236, 0.14);
+      --page-bg: radial-gradient(circle at 14% 2%, rgba(73, 132, 180, 0.22) 0%, rgba(10, 21, 34, 0) 28%), radial-gradient(circle at 88% 12%, rgba(106, 212, 210, 0.1) 0%, rgba(10, 21, 34, 0) 22%), linear-gradient(180deg, #07101a, #08111b 72%);
+      --app-bg: linear-gradient(180deg, rgba(10, 21, 34, 0.97), rgba(7, 14, 23, 0.99));
+      --sidebar-bg: linear-gradient(180deg, rgba(12, 26, 40, 0.985), rgba(8, 17, 29, 0.995));
+      --board-bg: radial-gradient(circle at 18% 10%, rgba(120, 183, 255, 0.055), rgba(120, 183, 255, 0) 28%), linear-gradient(180deg, rgba(7, 16, 27, 0.99), rgba(6, 14, 24, 0.995));
+      --panel-bg: rgba(14, 31, 47, 0.84);
+      --panel-bg-strong: rgba(19, 38, 58, 0.94);
+      --panel-border: rgba(145, 220, 236, 0.16);
+      --line: rgba(145, 220, 236, 0.24);
+      --line-soft: rgba(145, 220, 236, 0.12);
       --text: #ecf8ff;
       --text-soft: #c7dbeb;
-      --a2a: #67e6c7;
-      --spawn: #ffcc7a;
-      --user: #80cfff;
+      --text-muted: rgba(199, 219, 235, 0.68);
+      --a2a: #72cbdb;
+      --spawn: #8dd3c7;
+      --user: #78b7ff;
       --shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
       --header-h: 66px;
+      --sidebar-w: 350px;
+      --sidebar-collapsed-w: 74px;
+      --button-bg: rgba(36, 73, 101, 0.52);
+      --button-hover: rgba(50, 92, 125, 0.64);
+      --button-border: rgba(150, 205, 231, 0.22);
+      --button-ghost-bg: rgba(22, 46, 67, 0.74);
+      --input-bg: rgba(12, 28, 42, 0.94);
+      --input-border: rgba(143, 195, 220, 0.2);
+      --hover-bg: rgba(7, 24, 39, 0.96);
+      --hover-border: rgba(149, 227, 240, 0.4);
+      --toast-bg: rgba(13, 48, 42, 0.92);
+      --toast-border: rgba(103, 230, 199, 0.42);
+      --toast-text: #d9fff4;
+      --svg-header-bg: rgba(8, 20, 34, 0.88);
+      --svg-header-box: rgba(11, 35, 54, 0.86);
+      --svg-header-stroke: rgba(149, 227, 240, 0.42);
+      --svg-header-text: #e9f8ff;
+      --svg-lane: rgba(148, 224, 240, 0.28);
+      --svg-row-alt: rgba(120, 208, 230, 0.03);
+      --svg-card-fill: rgba(7, 24, 39, 0.9);
+      --svg-card-stroke: rgba(150, 225, 240, 0.25);
+      --svg-chip-fill: rgba(17, 42, 62, 0.92);
+      --svg-chip-stroke: rgba(146, 214, 229, 0.2);
+      --svg-chip-text: #d8edf8;
+      --svg-title-fill: rgba(16, 43, 66, 0.94);
+      --svg-body-text: #f5fcff;
+      --svg-separator-stroke: rgba(141, 203, 199, 0.44);
+      --svg-separator-bg: rgba(13, 42, 46, 0.88);
+      --svg-separator-text: #d5f3ed;
+      --svg-parallel-fill: rgba(42, 74, 70, 0.16);
+      --svg-parallel-stroke: rgba(141, 203, 199, 0.34);
+      --svg-focus: rgba(110, 225, 245, 0.32);
+      --svg-empty: rgba(212, 238, 251, 0.72);
+      --svg-badge-bg: rgba(8, 22, 35, 0.94);
+      --grid-line: rgba(114, 179, 228, 0.05);
+      --grid-line-strong: rgba(114, 179, 228, 0.028);
+      --dock-bg: linear-gradient(180deg, rgba(31, 58, 82, 0.94), rgba(21, 43, 63, 0.98));
+      --dock-bg-hover: linear-gradient(180deg, rgba(44, 77, 106, 0.96), rgba(26, 50, 72, 0.99));
+      --dock-border: rgba(154, 219, 239, 0.2);
+      --dock-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
+      --dock-icon: #dff5ff;
+      --brand-glow: rgba(97, 220, 186, 0.18);
+      --brand-shell: rgba(255, 134, 94, 0.94);
+      --brand-shell-dark: rgba(236, 96, 64, 0.96);
+      --brand-accent: rgba(255, 230, 166, 0.96);
+      --font-ui: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg-0: #e6eef8;
+      --bg-1: #dce7f3;
+      --page-bg: radial-gradient(circle at 16% 4%, rgba(121, 183, 229, 0.24) 0%, rgba(255,255,255,0) 28%), linear-gradient(180deg, #eef4fb, #e4edf7 62%);
+      --app-bg: linear-gradient(180deg, rgba(249, 252, 255, 0.97), rgba(237, 244, 251, 0.99));
+      --sidebar-bg: linear-gradient(180deg, rgba(246, 250, 255, 0.985), rgba(235, 242, 250, 0.995));
+      --board-bg: radial-gradient(circle at 16% 8%, rgba(141, 201, 233, 0.16), rgba(141, 201, 233, 0) 34%), linear-gradient(180deg, rgba(244, 249, 255, 0.99), rgba(229, 238, 247, 0.995));
+      --panel-bg: rgba(255, 255, 255, 0.76);
+      --panel-bg-strong: rgba(248, 251, 255, 0.96);
+      --panel-border: rgba(49, 88, 122, 0.13);
+      --line: rgba(49, 88, 122, 0.18);
+      --line-soft: rgba(49, 88, 122, 0.1);
+      --text: #15304a;
+      --text-soft: #50667d;
+      --text-muted: rgba(80, 102, 125, 0.72);
+      --shadow: 0 20px 42px rgba(49, 83, 115, 0.12);
+      --button-bg: rgba(240, 246, 251, 0.98);
+      --button-hover: rgba(229, 239, 248, 0.99);
+      --button-border: rgba(55, 96, 132, 0.18);
+      --button-ghost-bg: rgba(241, 247, 252, 0.95);
+      --input-bg: rgba(255, 255, 255, 0.98);
+      --input-border: rgba(55, 96, 132, 0.16);
+      --hover-bg: rgba(251, 254, 255, 0.98);
+      --hover-border: rgba(55, 96, 132, 0.22);
+      --toast-bg: rgba(228, 248, 239, 0.96);
+      --toast-border: rgba(57, 160, 110, 0.32);
+      --toast-text: #176140;
+      --svg-header-bg: rgba(230, 239, 248, 0.92);
+      --svg-header-box: rgba(250, 253, 255, 0.97);
+      --svg-header-stroke: rgba(68, 118, 156, 0.2);
+      --svg-header-text: #173650;
+      --svg-lane: rgba(72, 119, 156, 0.2);
+      --svg-row-alt: rgba(118, 181, 222, 0.085);
+      --svg-card-fill: rgba(252, 254, 255, 0.97);
+      --svg-card-stroke: rgba(68, 118, 156, 0.19);
+      --svg-chip-fill: rgba(239, 246, 252, 0.99);
+      --svg-chip-stroke: rgba(68, 118, 156, 0.16);
+      --svg-chip-text: #274359;
+      --svg-title-fill: rgba(234, 242, 250, 0.99);
+      --svg-body-text: #16314a;
+      --svg-separator-stroke: rgba(109, 181, 175, 0.36);
+      --svg-separator-bg: rgba(234, 246, 245, 0.98);
+      --svg-separator-text: #215c58;
+      --svg-parallel-fill: rgba(223, 243, 240, 0.52);
+      --svg-parallel-stroke: rgba(109, 181, 175, 0.22);
+      --svg-focus: rgba(80, 166, 211, 0.22);
+      --svg-empty: rgba(70, 97, 121, 0.66);
+      --svg-badge-bg: rgba(245, 249, 253, 0.99);
+      --grid-line: rgba(98, 145, 179, 0.082);
+      --grid-line-strong: rgba(98, 145, 179, 0.04);
+      --dock-bg: linear-gradient(180deg, rgba(250, 253, 255, 0.98), rgba(235, 242, 250, 0.99));
+      --dock-bg-hover: linear-gradient(180deg, rgba(243, 249, 254, 0.99), rgba(225, 236, 247, 0.99));
+      --dock-border: rgba(55, 96, 132, 0.2);
+      --dock-shadow: 0 10px 18px rgba(57, 92, 126, 0.12);
+      --dock-icon: #28435b;
+      --brand-glow: rgba(88, 204, 173, 0.14);
+      --brand-shell: rgba(255, 126, 92, 0.96);
+      --brand-shell-dark: rgba(233, 103, 73, 0.98);
+      --brand-accent: rgba(255, 240, 194, 0.98);
     }
 
     * { box-sizing: border-box; }
@@ -26,65 +143,166 @@
     html, body {
       margin: 0;
       min-height: 100%;
-      background: radial-gradient(circle at 12% 8%, #122943 0%, var(--bg-0) 46%), var(--bg-0);
+      background: var(--page-bg), var(--bg-0);
       color: var(--text);
-      font-family: "Noto Sans SC", sans-serif;
+      font-family: var(--font-ui);
     }
 
-    body { padding: 14px; }
+    body {
+      padding: 14px;
+      overflow: hidden;
+    }
+
+    html, body, .app, .sidebar, .board, .control-panel, .button, .filter-wrap select, .live-state, .brand-pill, .detail-panel, .detail-content, .detail-tag {
+      transition: background 180ms ease, background-color 180ms ease, color 180ms ease, border-color 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+    }
+
+    @keyframes gentleRise {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     .app {
-      max-width: 1520px;
+      max-width: 1600px;
       margin: 0 auto;
       border: 1px solid var(--line);
-      border-radius: 18px;
+      border-radius: 24px;
       overflow: hidden;
       box-shadow: var(--shadow);
-      background: linear-gradient(180deg, rgba(10, 25, 42, 0.95), rgba(6, 15, 25, 0.95));
+      background: var(--app-bg);
       height: calc(100vh - 28px);
+      min-height: 680px;
       display: grid;
-      grid-template-rows: auto auto 1fr;
-      min-height: 620px;
+      grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+      transition: grid-template-columns 180ms ease;
     }
 
-    .topbar {
+    .app.is-sidebar-collapsed {
+      grid-template-columns: var(--sidebar-collapsed-w) minmax(0, 1fr);
+    }
+
+    .sidebar {
+      min-width: 0;
+      min-height: 0;
       display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      align-items: center;
-      gap: 14px;
-      padding: 12px 14px;
-      border-bottom: 1px solid var(--line-soft);
-      background: linear-gradient(90deg, rgba(10, 30, 48, 0.94), rgba(8, 22, 38, 0.9));
+      flex-direction: column;
+      background: var(--sidebar-bg);
+      border-right: 1px solid var(--line-soft);
+      position: relative;
+      z-index: 5;
     }
 
-    .title-wrap { display: grid; gap: 3px; }
+    .sidebar-head {
+      padding: 18px 16px 14px;
+      display: grid;
+      gap: 14px;
+      border-bottom: 1px solid var(--line-soft);
+      background: radial-gradient(circle at 14% 0%, rgba(137, 199, 232, 0.12), rgba(137, 199, 232, 0) 34%), linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent);
+      animation: gentleRise 360ms ease both;
+    }
+
+    .sidebar-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .brand-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 46px;
+      height: 34px;
+      gap: 8px;
+      padding: 0 12px 0 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(87, 203, 243, 0.16), rgba(110, 242, 205, 0.14));
+      border: 1px solid var(--panel-border);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .brand-pill__short {
+      display: none;
+    }
+
+    .brand-mark {
+      position: relative;
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 auto;
+      filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.16));
+    }
+
+    .brand-mark svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    .brand-mark__glow {
+      fill: var(--brand-glow);
+    }
+
+    .brand-mark__shell {
+      fill: var(--brand-shell);
+    }
+
+    .brand-mark__shell-dark {
+      fill: var(--brand-shell-dark);
+    }
+
+    .brand-mark__accent {
+      fill: var(--brand-accent);
+    }
+
+    .sidebar-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .title-wrap { display: grid; gap: 6px; }
 
     .title {
       margin: 0;
-      font-family: "ZCOOL XiaoWei", serif;
-      font-size: clamp(24px, 2.2vw, 34px);
-      letter-spacing: 0.3px;
+      font-family: var(--font-ui);
+      font-size: clamp(24px, 2vw, 32px);
+      letter-spacing: 0.18px;
+      line-height: 1.08;
+      font-weight: 700;
     }
 
     .subtitle {
       margin: 0;
       font-size: 13px;
       color: var(--text-soft);
-      opacity: 0.9;
+      line-height: 1.55;
     }
 
     .live-state {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 6px;
-      padding: 3px 10px;
+      padding: 6px 12px;
       border-radius: 999px;
-      border: 1px solid rgba(149, 227, 240, 0.35);
-      background: rgba(11, 35, 54, 0.58);
+      border: 1px solid var(--panel-border);
+      background: var(--panel-bg);
       font-size: 11px;
-      color: #def6ff;
+      color: var(--text);
       white-space: nowrap;
+      width: fit-content;
     }
 
     .live-state[data-state="online"] {
@@ -99,55 +317,253 @@
       background: rgba(88, 58, 23, 0.56);
     }
 
-    .controls {
-      padding: 10px 14px;
-      border-bottom: 1px solid var(--line-soft);
+    html[data-theme="light"] .live-state[data-state="online"] {
+      color: #176140;
+      background: rgba(180, 239, 214, 0.68);
+    }
+
+    html[data-theme="light"] .live-state[data-state="reconnecting"] {
+      color: #8a5400;
+      background: rgba(255, 228, 181, 0.86);
+    }
+
+    .sidebar-toolbar {
+      flex: 1;
+      min-height: 0;
+      overflow: auto;
+      padding: 16px;
       display: grid;
-      grid-template-columns: repeat(4, auto) minmax(220px, 300px) minmax(220px, 1fr);
-      gap: 10px;
+      gap: 14px;
+      align-content: start;
+      scrollbar-gutter: stable;
+      scroll-behavior: smooth;
+    }
+
+    .control-panel {
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--panel-border);
+      background: var(--panel-bg);
+      backdrop-filter: blur(6px);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 14px 30px rgba(0, 0, 0, 0.14);
+      animation: gentleRise 420ms ease both;
+    }
+
+    .control-panel:nth-of-type(2) { animation-delay: 40ms; }
+    .control-panel:nth-of-type(3) { animation-delay: 80ms; }
+    .control-panel:nth-of-type(4) { animation-delay: 120ms; }
+    .control-panel:nth-of-type(5) { animation-delay: 160ms; }
+
+    .control-panel-head {
+      display: flex;
       align-items: center;
-      background: rgba(8, 21, 34, 0.88);
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .control-panel-title {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .button-grid--single {
+      grid-template-columns: 1fr;
     }
 
     .button {
-      border: 1px solid rgba(160, 236, 248, 0.33);
+      border: 1px solid var(--button-border);
       color: var(--text);
-      background: rgba(34, 80, 108, 0.55);
-      border-radius: 999px;
-      padding: 8px 13px;
+      background: var(--button-bg);
+      border-radius: 16px;
+      padding: 10px 12px;
+      min-height: 44px;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
-      transition: transform 120ms ease, background 120ms ease;
+      transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+      min-width: 0;
     }
 
-    .button:hover { transform: translateY(-1px); background: rgba(45, 102, 133, 0.66); }
+    .button:hover {
+      transform: translateY(-1px);
+      background: var(--button-hover);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    }
+
     .button:active { transform: translateY(1px); }
     .button:disabled { opacity: 0.45; cursor: not-allowed; transform: none; }
 
     .button.is-primary {
-      background: linear-gradient(90deg, rgba(79, 210, 252, 0.3), rgba(143, 252, 217, 0.26));
-      border-color: rgba(154, 247, 255, 0.65);
+      background: linear-gradient(135deg, rgba(120, 183, 255, 0.24), rgba(114, 203, 219, 0.22));
+      border-color: rgba(144, 209, 235, 0.42);
+    }
+
+    .button--ghost {
+      background: var(--button-ghost-bg);
+    }
+
+    .button--icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding-inline: 11px;
+      white-space: nowrap;
+    }
+
+    .button__icon {
+      font-size: 14px;
+      line-height: 1;
+    }
+
+    .button__icon--svg svg,
+    .detail-tag__icon svg {
+      display: block;
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.85;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .sidebar-actions .button__icon--svg svg {
+      width: 20px;
+      height: 20px;
+      stroke-width: 1.9;
+    }
+
+    .dock-button__icon svg {
+      display: block;
+      width: 24px;
+      height: 24px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.9;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .button__label {
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    .control-panel-body {
+      display: grid;
+      gap: 12px;
+    }
+
+
+    .dock-button {
+      display: none;
+      width: 50px;
+      height: 50px;
+      padding: 0;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--dock-border);
+      border-radius: 17px;
+      color: var(--dock-icon);
+      background: var(--dock-bg);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), var(--dock-shadow);
+      cursor: pointer;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease, box-shadow 140ms ease;
+    }
+
+    .dock-button:hover,
+    .dock-button:focus-visible {
+      transform: translateY(-1px) scale(1.02);
+      border-color: rgba(155, 226, 240, 0.34);
+      background: var(--dock-bg-hover);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 14px 24px rgba(0, 0, 0, 0.18);
+    }
+
+    .dock-button:focus-visible {
+      outline: none;
+    }
+
+    .dock-button__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      opacity: 0.96;
+    }
+
+    .sidebar-head [data-tooltip],
+    .dock-button[data-tooltip] {
+      position: relative;
+    }
+
+    .app.is-sidebar-collapsed .sidebar-head [data-tooltip]::after,
+    .app.is-sidebar-collapsed .dock-button[data-tooltip]::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      left: calc(100% + 12px);
+      top: 50%;
+      transform: translateY(-50%) translateX(-8px);
+      padding: 7px 10px;
+      border-radius: 12px;
+      border: 1px solid var(--panel-border);
+      background: var(--panel-bg-strong);
+      color: var(--text);
+      font-size: 12px;
+      line-height: 1;
+      white-space: nowrap;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 140ms ease, transform 140ms ease;
+      z-index: 22;
+    }
+
+    .app.is-sidebar-collapsed .sidebar-head [data-tooltip]:hover::after,
+    .app.is-sidebar-collapsed .sidebar-head [data-tooltip]:focus-visible::after,
+    .app.is-sidebar-collapsed .dock-button[data-tooltip]:hover::after,
+    .app.is-sidebar-collapsed .dock-button[data-tooltip]:focus-visible::after {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
     }
 
     .filter-wrap,
     .progress-wrap {
       display: grid;
-      grid-template-columns: auto 1fr;
-      align-items: center;
       gap: 8px;
-      border: 1px solid rgba(141, 222, 235, 0.23);
-      border-radius: 10px;
-      background: rgba(17, 44, 65, 0.54);
-      padding: 6px 9px;
       min-width: 0;
+    }
+
+    .field-note {
+      margin: 0;
+      font-size: 11px;
+      line-height: 1.5;
+      color: var(--text-muted);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .field-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
     }
 
     .filter-wrap label,
     .progress-wrap label {
       font-size: 12px;
       color: var(--text-soft);
-      opacity: 0.92;
       white-space: nowrap;
     }
 
@@ -165,27 +581,68 @@
     }
 
     .filter-wrap select {
-      min-height: 34px;
-      border: 1px solid rgba(160, 236, 248, 0.24);
-      border-radius: 8px;
+      min-height: 38px;
+      border: 1px solid var(--input-border);
+      border-radius: 12px;
       color: var(--text);
-      background: rgba(10, 30, 48, 0.92);
-      padding: 6px 10px;
+      background: var(--input-bg);
+      padding: 8px 11px;
       outline: none;
     }
 
+    .progress-wrap input[type="range"] {
+      accent-color: var(--user);
+    }
+
     .board {
+      min-width: 0;
       min-height: 0;
       overflow: hidden;
-      background: linear-gradient(180deg, rgba(7, 18, 30, 0.96), rgba(5, 12, 21, 0.98));
+      background: var(--board-bg);
+      animation: gentleRise 480ms ease both;
+      position: relative;
+      z-index: 1;
+    }
+
+    .board-shell {
+      position: relative;
+      min-width: 0;
+      min-height: 0;
+      height: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 368px;
+    }
+
+    .board-shell.is-detail-collapsed {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .diagram-stage {
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      border-right: 1px solid var(--line-soft);
+    }
+
+    .board-shell.is-detail-collapsed .diagram-stage {
+      border-right: none;
     }
 
     .diagram-scroll {
       position: relative;
+      flex: 1;
       min-height: 100%;
       height: 100%;
       overflow: auto;
+      scroll-behavior: smooth;
       scrollbar-gutter: stable both-edges;
+      background-image:
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+        linear-gradient(var(--grid-line-strong) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line-strong) 1px, transparent 1px);
+      background-size: 32px 32px, 32px 32px, 160px 160px, 160px 160px;
+      background-position: 0 0, 0 0, 0 0, 0 0;
     }
 
     .diagram-header {
@@ -193,7 +650,7 @@
       top: 0;
       z-index: 3;
       backdrop-filter: blur(3px);
-      background: linear-gradient(180deg, rgba(7, 20, 34, 0.96), rgba(7, 20, 34, 0.88));
+      background: transparent;
       border-bottom: 1px solid var(--line-soft);
     }
 
@@ -208,96 +665,790 @@
       height: auto;
     }
 
-    .hover-pop {
-      position: absolute;
-      z-index: 6;
+    .detail-panel {
+      min-width: 0;
+      min-height: 0;
+      display: grid;
+      grid-template-rows: auto auto minmax(0, 1fr);
+      gap: 16px;
+      padding: 18px 18px 16px;
+      background:
+        radial-gradient(circle at 12% 2%, rgba(118, 195, 243, 0.08), rgba(118, 195, 243, 0) 28%),
+        linear-gradient(180deg, rgba(11, 25, 39, 0.92), rgba(8, 18, 29, 0.97));
+      overflow: hidden;
+    }
+
+    .detail-panel.is-collapsed {
       display: none;
-      max-width: min(520px, 72vw);
-      max-height: 56vh;
+    }
+
+    html[data-theme="light"] .detail-panel {
+      background:
+        radial-gradient(circle at 12% 2%, rgba(118, 195, 243, 0.12), rgba(118, 195, 243, 0) 28%),
+        linear-gradient(180deg, rgba(247, 251, 255, 0.96), rgba(236, 243, 250, 0.98));
+    }
+
+    .detail-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .detail-copy {
+      flex-shrink: 0;
+    }
+
+    .detail-copy:disabled,
+    .detail-clear:disabled {
+      box-shadow: none;
+    }
+
+    .detail-copy:disabled:hover,
+    .detail-clear:disabled:hover {
+      transform: none;
+    }
+
+    .detail-head-main {
+      min-width: 0;
+      display: grid;
+      gap: 6px;
+    }
+
+    .detail-kicker {
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .detail-title {
+      margin: 0;
+      font-family: var(--font-ui);
+      font-size: 23px;
+      line-height: 1.18;
+      color: var(--text);
+      word-break: break-word;
+      font-weight: 700;
+    }
+
+    .detail-subtitle {
+      margin: 0;
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: var(--text-soft);
+    }
+
+    .detail-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .detail-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-content: flex-start;
+      min-width: 0;
+      padding-bottom: 6px;
+    }
+
+    .detail-tag {
+      display: inline-grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      align-items: center;
+      gap: 8px;
+      max-width: 100%;
+      min-height: 34px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--panel-border);
+      background: rgba(255, 255, 255, 0.02);
+      color: var(--text-soft);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    }
+
+    html[data-theme="light"] .detail-tag {
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .detail-tag--accent {
+      color: var(--text);
+      border-color: var(--tag-accent, var(--panel-border));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+    }
+
+    .detail-tag__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: currentColor;
+      opacity: 0.94;
+    }
+
+    .detail-tag__text {
+      min-width: 0;
+      font-size: 12px;
+      line-height: 1.4;
+      white-space: normal;
+      word-break: break-word;
+    }
+
+    .detail-content {
+      min-width: 0;
+      min-height: 0;
       overflow: auto;
-      border: 1px solid rgba(149, 227, 240, 0.4);
-      border-radius: 10px;
-      background: rgba(7, 24, 39, 0.96);
-      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.52);
-      padding: 10px 10px 9px;
-      pointer-events: none;
+      padding: 20px 18px;
+      border-radius: 22px;
+      border: 1px solid var(--panel-border);
+      background: linear-gradient(180deg, rgba(13, 30, 46, 0.72), rgba(7, 18, 29, 0.78));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      scrollbar-gutter: stable;
+    }
+
+    html[data-theme="light"] .detail-content {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 249, 253, 0.96));
+    }
+
+    .detail-empty {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--text-soft);
+    }
+
+    .detail-body {
+      margin: 0;
+      display: grid;
+      gap: 14px;
+      font-family: var(--font-ui);
+      font-size: 13px;
+      line-height: 1.72;
+      color: var(--text);
+      word-break: break-word;
+      user-select: text;
+    }
+
+    .detail-body > * {
+      margin: 0;
+    }
+
+    .detail-body h1,
+    .detail-body h2,
+    .detail-body h3,
+    .detail-body h4,
+    .detail-body h5,
+    .detail-body h6 {
+      font-size: 1em;
+      line-height: 1.45;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .detail-body h1 { font-size: 1.42em; }
+    .detail-body h2 { font-size: 1.3em; }
+    .detail-body h3 { font-size: 1.18em; }
+
+    .detail-body p {
+      white-space: pre-wrap;
+      color: var(--text);
+    }
+
+    .detail-body ul,
+    .detail-body ol {
+      display: grid;
+      gap: 8px;
+      padding-left: 1.3em;
+      color: var(--text);
+    }
+
+    .detail-body li {
+      white-space: pre-wrap;
+    }
+
+    .detail-body blockquote {
+      padding: 12px 14px;
+      border-left: 3px solid rgba(124, 196, 240, 0.52);
+      border-radius: 0 16px 16px 0;
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-soft);
+      white-space: pre-wrap;
+    }
+
+    html[data-theme="light"] .detail-body blockquote {
+      background: rgba(93, 142, 178, 0.08);
+    }
+
+    .detail-body hr {
+      border: 0;
+      height: 1px;
+      background: var(--line-soft);
+    }
+
+    .detail-body a {
+      color: var(--user);
+      text-decoration: none;
+      border-bottom: 1px solid rgba(120, 183, 255, 0.36);
+    }
+
+    .detail-body strong {
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .detail-body em {
+      font-style: italic;
+    }
+
+    .detail-body code {
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+      font-size: 0.92em;
+      padding: 0.14em 0.42em;
+      border-radius: 7px;
+      background: rgba(118, 183, 255, 0.12);
+      color: var(--text);
+    }
+
+    .detail-body pre {
+      margin: 0;
+      padding: 14px 15px;
+      border-radius: 16px;
+      border: 1px solid var(--panel-border);
+      background: rgba(7, 18, 29, 0.58);
+      overflow: auto;
       white-space: pre-wrap;
       word-break: break-word;
     }
 
-    .hover-pop-meta {
-      font-size: 11px;
-      color: #cde8f7;
-      opacity: 0.9;
-      margin-bottom: 6px;
+    html[data-theme="light"] .detail-body pre {
+      background: rgba(240, 246, 252, 0.9);
     }
 
-    .hover-pop-body {
+    .detail-body pre code {
+      display: block;
+      padding: 0;
+      border-radius: 0;
+      background: transparent;
+      color: inherit;
+    }
+
+    .detail-panel.is-empty .detail-tags,
+    .detail-panel.is-empty .detail-body {
+      display: none;
+    }
+
+    .detail-panel:not(.is-empty) .detail-empty {
+      display: none;
+    }
+
+    .copy-toast {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      z-index: 7;
+      display: none;
+      padding: 7px 11px;
+      border: 1px solid var(--toast-border);
+      border-radius: 999px;
+      background: var(--toast-bg);
+      color: var(--toast-text);
       font-size: 12px;
-      line-height: 1.48;
-      color: #f2fbff;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+      white-space: nowrap;
     }
 
-    @media (max-width: 1220px) {
-      .controls {
-        grid-template-columns: repeat(4, auto) minmax(170px, 1fr);
+    .app.is-sidebar-collapsed .title-wrap,
+    .app.is-sidebar-collapsed .live-state {
+      display: none;
+    }
+
+    .app.is-sidebar-collapsed .sidebar {
+      overflow: visible;
+    }
+
+    .app.is-sidebar-collapsed .sidebar-head {
+      padding: 12px 8px 10px;
+      gap: 12px;
+      justify-items: center;
+    }
+
+    .app.is-sidebar-collapsed .sidebar-top {
+      width: 100%;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .app.is-sidebar-collapsed .sidebar-actions {
+      width: auto;
+      justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .app.is-sidebar-collapsed .brand-pill {
+      width: 42px;
+      min-width: 42px;
+      height: 42px;
+      padding: 0;
+      border-radius: 14px;
+      letter-spacing: 0.04em;
+    }
+
+    .app.is-sidebar-collapsed .brand-pill__full {
+      display: none;
+    }
+
+    .app.is-sidebar-collapsed .brand-pill__short {
+      display: none;
+    }
+
+    .app.is-sidebar-collapsed .brand-mark {
+      width: 20px;
+      height: 20px;
+    }
+
+    .app.is-sidebar-collapsed .brand-mark svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .app.is-sidebar-collapsed .button--icon {
+      width: 46px;
+      min-width: 46px;
+      min-height: 46px;
+      padding: 0;
+      border-radius: 15px;
+    }
+
+    .app.is-sidebar-collapsed .button__label {
+      display: none;
+    }
+
+    .app.is-sidebar-collapsed .sidebar-toolbar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 8px 14px;
+      overflow: visible;
+      scrollbar-gutter: auto;
+    }
+
+    .app.is-sidebar-collapsed .control-panel {
+      width: 100%;
+      padding: 0;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      box-shadow: none;
+      animation: none;
+      position: relative;
+      justify-items: center;
+    }
+
+    .app.is-sidebar-collapsed .control-panel-body {
+      position: absolute;
+      left: calc(100% - 6px);
+      top: -6px;
+      width: min(320px, calc(100vw - 128px));
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid var(--panel-border);
+      background: var(--panel-bg-strong);
+      box-shadow: 0 20px 38px rgba(0, 0, 0, 0.24);
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateX(-8px) scale(0.98);
+      transition: opacity 150ms ease, transform 150ms ease, visibility 150ms ease;
+      z-index: 18;
+    }
+
+    .app.is-sidebar-collapsed .control-panel:hover .control-panel-body,
+    .app.is-sidebar-collapsed .control-panel:focus-within .control-panel-body {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateX(0) scale(1);
+    }
+
+    .app.is-sidebar-collapsed .dock-button {
+      display: inline-flex;
+    }
+
+    @media (max-width: 980px) {
+      .app {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+        height: calc(100vh - 28px);
+        min-height: calc(100vh - 28px);
       }
-      .filter-wrap,
-      .progress-wrap { grid-column: 1 / -1; }
+
+      .board-shell {
+        grid-template-columns: 1fr;
+        grid-template-rows: minmax(0, 1fr) minmax(228px, 38vh);
+      }
+
+      .board-shell.is-detail-collapsed {
+        grid-template-rows: minmax(0, 1fr);
+      }
+
+      .diagram-stage {
+        border-right: none;
+        border-bottom: 1px solid var(--line-soft);
+      }
+
+      .board-shell.is-detail-collapsed .diagram-stage {
+        border-bottom: none;
+      }
+
+      .detail-panel {
+        padding: 16px 16px 14px;
+      }
+
+      .app.is-sidebar-collapsed {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
+      }
+
+      .sidebar {
+        border-right: none;
+        border-bottom: 1px solid var(--line-soft);
+        max-height: min(42vh, 360px);
+      }
+
+      .app.is-sidebar-collapsed .sidebar {
+        display: grid;
+      }
+
+      .app.is-sidebar-collapsed .title-wrap,
+      .app.is-sidebar-collapsed .live-state {
+        display: none;
+      }
+
+      .app.is-sidebar-collapsed .sidebar-head {
+        padding: 12px 12px 10px;
+      }
+
+      .app.is-sidebar-collapsed .sidebar-top {
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .app.is-sidebar-collapsed .sidebar-actions {
+        flex-direction: row;
+      }
+
+      .app.is-sidebar-collapsed .sidebar-toolbar {
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 10px 12px 12px;
+        overflow: auto;
+      }
+
+      .app.is-sidebar-collapsed .control-panel {
+        width: auto;
+      }
+
+      .app.is-sidebar-collapsed .control-panel-body {
+        left: 0;
+        top: calc(100% + 10px);
+        width: min(320px, calc(100vw - 28px));
+      }
     }
 
     @media (max-width: 760px) {
       body { padding: 8px; }
-      .app { height: calc(100vh - 16px); }
-      .controls {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      .app {
+        min-height: calc(100vh - 16px);
+        height: calc(100vh - 16px);
       }
-      .filter-wrap,
-      .progress-wrap { grid-column: 1 / -1; }
+      .sidebar {
+        max-height: min(38vh, 332px);
+      }
+      .sidebar-head {
+        padding: 12px 12px 10px;
+        gap: 10px;
+      }
+      .title {
+        font-size: clamp(20px, 6.4vw, 26px);
+      }
+      .subtitle {
+        font-size: 11.5px;
+        line-height: 1.42;
+      }
+      .sidebar-head,
+      .sidebar-toolbar { padding-inline: 12px; }
+      .sidebar-toolbar {
+        padding-top: 10px;
+        padding-bottom: 12px;
+        gap: 10px;
+      }
+      .board-shell {
+        grid-template-rows: minmax(0, 1fr) minmax(210px, 42vh);
+      }
+      .detail-panel {
+        padding: 14px 12px 12px;
+        gap: 14px;
+      }
+      .detail-head {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .detail-actions {
+        justify-content: flex-start;
+      }
+      .detail-title {
+        font-size: 21px;
+      }
+      .detail-content {
+        padding: 18px 14px;
+        border-radius: 18px;
+      }
+      .control-panel {
+        padding: 12px;
+        gap: 10px;
+      }
+      .control-panel-title {
+        letter-spacing: 0.12em;
+      }
+      .live-state {
+        padding: 5px 10px;
+      }
+      .button--icon {
+        min-height: 38px;
+      }
+      .button__label {
+        font-size: 11px;
+      }
+      .button-grid { grid-template-columns: 1fr; }
       .button { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <div class="app">
-    <header class="topbar">
-      <div class="title-wrap">
-        <h1 class="title">OpenClaw 执行时序图</h1>
-        <p class="subtitle">自动读取历史 session，动态渲染 人 / main / 子agent 的交互流程</p>
-      </div>
-      <span class="live-state" id="live-state" data-state="connecting">连接中</span>
-    </header>
+  <div class="app" id="app-shell">
+    <aside class="sidebar">
+      <section class="sidebar-head">
+        <div class="sidebar-top">
+          <span class="brand-pill" data-tooltip="OpenClaw">
+            <span class="brand-mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <ellipse class="brand-mark__glow" cx="12" cy="12" rx="10.5" ry="10"></ellipse>
+                <path class="brand-mark__shell-dark" d="M11.8 6.2c-1.7 0-3.2 1-3.8 2.5-.7-.5-1.5-.8-2.4-.8-1.5 0-2.8.8-3.6 2l2 1.2c.4-.7 1.1-1.1 1.8-1.1.8 0 1.6.5 1.9 1.3l.3.8-.9.3c-1.2.4-2 1.5-2 2.7 0 1.7 1.4 3.1 3.1 3.1h7.7c2.3 0 4.2-1.8 4.2-4.1 0-1.9-1.4-3.6-3.2-4-.5-2.2-2.4-3.9-4.9-3.9z"></path>
+                <path class="brand-mark__shell" d="M12.1 7.1c-1.5 0-2.8 1-3.3 2.4l-.3.8-.8-.4c-.6-.3-1.2-.5-1.8-.5-1 0-2 .4-2.7 1.2l1 .6c.5-.4 1.1-.7 1.7-.7.9 0 1.8.5 2.2 1.4l.5 1 1-.4c.5-.2 1-.3 1.5-.3 1.8 0 3.2 1.4 3.2 3.1 0 .6-.2 1.2-.5 1.7h2.4c1.7 0 3.1-1.3 3.1-3 0-1.5-1.1-2.7-2.5-3l-.8-.2-.1-.8c-.3-1.7-1.8-2.9-3.6-2.9z"></path>
+                <circle class="brand-mark__accent" cx="9.5" cy="13.4" r="1"></circle>
+                <circle class="brand-mark__accent" cx="13" cy="13.4" r="1"></circle>
+                <path class="brand-mark__accent" d="M11.1 15.6c.5.4 1.3.4 1.8 0l.5.6c-.8.8-2 .8-2.8 0z"></path>
+                <path class="brand-mark__accent" d="M18.9 7.1l1.6-1.2.7.9-1.8 1.4z"></path>
+                <path class="brand-mark__accent" d="M19.3 9.4l2-.4.2 1.1-2.1.4z"></path>
+                <path class="brand-mark__accent" d="M5.1 7.1 3.5 5.9l-.7.9 1.8 1.4z"></path>
+                <path class="brand-mark__accent" d="M4.7 9.4 2.7 9l-.2 1.1 2.1.4z"></path>
+              </svg>
+            </span>
+            <span class="brand-pill__full">OpenClaw</span>
+            <span class="brand-pill__short">OC</span>
+          </span>
+          <div class="sidebar-actions">
+            <button class="button button--ghost button--icon" id="toggle-theme" type="button" data-tooltip="切到浅色" aria-label="切到浅色">
+              <span class="button__icon button__icon--svg" id="toggle-theme-icon" aria-hidden="true"></span>
+              <span class="button__label" id="toggle-theme-label">切到浅色</span>
+            </button>
+            <button class="button button--ghost button--icon" id="toggle-sidebar" type="button" data-tooltip="收起边栏" aria-label="收起边栏">
+              <span class="button__icon button__icon--svg" id="toggle-sidebar-icon" aria-hidden="true"></span>
+              <span class="button__label" id="toggle-sidebar-label">收起边栏</span>
+            </button>
+          </div>
+        </div>
+        <div class="title-wrap">
+          <h1 class="title">OpenClaw 执行时序图</h1>
+          <p class="subtitle">自动读取历史 session，动态渲染 人 / main / 子agent 的交互流程</p>
+        </div>
+        <span class="live-state" id="live-state" data-state="connecting">连接中</span>
+      </section>
 
-    <section class="controls">
-      <button class="button" id="prev-step">上一步</button>
-      <button class="button" id="next-step">下一步</button>
-      <button class="button" id="reload">重载历史</button>
-      <button class="button" id="toggle-process">显示过程信息</button>
+      <section class="sidebar-toolbar">
+        <div class="control-panel">
+          <button class="dock-button" type="button" data-tooltip="回放控制" aria-label="回放控制">
+            <span class="dock-button__icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20">
+                <circle cx="7" cy="10" r="3"></circle>
+                <path d="M6 8.4 8.7 10 6 11.6z"></path>
+                <path d="M12.4 6.4h2.8"></path>
+                <path d="M12.4 10h2.8"></path>
+                <path d="M12.4 13.6h2"></path>
+              </svg>
+            </span>
+          </button>
+          <div class="control-panel-body">
+            <div class="control-panel-head">
+              <span class="control-panel-title">回放控制</span>
+            </div>
+            <div class="button-grid">
+              <button class="button" id="prev-step">上一步</button>
+              <button class="button" id="next-step">下一步</button>
+            </div>
+            <div class="progress-wrap">
+              <div class="field-head">
+                <label for="progress">进度</label>
+                <span id="progress-text">0 / 0</span>
+              </div>
+              <input id="progress" type="range" min="0" max="0" value="0" step="1" />
+            </div>
+          </div>
+        </div>
 
-      <div class="filter-wrap">
-        <label for="session-filter">会话筛选</label>
-        <select id="session-filter">
-          <option value="all">全部会话</option>
-        </select>
-      </div>
+        <div class="control-panel">
+          <button class="dock-button" type="button" data-tooltip="筛选" aria-label="筛选">
+            <span class="dock-button__icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20">
+                <path d="M4.7 5.2h10.6l-4.2 4.8v3.5l-2.2 1.3V10z"></path>
+                <path d="M8.2 5.2v2"></path>
+              </svg>
+            </span>
+          </button>
+          <div class="control-panel-body">
+            <div class="control-panel-head">
+              <span class="control-panel-title">筛选</span>
+            </div>
+            <div class="filter-wrap">
+              <div class="field-head">
+                <label for="session-filter">会话筛选</label>
+              </div>
+              <select id="session-filter">
+                <option value="all">全部会话</option>
+              </select>
+            </div>
+            <div class="progress-wrap">
+              <div class="field-head">
+                <label for="time-start">时间范围</label>
+                <span id="time-filter-text">00:00 - 24:00</span>
+              </div>
+              <div class="progress-wrap">
+                <div class="field-head">
+                  <label for="time-start">开始</label>
+                  <span id="time-start-text">00:00</span>
+                </div>
+                <input id="time-start" type="range" min="0" max="23" value="0" step="1" />
+              </div>
+              <div class="progress-wrap">
+                <div class="field-head">
+                  <label for="time-end">结束</label>
+                  <span id="time-end-text">24:00</span>
+                </div>
+                <input id="time-end" type="range" min="1" max="24" value="24" step="1" />
+              </div>
+              <p class="field-note" id="time-filter-note">按本地绝对时间筛选，范围覆盖 00:00 - 24:00。</p>
+            </div>
+          </div>
+        </div>
 
-      <div class="progress-wrap">
-        <label for="progress">进度</label>
-        <input id="progress" type="range" min="0" max="0" value="0" step="1" />
-        <span id="progress-text">0 / 0</span>
-      </div>
-    </section>
+        <div class="control-panel">
+          <button class="dock-button" type="button" data-tooltip="思考信息" aria-label="思考信息">
+            <span class="dock-button__icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20">
+                <path d="M10 4.7a4.3 4.3 0 0 0-2.9 7.4c.7.5 1.1 1.2 1.3 2h3.2c.2-.8.6-1.5 1.3-2A4.3 4.3 0 0 0 10 4.7z"></path>
+                <path d="M8.7 15h2.6"></path>
+                <path d="M8.9 16.8h2.2"></path>
+                <path d="M10 3.3v1"></path>
+              </svg>
+            </span>
+          </button>
+          <div class="control-panel-body">
+            <div class="control-panel-head">
+              <span class="control-panel-title">思考信息</span>
+            </div>
+            <div class="button-grid button-grid--single">
+              <button class="button" id="toggle-thinking">展开思考信息</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-panel">
+          <button class="dock-button" type="button" data-tooltip="重载历史" aria-label="重载历史">
+            <span class="dock-button__icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20">
+                <path d="M15.1 8.3a5.4 5.4 0 1 0 .2 3.7"></path>
+                <path d="M15 5.3v4.1h-4.1"></path>
+              </svg>
+            </span>
+          </button>
+          <div class="control-panel-body">
+            <div class="control-panel-head">
+              <span class="control-panel-title">重载历史</span>
+            </div>
+            <div class="button-grid button-grid--single">
+              <button class="button" id="reload">重载历史</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="control-panel">
+          <button class="dock-button" type="button" data-tooltip="导出 HTML" aria-label="导出 HTML">
+            <span class="dock-button__icon" aria-hidden="true">
+              <svg viewBox="0 0 20 20">
+                <path d="M6.3 4.8h5.1l2.7 2.7v7.7a1.6 1.6 0 0 1-1.6 1.6H6.3a1.6 1.6 0 0 1-1.6-1.6V6.4a1.6 1.6 0 0 1 1.6-1.6z"></path>
+                <path d="M11.4 4.8v2.9h2.9"></path>
+                <path d="M8 11h4"></path>
+                <path d="M10 8.8v4.2"></path>
+                <path d="M8.5 11.6 10 13.1l1.5-1.5"></path>
+              </svg>
+            </span>
+          </button>
+          <div class="control-panel-body">
+            <div class="control-panel-head">
+              <span class="control-panel-title">导出 HTML</span>
+            </div>
+            <div class="button-grid button-grid--single">
+              <button class="button" id="export-html">导出 HTML</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </aside>
 
     <main class="board">
-      <div class="diagram-scroll" id="diagram-scroll">
-        <div class="diagram-header" id="diagram-header">
-          <svg id="diagram-header-svg" aria-hidden="true"></svg>
-        </div>
-        <svg id="diagram" aria-label="OpenClaw 时序图"></svg>
-        <div class="hover-pop" id="hover-pop" aria-hidden="true">
-          <div class="hover-pop-meta" id="hover-pop-meta"></div>
-          <div class="hover-pop-body" id="hover-pop-body"></div>
-        </div>
+      <div class="board-shell is-detail-collapsed" id="board-shell">
+        <section class="diagram-stage">
+          <div class="diagram-scroll" id="diagram-scroll">
+            <div class="diagram-header" id="diagram-header">
+              <svg id="diagram-header-svg" aria-hidden="true"></svg>
+            </div>
+            <svg id="diagram" aria-label="OpenClaw 时序图"></svg>
+          </div>
+        </section>
+        <aside class="detail-panel is-empty" id="detail-panel" aria-live="polite">
+          <div class="detail-head">
+            <div class="detail-head-main">
+              <span class="detail-kicker">事件详情</span>
+              <h2 class="detail-title" id="detail-title">未选择事件</h2>
+              <p class="detail-subtitle" id="detail-subtitle">点击任意事件卡片，在这里查看完整正文并进行复制。</p>
+            </div>
+            <div class="detail-actions">
+              <button class="button button--ghost button--icon detail-copy" id="detail-copy" type="button" aria-label="复制全文">
+                <span class="button__icon button__icon--svg" id="detail-copy-icon" aria-hidden="true"></span>
+                <span class="button__label">复制全文</span>
+              </button>
+              <button class="button button--ghost button--icon detail-clear" id="detail-clear" type="button" aria-label="清空详情">
+                <span class="button__icon button__icon--svg" id="detail-clear-icon" aria-hidden="true"></span>
+                <span class="button__label">清空</span>
+              </button>
+            </div>
+          </div>
+          <div class="detail-tags" id="detail-tags"></div>
+          <div class="detail-content" id="detail-content">
+            <p class="detail-empty" id="detail-empty">点击任意事件卡片后，这里会展示完整文本。正文支持 Markdown 渲染、直接选择，也可以用右上角按钮复制全文。</p>
+            <div class="detail-body" id="detail-body"></div>
+          </div>
+        </aside>
+        <div class="copy-toast" id="copy-toast" aria-live="polite">已复制全文</div>
       </div>
     </main>
   </div>
@@ -305,28 +1456,137 @@
   <script>
     (() => {
       const NS = "http://www.w3.org/2000/svg";
-      const HEADER_H = 66;
+      const THEME_STORAGE_KEY = "openclaw-sequence-theme";
+      const SIDEBAR_STORAGE_KEY = "openclaw-sequence-sidebar-collapsed";
+
+      const appShell = document.getElementById("app-shell");
+      const themeToggleBtn = document.getElementById("toggle-theme");
+      const themeToggleIconEl = document.getElementById("toggle-theme-icon");
+      const themeToggleLabelEl = document.getElementById("toggle-theme-label");
+      const sidebarToggleBtn = document.getElementById("toggle-sidebar");
+      const sidebarToggleIconEl = document.getElementById("toggle-sidebar-icon");
+      const sidebarToggleLabelEl = document.getElementById("toggle-sidebar-label");
 
       const liveStateEl = document.getElementById("live-state");
       const prevBtn = document.getElementById("prev-step");
       const nextBtn = document.getElementById("next-step");
       const reloadBtn = document.getElementById("reload");
-      const processBtn = document.getElementById("toggle-process");
+      const exportBtn = document.getElementById("export-html");
+      const thinkingBtn = document.getElementById("toggle-thinking");
       const sessionFilterEl = document.getElementById("session-filter");
+      const timeStartInput = document.getElementById("time-start");
+      const timeEndInput = document.getElementById("time-end");
+      const timeFilterTextEl = document.getElementById("time-filter-text");
+      const timeStartTextEl = document.getElementById("time-start-text");
+      const timeEndTextEl = document.getElementById("time-end-text");
+      const timeFilterNoteEl = document.getElementById("time-filter-note");
 
       const progressInput = document.getElementById("progress");
       const progressTextEl = document.getElementById("progress-text");
 
+      const boardShell = document.getElementById("board-shell");
       const diagramScroll = document.getElementById("diagram-scroll");
       const diagramHeaderSvg = document.getElementById("diagram-header-svg");
       const diagram = document.getElementById("diagram");
-      const hoverPop = document.getElementById("hover-pop");
-      const hoverPopMeta = document.getElementById("hover-pop-meta");
-      const hoverPopBody = document.getElementById("hover-pop-body");
+      const detailPanel = document.getElementById("detail-panel");
+      const detailTitleEl = document.getElementById("detail-title");
+      const detailSubtitleEl = document.getElementById("detail-subtitle");
+      const detailTagsEl = document.getElementById("detail-tags");
+      const detailContentEl = document.getElementById("detail-content");
+      const detailBodyEl = document.getElementById("detail-body");
+      const detailCopyBtn = document.getElementById("detail-copy");
+      const detailCopyIconEl = document.getElementById("detail-copy-icon");
+      const detailClearBtn = document.getElementById("detail-clear");
+      const detailClearIconEl = document.getElementById("detail-clear-icon");
+      const copyToast = document.getElementById("copy-toast");
 
       const measureCanvas = document.createElement("canvas");
       const measureCtx = measureCanvas.getContext("2d");
-      measureCtx.font = '12px "Noto Sans SC", sans-serif';
+      const BASE_TEXT_FONT = '12px "Noto Sans SC", sans-serif';
+      const HEADER_TEXT_FONT = '700 13.5px "Noto Sans SC", sans-serif';
+      measureCtx.font = BASE_TEXT_FONT;
+      const ICONS = {
+        sun: `<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="3.2"></circle><path d="M10 2.7v2"></path><path d="M10 15.3v2"></path><path d="M2.7 10h2"></path><path d="M15.3 10h2"></path><path d="M4.9 4.9l1.5 1.5"></path><path d="M13.6 13.6l1.5 1.5"></path><path d="M15.1 4.9l-1.5 1.5"></path><path d="M6.4 13.6l-1.5 1.5"></path></svg>`,
+        moon: `<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M14.1 3.9a6.7 6.7 0 1 0 2 10.8 7.3 7.3 0 0 1-2-10.8z"></path><path d="M13.5 5.1v1.4"></path><path d="M12.8 5.8h1.4"></path></svg>`,
+        collapse: `<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3.8" y="4.2" width="12.4" height="11.6" rx="2.2"></rect><path d="M7.4 4.7v10.6"></path><path d="M12.2 8.1 9.7 10l2.5 1.9"></path></svg>`,
+        expand: `<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="3.8" y="4.2" width="12.4" height="11.6" rx="2.2"></rect><path d="M7.4 4.7v10.6"></path><path d="M10 8.1 12.5 10 10 11.9"></path></svg>`,
+        copy: `<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="7.1" y="5.2" width="8.1" height="10.1" rx="1.5"></rect><path d="M5.1 12.6H4.8a1.4 1.4 0 0 1-1.4-1.4V4.9a1.4 1.4 0 0 1 1.4-1.4h5.7A1.4 1.4 0 0 1 11.9 4v.4"></path></svg>`,
+        clear: `<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="5.8"></circle><path d="M8 8l4 4"></path><path d="M12 8l-4 4"></path></svg>`
+      };
+      const SVG_ICON_SET = {
+        clock: {
+          circles: [{ cx: 10, cy: 10, r: 5.8 }],
+          paths: ["M10 6.7v3.5", "M10 10.2l2.3 1.4"]
+        },
+        user: {
+          paths: [
+            "M6.2 14.8c.8-1.8 2.2-2.8 3.8-2.8s3 .9 3.8 2.8",
+            "M10 10.7c1.8 0 3.1-1.4 3.1-3.1S11.8 4.5 10 4.5 6.9 5.8 6.9 7.6s1.3 3.1 3.1 3.1z"
+          ]
+        },
+        spawn: {
+          paths: ["M5.4 15.4V6.3", "M5.4 10h4.5", "M9.9 6.5 14.9 10l-5 3.5"]
+        },
+        a2a: {
+          paths: ["M4.8 7.2h7.8", "M10.2 4.8 13.6 8.2 10.2 11.6", "M15.2 12.8H7.4", "M9.8 10.4 6.4 13.8 9.8 17.2"]
+        },
+        process: {
+          rects: [{ x: 6.2, y: 6.2, width: 7.6, height: 7.6, rx: 1.3 }],
+          paths: [
+            "M10 3.8v1.6", "M6.6 3.8v1.6", "M13.4 3.8v1.6",
+            "M10 14.6v1.6", "M6.6 14.6v1.6", "M13.4 14.6v1.6",
+            "M3.8 6.6h1.6", "M3.8 10h1.6", "M3.8 13.4h1.6",
+            "M14.6 6.6h1.6", "M14.6 10h1.6", "M14.6 13.4h1.6"
+          ]
+        },
+        message: {
+          paths: ["M5.2 6.2h9.6a1.8 1.8 0 0 1 1.8 1.8v4a1.8 1.8 0 0 1-1.8 1.8H10l-3.2 2.2v-2.2H5.2A1.8 1.8 0 0 1 3.4 12V8a1.8 1.8 0 0 1 1.8-1.8z"]
+        },
+        doc: {
+          paths: ["M6.6 4.8h5l2.8 2.8v7.6a1.6 1.6 0 0 1-1.6 1.6H6.6A1.6 1.6 0 0 1 5 15.2V6.4a1.6 1.6 0 0 1 1.6-1.6z", "M11.6 4.8v3h3", "M7.5 10.2h5", "M7.5 12.9h5.6"]
+        },
+        edit: {
+          paths: ["M6.1 14.2 6.8 11.3 12.6 5.5 14.9 7.8 9.1 13.6 6.1 14.2z", "M11.7 6.4 14 8.7", "M6.1 14.2 8.2 13.7"]
+        },
+        search: {
+          circles: [{ cx: 8.6, cy: 8.6, r: 3.8 }],
+          paths: ["M11.5 11.5 15.5 15.5"]
+        },
+        globe: {
+          circles: [{ cx: 10, cy: 10, r: 5.7 }],
+          paths: ["M4.4 10h11.2", "M10 4.4c1.5 1.5 2.4 3.5 2.4 5.6s-.9 4.1-2.4 5.6", "M10 4.4c-1.5 1.5-2.4 3.5-2.4 5.6s.9 4.1 2.4 5.6"]
+        },
+        terminal: {
+          rects: [{ x: 4.7, y: 5.1, width: 10.6, height: 9.8, rx: 1.6 }],
+          paths: ["M7.1 8.2 8.8 10 7.1 11.8", "M10.2 11.9h3.1"]
+        },
+        warning: {
+          paths: ["M10 4.7 15.5 14.8H4.5L10 4.7z", "M10 8.3v3.3"],
+          circles: [{ cx: 10, cy: 13.4, r: 0.55 }]
+        },
+        check: {
+          circles: [{ cx: 10, cy: 10, r: 5.7 }],
+          paths: ["M7.2 10.1 9.1 12 12.9 8.2"]
+        },
+        inbox: {
+          paths: ["M5.1 7.2h9.8l-1.1 7H6.2L5.1 7.2z", "M7.7 10.5c.2 1 .9 1.7 2.3 1.7s2.1-.7 2.3-1.7", "M7.3 10.5h5.4"]
+        },
+        send: {
+          paths: ["M4.8 10h9.2", "M11.1 6.2 15 10l-3.9 3.8"]
+        },
+        thread: {
+          paths: ["M6 6.4h7.8", "M6 10h7.8", "M6 13.6h5.8", "M12.7 12.2 15 13.6 12.7 15"]
+        },
+        parallel: {
+          paths: ["M5.2 5.7v8.6", "M5.2 10h4.5", "M9.7 10V6.5", "M9.7 10v3.5", "M9.7 6.5h5", "M9.7 13.5h5"]
+        },
+        spark: {
+          paths: ["M10 4.5v2.8", "M10 12.7v2.8", "M4.5 10h2.8", "M12.7 10h2.8", "M6.4 6.4l1.9 1.9", "M11.7 11.7l1.9 1.9", "M13.6 6.4l-1.9 1.9", "M8.3 11.7l-1.9 1.9"]
+        }
+      };
+
+      detailCopyIconEl.innerHTML = ICONS.copy;
+      detailClearIconEl.innerHTML = ICONS.clear;
 
       const state = {
         allTimeline: [],
@@ -335,8 +1595,18 @@
         source: null,
         forceBottom: false,
         showInternal: false,
-        sessionFilter: "all"
+        collapsedEventIds: new Set(),
+        expandedThinkingIds: new Set(),
+        sessionFilter: "all",
+        sessionFilterTouched: false,
+        timeStartHour: 0,
+        timeEndHour: 24,
+        theme: "dark",
+        sidebarCollapsed: false,
+        selectedEventId: null
       };
+      let copyToastTimer = null;
+      let relayoutTimer = null;
 
       const modeColor = {
         user: "#80cfff",
@@ -345,6 +1615,192 @@
         internal: "#ff9ac1"
       };
 
+      function readStorage(key) {
+        try {
+          return localStorage.getItem(key);
+        } catch {
+          return null;
+        }
+      }
+
+      function writeStorage(key, value) {
+        try {
+          localStorage.setItem(key, value);
+        } catch {
+          // Ignore storage failures.
+        }
+      }
+
+      function normalizeTheme(theme) {
+        return theme === "light" ? "light" : "dark";
+      }
+
+      function applyTheme(theme) {
+        state.theme = normalizeTheme(theme);
+        document.documentElement.dataset.theme = state.theme;
+      }
+
+      function syncShellState() {
+        appShell.classList.toggle("is-sidebar-collapsed", Boolean(state.sidebarCollapsed));
+
+        const nextThemeLabel = state.theme === "dark" ? "切到浅色" : "切到深色";
+        themeToggleLabelEl.textContent = nextThemeLabel;
+        themeToggleIconEl.innerHTML = state.theme === "dark" ? ICONS.sun : ICONS.moon;
+        themeToggleBtn.title = nextThemeLabel;
+        themeToggleBtn.dataset.tooltip = nextThemeLabel;
+        themeToggleBtn.setAttribute("aria-label", nextThemeLabel);
+
+        const sidebarLabel = state.sidebarCollapsed ? "展开边栏" : "收起边栏";
+        sidebarToggleLabelEl.textContent = sidebarLabel;
+        sidebarToggleIconEl.innerHTML = state.sidebarCollapsed ? ICONS.expand : ICONS.collapse;
+        sidebarToggleBtn.title = sidebarLabel;
+        sidebarToggleBtn.dataset.tooltip = sidebarLabel;
+        sidebarToggleBtn.setAttribute("aria-label", sidebarLabel);
+      }
+
+      function scheduleRelayout() {
+        render({ preserveScroll: true });
+        if (relayoutTimer) clearTimeout(relayoutTimer);
+        relayoutTimer = setTimeout(() => {
+          relayoutTimer = null;
+          render({ preserveScroll: true });
+        }, 220);
+      }
+
+      function cssVar(name, fallback) {
+        const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+        return value || fallback;
+      }
+
+      function getDiagramPalette() {
+        return {
+          headerBg: cssVar("--svg-header-bg", "rgba(8, 20, 34, 0.88)"),
+          headerBox: cssVar("--svg-header-box", "rgba(11, 35, 54, 0.86)"),
+          headerStroke: cssVar("--svg-header-stroke", "rgba(149, 227, 240, 0.42)"),
+          headerText: cssVar("--svg-header-text", "#e9f8ff"),
+          lane: cssVar("--svg-lane", "rgba(148, 224, 240, 0.28)"),
+          rowAlt: cssVar("--svg-row-alt", "rgba(120, 208, 230, 0.03)"),
+          cardFill: cssVar("--svg-card-fill", "rgba(7, 24, 39, 0.9)"),
+          cardStroke: cssVar("--svg-card-stroke", "rgba(150, 225, 240, 0.25)"),
+          chipFill: cssVar("--svg-chip-fill", "rgba(14, 39, 60, 0.9)"),
+          chipStroke: cssVar("--svg-chip-stroke", "rgba(146, 214, 229, 0.2)"),
+          chipText: cssVar("--svg-chip-text", "#d8edf8"),
+          titleFill: cssVar("--svg-title-fill", "rgba(16, 43, 66, 0.94)"),
+          bodyText: cssVar("--svg-body-text", "#f5fcff"),
+          separatorStroke: cssVar("--svg-separator-stroke", "rgba(255, 204, 122, 0.55)"),
+          separatorBg: cssVar("--svg-separator-bg", "rgba(33, 24, 10, 0.9)"),
+          separatorText: cssVar("--svg-separator-text", "#ffe7bf"),
+          parallelFill: cssVar("--svg-parallel-fill", "rgba(66, 49, 18, 0.18)"),
+          parallelStroke: cssVar("--svg-parallel-stroke", "rgba(255, 204, 122, 0.45)"),
+          focus: cssVar("--svg-focus", "rgba(110, 225, 245, 0.32)"),
+          empty: cssVar("--svg-empty", "rgba(212, 238, 251, 0.72)"),
+          badgeBg: cssVar("--svg-badge-bg", "rgba(8, 22, 35, 0.94)")
+        };
+      }
+
+      function getIconSpec(name) {
+        return SVG_ICON_SET[name] || SVG_ICON_SET.process;
+      }
+
+      function appendSvgIcon(target, name, options = {}) {
+        const spec = getIconSpec(name);
+        const {
+          x = 0,
+          y = 0,
+          size = 14,
+          color = "currentColor",
+          strokeWidth = 1.8,
+          opacity = 1
+        } = options;
+
+        const group = document.createElementNS(NS, "g");
+        group.setAttribute("transform", `translate(${x} ${y}) scale(${size / 20})`);
+        group.setAttribute("fill", "none");
+        group.setAttribute("stroke", color);
+        group.setAttribute("stroke-width", String(strokeWidth));
+        group.setAttribute("stroke-linecap", "round");
+        group.setAttribute("stroke-linejoin", "round");
+        group.setAttribute("opacity", String(opacity));
+        group.setAttribute("pointer-events", "none");
+
+        (spec.paths || []).forEach((d) => {
+          const path = document.createElementNS(NS, "path");
+          path.setAttribute("d", d);
+          group.appendChild(path);
+        });
+
+        (spec.circles || []).forEach((circleDef) => {
+          const circle = document.createElementNS(NS, "circle");
+          circle.setAttribute("cx", String(circleDef.cx));
+          circle.setAttribute("cy", String(circleDef.cy));
+          circle.setAttribute("r", String(circleDef.r));
+          group.appendChild(circle);
+        });
+
+        (spec.rects || []).forEach((rectDef) => {
+          const rect = document.createElementNS(NS, "rect");
+          rect.setAttribute("x", String(rectDef.x));
+          rect.setAttribute("y", String(rectDef.y));
+          rect.setAttribute("width", String(rectDef.width));
+          rect.setAttribute("height", String(rectDef.height));
+          rect.setAttribute("rx", String(rectDef.rx || 0));
+          group.appendChild(rect);
+        });
+
+        target.appendChild(group);
+        return group;
+      }
+
+      function createHtmlIcon(name, options = {}) {
+        const spec = getIconSpec(name);
+        const {
+          size = 14,
+          color = "currentColor",
+          strokeWidth = 1.85
+        } = options;
+
+        const svg = document.createElementNS(NS, "svg");
+        svg.setAttribute("viewBox", "0 0 20 20");
+        svg.setAttribute("width", String(size));
+        svg.setAttribute("height", String(size));
+        svg.setAttribute("fill", "none");
+        svg.setAttribute("stroke", color);
+        svg.setAttribute("stroke-width", String(strokeWidth));
+        svg.setAttribute("stroke-linecap", "round");
+        svg.setAttribute("stroke-linejoin", "round");
+        svg.setAttribute("aria-hidden", "true");
+
+        (spec.paths || []).forEach((d) => {
+          const path = document.createElementNS(NS, "path");
+          path.setAttribute("d", d);
+          svg.appendChild(path);
+        });
+
+        (spec.circles || []).forEach((circleDef) => {
+          const circle = document.createElementNS(NS, "circle");
+          circle.setAttribute("cx", String(circleDef.cx));
+          circle.setAttribute("cy", String(circleDef.cy));
+          circle.setAttribute("r", String(circleDef.r));
+          svg.appendChild(circle);
+        });
+
+        (spec.rects || []).forEach((rectDef) => {
+          const rect = document.createElementNS(NS, "rect");
+          rect.setAttribute("x", String(rectDef.x));
+          rect.setAttribute("y", String(rectDef.y));
+          rect.setAttribute("width", String(rectDef.width));
+          rect.setAttribute("height", String(rectDef.height));
+          rect.setAttribute("rx", String(rectDef.rx || 0));
+          svg.appendChild(rect);
+        });
+
+        return svg;
+      }
+
+      applyTheme(readStorage(THEME_STORAGE_KEY));
+      state.sidebarCollapsed = readStorage(SIDEBAR_STORAGE_KEY) === "1";
+      syncShellState();
+
       function setLiveState(kind, text) {
         liveStateEl.dataset.state = kind;
         liveStateEl.textContent = text;
@@ -352,6 +1808,21 @@
 
       function safeMode(mode) {
         return ["user", "spawn", "a2a", "internal"].includes(mode) ? mode : "a2a";
+      }
+
+      function agentEmoji(id) {
+        const clean = typeof id === "string" ? id.trim() : "";
+        if (!clean) return "❔";
+        if (clean === "user") return "🧑";
+        if (clean === "main") return "🧠";
+        if (/watch|monitor|guard|vigil/i.test(clean)) return "👀";
+        if (/news|search|research|web/i.test(clean)) return "📰";
+        if (/meal|food|cook/i.test(clean)) return "🍱";
+        if (/cat/i.test(clean)) return "🐱";
+        if (/trash|clean/i.test(clean)) return "🗑️";
+        if (/wali|shield/i.test(clean)) return "🛡️";
+        if (/eve/i.test(clean)) return "✨";
+        return "🤖";
       }
 
       function extractSessionTag(raw, id) {
@@ -411,18 +1882,94 @@
       }
 
       function displayAgent(id) {
-        return id === "user" ? "人" : id;
+        const clean = typeof id === "string" ? id.trim() : "";
+        if (!clean) return "❔ unknown";
+        if (clean === "user") return "🧑 人";
+        return `${agentEmoji(clean)} ${clean}`;
       }
 
-      function modeName(mode) {
-        if (mode === "spawn") return "SPAWN";
-        if (mode === "user") return "USER";
-        if (mode === "internal") return "PROC";
-        return "A2A";
+      function internalModeLabel(evt) {
+        const mechanism = typeof evt?.mechanism === "string" ? evt.mechanism.trim().toLowerCase() : "";
+        if (evt?.stage === "thinking" || mechanism.includes("thinking")) return "THINKING";
+        if (mechanism.includes("exec") || mechanism.includes("shell") || mechanism.includes("bash") || mechanism.includes("terminal")) return "EXEC";
+        if (mechanism.includes("read")) return "READ";
+        if (mechanism.includes("write") || mechanism.includes("edit")) return "WRITE";
+        if (mechanism.includes("grep") || mechanism.includes("search")) return "SEARCH";
+        if (mechanism.includes("fetch") || mechanism.includes("browser") || mechanism.includes("web")) return "FETCH";
+        if (mechanism.includes("cron") || mechanism.includes("schedule")) return "SCHEDULE";
+        if (mechanism.includes("message")) return "MESSAGE";
+        if (!mechanism) return "PROCESS";
+        return mechanism.replace(/^sessions_/, "").replace(/[_-]+/g, " ").trim().toUpperCase();
+      }
+
+      function modeSpec(evt) {
+        const mode = typeof evt === "string" ? evt : evt?.mode;
+        if (mode === "spawn") {
+          return {
+            shortLabel: "SPAWN",
+            titleLabel: "SPAWN",
+            description: "通过 sessions_spawn 新开子会话并分配任务"
+          };
+        }
+        if (mode === "user") {
+          return {
+            shortLabel: "USER",
+            titleLabel: "USER",
+            description: "人和主智能体之间的输入或回复"
+          };
+        }
+        if (mode === "internal") {
+          const label = internalModeLabel(evt);
+          const mechanism = detailMechanismLabel(evt) || label.toLowerCase();
+          return {
+            shortLabel: label,
+            titleLabel: label,
+            description: `内部过程，当前为 ${mechanism}`
+          };
+        }
+        return {
+          shortLabel: "SEND",
+          titleLabel: "SEND",
+          description: "通过 sessions_send 向已有会话发送消息"
+        };
+      }
+
+      function modeName(evt) {
+        return modeSpec(evt).shortLabel;
+      }
+
+      function modeIconName(mode) {
+        if (mode === "spawn") return "spawn";
+        if (mode === "user") return "user";
+        if (mode === "internal") return "process";
+        return "a2a";
       }
 
       function formatTime(ts) {
         return new Date(ts).toLocaleTimeString();
+      }
+
+      function formatDateTime(ts) {
+        return new Date(ts).toLocaleString("zh-CN", {
+          year: "numeric",
+          month: "2-digit",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+          hour12: false
+        });
+      }
+
+      function formatFileTimestamp(ts) {
+        const date = new Date(Number(ts) || Date.now());
+        const year = String(date.getFullYear());
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
+        const hour = String(date.getHours()).padStart(2, "0");
+        const minute = String(date.getMinutes()).padStart(2, "0");
+        const second = String(date.getSeconds()).padStart(2, "0");
+        return `${year}${month}${day}-${hour}${minute}${second}`;
       }
 
       function formatDayKey(ts) {
@@ -442,6 +1989,161 @@
           day: "2-digit",
           weekday: "short"
         });
+      }
+
+      function formatHourLabel(hour) {
+        const safe = clamp(Math.round(Number(hour) || 0), 0, 24);
+        return `${String(safe).padStart(2, "0")}:00`;
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#39;");
+      }
+
+      function sanitizeHref(rawHref) {
+        const href = String(rawHref ?? "").trim();
+        if (!href) return "";
+        if (/^(https?:|mailto:)/i.test(href)) return href;
+        if (href.startsWith("/") || href.startsWith("#")) return href;
+        return "";
+      }
+
+      function renderInlineMarkdown(text) {
+        const placeholders = [];
+        const stash = (html) => {
+          const token = `\u0000${placeholders.length}\u0000`;
+          placeholders.push(html);
+          return token;
+        };
+
+        let html = escapeHtml(String(text ?? ""));
+
+        html = html.replace(/`([^`\n]+)`/g, (_, code) => {
+          return stash(`<code>${code}</code>`);
+        });
+
+        html = html.replace(/\[([^\]]+)\]\(([^)\s]+)(?:\s+\"([^\"]*)\")?\)/g, (_, label, href, title) => {
+          const safeHref = sanitizeHref(href);
+          if (!safeHref) return label;
+          const titleAttr = title ? ` title="${escapeHtml(title)}"` : "";
+          return stash(`<a href="${escapeHtml(safeHref)}"${titleAttr} target="_blank" rel="noreferrer noopener">${label}</a>`);
+        });
+
+        html = html.replace(/\*\*([^*][\s\S]*?)\*\*/g, "<strong>$1</strong>");
+        html = html.replace(/(^|[^\*])\*([^*\n][\s\S]*?)\*(?!\*)/g, "$1<em>$2</em>");
+        html = html.replace(/(^|[^_])_([^_\n][\s\S]*?)_(?!_)/g, "$1<em>$2</em>");
+        html = html.replace(/~~([^~][\s\S]*?)~~/g, "<del>$1</del>");
+        html = html.replace(/\n/g, "<br>");
+
+        return html.replace(/\u0000(\d+)\u0000/g, (_, index) => placeholders[Number(index)] || "");
+      }
+
+      function renderMarkdown(text) {
+        const source = String(text ?? "").replace(/\r\n?/g, "\n");
+        if (!source.trim()) return `<p>${escapeHtml("(空消息)")}</p>`;
+
+        const lines = source.split("\n");
+        const blocks = [];
+
+        const isHorizontalRule = (line) => /^\s*([-*_])(?:\s*\1){2,}\s*$/.test(line);
+        const isHeading = (line) => /^(#{1,6})\s+(.*)$/.test(line);
+        const isQuote = (line) => /^\s*>\s?/.test(line);
+        const isUnorderedItem = (line) => /^\s*[-+*]\s+/.test(line);
+        const isOrderedItem = (line) => /^\s*\d+\.\s+/.test(line);
+        const isFence = (line) => /^\s*```/.test(line);
+        const isBlockBoundary = (line) => {
+          if (!line.trim()) return true;
+          return isHorizontalRule(line) || isHeading(line) || isQuote(line) || isUnorderedItem(line) || isOrderedItem(line) || isFence(line);
+        };
+
+        let index = 0;
+        while (index < lines.length) {
+          const line = lines[index];
+
+          if (!line.trim()) {
+            index += 1;
+            continue;
+          }
+
+          const fenceMatch = /^\s*```([\w-]*)\s*$/.exec(line);
+          if (fenceMatch) {
+            const codeLines = [];
+            index += 1;
+            while (index < lines.length && !/^\s*```\s*$/.test(lines[index])) {
+              codeLines.push(lines[index]);
+              index += 1;
+            }
+            if (index < lines.length) index += 1;
+            blocks.push(`<pre><code>${escapeHtml(codeLines.join("\n"))}</code></pre>`);
+            continue;
+          }
+
+          const headingMatch = /^(#{1,6})\s+(.*)$/.exec(line);
+          if (headingMatch) {
+            const level = Math.min(6, headingMatch[1].length);
+            blocks.push(`<h${level}>${renderInlineMarkdown(headingMatch[2].trim())}</h${level}>`);
+            index += 1;
+            continue;
+          }
+
+          if (isHorizontalRule(line)) {
+            blocks.push("<hr />");
+            index += 1;
+            continue;
+          }
+
+          if (isQuote(line)) {
+            const quoteLines = [];
+            while (index < lines.length && isQuote(lines[index])) {
+              quoteLines.push(lines[index].replace(/^\s*>\s?/, ""));
+              index += 1;
+            }
+            blocks.push(`<blockquote>${renderInlineMarkdown(quoteLines.join("\n"))}</blockquote>`);
+            continue;
+          }
+
+          if (isUnorderedItem(line)) {
+            const items = [];
+            while (index < lines.length && isUnorderedItem(lines[index])) {
+              items.push(lines[index].replace(/^\s*[-+*]\s+/, ""));
+              index += 1;
+            }
+            blocks.push(`<ul>${items.map((item) => `<li>${renderInlineMarkdown(item)}</li>`).join("")}</ul>`);
+            continue;
+          }
+
+          if (isOrderedItem(line)) {
+            const items = [];
+            while (index < lines.length && isOrderedItem(lines[index])) {
+              items.push(lines[index].replace(/^\s*\d+\.\s+/, ""));
+              index += 1;
+            }
+            blocks.push(`<ol>${items.map((item) => `<li>${renderInlineMarkdown(item)}</li>`).join("")}</ol>`);
+            continue;
+          }
+
+          const paragraphLines = [];
+          while (index < lines.length && !isBlockBoundary(lines[index])) {
+            paragraphLines.push(lines[index]);
+            index += 1;
+          }
+          blocks.push(`<p>${renderInlineMarkdown(paragraphLines.join("\n"))}</p>`);
+        }
+
+        return blocks.join("");
+      }
+
+      function measureTextWidth(text, font = BASE_TEXT_FONT) {
+        const previousFont = measureCtx.font;
+        if (font && previousFont !== font) measureCtx.font = font;
+        const width = measureCtx.measureText(String(text || "")).width;
+        if (font && previousFont !== font) measureCtx.font = previousFont;
+        return width;
       }
 
       function buildAgentList(events) {
@@ -481,8 +2183,116 @@
         return true;
       }
 
-      function getFilteredTimeline() {
+      function isThinkingEvent(evt) {
+        if (!evt || evt.mode !== "internal") return false;
+        const mechanism = typeof evt.mechanism === "string" ? evt.mechanism.trim().toLowerCase() : "";
+        return evt.stage === "thinking" || mechanism.includes("thinking");
+      }
+
+      function getSessionFilterTimeline() {
         return state.allTimeline.filter((evt) => eventMatchesCurrentFilter(evt));
+      }
+
+      function getTimeFilterRange() {
+        const startHour = clamp(Math.round(Number(state.timeStartHour) || 0), 0, 23);
+        const endHour = clamp(Math.round(Number(state.timeEndHour) || 24), startHour + 1, 24);
+        return { startHour, endHour };
+      }
+
+      function eventMatchesTimeFilter(evt, range = getTimeFilterRange()) {
+        if (!evt) return false;
+        const date = new Date(Number(evt.ts) || Date.now());
+        const clockHour = date.getHours() + date.getMinutes() / 60 + date.getSeconds() / 3600 + date.getMilliseconds() / 3600000;
+        return clockHour >= range.startHour && clockHour < range.endHour;
+      }
+
+      function getCurrentFilterTimeline() {
+        const sessionTimeline = getSessionFilterTimeline();
+        const timeRange = getTimeFilterRange();
+        return sessionTimeline.filter((evt) => eventMatchesTimeFilter(evt, timeRange));
+      }
+
+      function getTimeFilterLabel(range = getTimeFilterRange()) {
+        return `${formatHourLabel(range.startHour)} - ${formatHourLabel(range.endHour)}`;
+      }
+
+      function getTimeFilterRangeLabel() {
+        return `按本地绝对时间筛选，范围覆盖 ${getTimeFilterLabel()}`;
+      }
+
+      function getFilteredTimeline() {
+        return getCurrentFilterTimeline();
+      }
+
+      function findTimelineEvent(eventId) {
+        return state.allTimeline.find((evt) => evt.id === eventId) || null;
+      }
+
+      function isEventCollapsed(evt) {
+        if (!evt) return false;
+        if (isThinkingEvent(evt)) {
+          if (state.showInternal) {
+            return state.collapsedEventIds.has(evt.id);
+          }
+          return !state.expandedThinkingIds.has(evt.id);
+        }
+        return state.collapsedEventIds.has(evt.id);
+      }
+
+      function resetEventCollapseState() {
+        if (state.expandedThinkingIds.size) state.expandedThinkingIds.clear();
+        if (!state.collapsedEventIds.size) return;
+        state.collapsedEventIds.forEach((id) => {
+          const evt = findTimelineEvent(id);
+          if (evt && isThinkingEvent(evt)) {
+            state.collapsedEventIds.delete(id);
+          }
+        });
+      }
+
+      function pruneEventCollapseState() {
+        if (!state.collapsedEventIds.size && !state.expandedThinkingIds.size) return;
+        const validIds = new Set(state.allTimeline.map((evt) => evt.id));
+        state.collapsedEventIds.forEach((id) => {
+          if (!validIds.has(id)) state.collapsedEventIds.delete(id);
+        });
+        state.expandedThinkingIds.forEach((id) => {
+          if (!validIds.has(id)) state.expandedThinkingIds.delete(id);
+        });
+      }
+
+      function toggleEventCollapsed(eventId) {
+        const targetId = typeof eventId === "string" ? eventId.trim() : "";
+        if (!targetId) return;
+
+        const evt = findTimelineEvent(targetId);
+        if (!evt) return;
+
+        if (isThinkingEvent(evt)) {
+          if (state.showInternal) {
+            if (state.collapsedEventIds.has(targetId)) {
+              state.collapsedEventIds.delete(targetId);
+            } else {
+              state.collapsedEventIds.add(targetId);
+            }
+          } else if (state.expandedThinkingIds.has(targetId)) {
+            state.expandedThinkingIds.delete(targetId);
+          } else {
+            state.expandedThinkingIds.add(targetId);
+          }
+        } else if (state.collapsedEventIds.has(targetId)) {
+          state.collapsedEventIds.delete(targetId);
+        } else {
+          state.collapsedEventIds.add(targetId);
+        }
+
+        render({ preserveScroll: true });
+      }
+
+      function getSessionFilterLabel() {
+        const option = sessionFilterEl.selectedOptions && sessionFilterEl.selectedOptions[0];
+        const label = option && typeof option.textContent === "string" ? option.textContent.trim() : "";
+        return label || "全部会话";
       }
 
       function syncSessionFilterOptions() {
@@ -514,8 +2324,17 @@
           });
 
         const options = [{ value: "all" }, ...sessions, ...days];
-        if (!options.some((item) => item.value === previous)) {
-          state.sessionFilter = "all";
+        const hasPrevious = options.some((item) => item.value === previous);
+        const latestSessionValue = sessions.length ? sessions[0].value : "all";
+
+        if (!state.sessionFilterTouched) {
+          if (sessions.length && (previous === "all" || !hasPrevious)) {
+            state.sessionFilter = latestSessionValue;
+          } else if (!hasPrevious) {
+            state.sessionFilter = "all";
+          }
+        } else if (!hasPrevious) {
+          state.sessionFilter = latestSessionValue;
         }
 
         sessionFilterEl.textContent = "";
@@ -552,7 +2371,7 @@
         sessionFilterEl.value = state.sessionFilter;
       }
 
-      function wrapText(text, maxWidth, maxLines) {
+      function wrapText(text, maxWidth, maxLines, font = BASE_TEXT_FONT) {
         const lines = [];
         const parts = String(text || "").split(/\r?\n/);
 
@@ -567,7 +2386,7 @@
           let line = "";
           for (const ch of part) {
             const next = line + ch;
-            if (measureCtx.measureText(next).width <= maxWidth || line.length === 0) {
+            if (measureTextWidth(next, font) <= maxWidth || line.length === 0) {
               line = next;
             } else {
               lines.push(line);
@@ -586,25 +2405,419 @@
         return lines;
       }
 
+      function fitText(text, maxWidth, font = BASE_TEXT_FONT) {
+        const raw = String(text || "").trim();
+        if (!raw) return "";
+        if (!(maxWidth > 12) || measureTextWidth(raw, font) <= maxWidth) return raw;
+        const ellipsis = "…";
+        const ellipsisW = measureTextWidth(ellipsis, font);
+        let out = "";
+        for (const ch of raw) {
+          const next = out + ch;
+          if (measureTextWidth(next, font) + ellipsisW > maxWidth) break;
+          out = next;
+        }
+        return out ? `${out}${ellipsis}` : ellipsis;
+      }
+
+      function withEllipsis(text, maxWidth, font = BASE_TEXT_FONT) {
+        const clean = String(text || "").replace(/…+$/, "").trimEnd();
+        if (!clean) return "…";
+        if (measureTextWidth(`${clean}…`, font) <= maxWidth) return `${clean}…`;
+        const fitted = fitText(clean, maxWidth, font);
+        return fitted.endsWith("…") ? fitted : `${fitted}…`;
+      }
+
+      function wrapTextWithEllipsis(text, maxWidth, maxLines, font = BASE_TEXT_FONT) {
+        const source = String(text || "");
+        if (!source.trim()) return { lines: ["(空)"], truncated: false };
+
+        const parts = source.split(/\r?\n/);
+        const lines = [];
+        let truncated = false;
+        let stop = false;
+
+        for (let p = 0; p < parts.length && !stop; p += 1) {
+          const part = parts[p];
+          if (!part) {
+            if (lines.length < maxLines) {
+              lines.push("");
+            } else {
+              truncated = true;
+              break;
+            }
+            continue;
+          }
+
+          let line = "";
+          for (let idx = 0; idx < part.length; idx += 1) {
+            const ch = part[idx];
+            const next = line + ch;
+            if (measureTextWidth(next, font) <= maxWidth || !line) {
+              line = next;
+            } else {
+              lines.push(line);
+              line = ch;
+              if (lines.length >= maxLines) {
+                truncated = true;
+                stop = true;
+                break;
+              }
+            }
+          }
+
+          if (stop) break;
+
+          if (line) {
+            lines.push(line);
+            if (lines.length > maxLines) {
+              lines.length = maxLines;
+              truncated = true;
+              break;
+            }
+          }
+
+          if (lines.length >= maxLines && p < parts.length - 1) {
+            truncated = true;
+            break;
+          }
+        }
+
+        if (!lines.length) lines.push("(空)");
+
+        if (truncated) {
+          const lastIndex = Math.min(lines.length, maxLines) - 1;
+          lines[lastIndex] = withEllipsis(lines[lastIndex], maxWidth, font);
+        }
+
+        return {
+          lines: lines.slice(0, maxLines),
+          truncated
+        };
+      }
+
+      function mechanismIconName(mechanism) {
+        const clean = typeof mechanism === "string" ? mechanism.trim().toLowerCase() : "";
+        if (!clean) return "process";
+        if (clean === "sessions_spawn") return "spawn";
+        if (clean === "sessions_send") return "send";
+        if (clean.includes("thinking") || clean === "process") return "spark";
+        if (clean.includes("read")) return "doc";
+        if (clean.includes("write") || clean.includes("edit")) return "edit";
+        if (clean.includes("grep") || clean.includes("search")) return "search";
+        if (clean.includes("fetch") || clean.includes("browser")) return "globe";
+        if (clean.includes("exec") || clean.includes("shell") || clean.includes("bash") || clean.includes("terminal")) return "terminal";
+        if (clean.includes("cron") || clean.includes("schedule")) return "clock";
+        if (clean.includes("message")) return "message";
+        if (clean.includes("gateway")) return "send";
+        return "process";
+      }
+
+      function eventVisualIconName(evt) {
+        if (!evt) return "";
+        const text = String(evt.text || "");
+        const hasError = /error|failed|exception|denied|timeout|失败|异常|拒绝/i.test(text);
+        if (hasError) return "warning";
+
+        if (evt.mode === "user") {
+          return "message";
+        }
+
+        if (evt.mode === "spawn") {
+          if (evt.stage === "result") return "check";
+          if (evt.stage === "delivery") return "inbox";
+          return "spawn";
+        }
+
+        if (evt.mode === "a2a") {
+          if (evt.stage === "result") return "check";
+          if (evt.stage === "delivery") return "inbox";
+          return "send";
+        }
+
+        if (evt.mode === "internal") {
+          if (evt.stage === "thinking") return "spark";
+          return mechanismIconName(evt.mechanism);
+        }
+
+        return mechanismIconName(evt.mechanism);
+      }
+
+      function decorateEventText(evt) {
+        return String((evt && evt.text) || "").trim() || "(空消息)";
+      }
+
+      function extractDisplayTitle(evt) {
+        const raw = String((evt && evt.text) || "").trim();
+        if (!raw) return { title: "", body: "(空消息)" };
+        const lines = raw.split(/\r?\n/);
+        const titleMatch = /^【\s*([^】]+?)\s*】$/.exec(lines[0] || "");
+        if (!titleMatch) {
+          return {
+            title: "",
+            body: decorateEventText(evt)
+          };
+        }
+
+        const titleCore = titleMatch[1].trim();
+        const body = lines.slice(1).join("\n").trim() || "(空消息)";
+        return {
+          title: titleCore,
+          body
+        };
+      }
+
       function mechanismLabel(evt) {
         if (!evt || typeof evt.mechanism !== "string") return "";
         if (!evt.mechanism.startsWith("sessions_")) return "";
-        if (evt.stage) return `${evt.mechanism} (${evt.stage})`;
-        return evt.mechanism;
+        const text = evt.stage ? `${evt.mechanism} (${evt.stage})` : `${evt.mechanism}`;
+        return fitText(text, 156);
+      }
+
+      function detailMechanismLabel(evt) {
+        if (!evt || typeof evt.mechanism !== "string") return "";
+        const mechanism = evt.mechanism.trim();
+        if (!mechanism || mechanism === "user_message") return "";
+        if (!evt.stage || evt.stage === mechanism) return mechanism;
+        return `${mechanism} (${evt.stage})`;
+      }
+
+      function detailTitleText(evt) {
+        const displayParts = extractDisplayTitle(evt);
+        if (displayParts.title) return displayParts.title;
+
+        const mechanism = detailMechanismLabel(evt);
+        if (mechanism) return mechanism;
+
+        if (evt.mode === "user" && evt.from !== "user") {
+          return "回复消息";
+        }
+
+        return modeSpec(evt).titleLabel;
+      }
+
+      function buildDetailTags(evt) {
+        const tags = [
+          { text: formatDateTime(evt.ts), icon: "clock" },
+          {
+            text: modeSpec(evt).titleLabel,
+            icon: modeIconName(evt.mode),
+            accent: modeColor[evt.mode] || "",
+            title: modeSpec(evt).description
+          }
+        ];
+
+        const mechanism = detailMechanismLabel(evt);
+        if (mechanism) {
+          tags.push({
+            text: mechanism,
+            icon: mechanismIconName(evt.mechanism)
+          });
+        }
+
+        if (evt.sessionTag) {
+          tags.push({
+            text: evt.sessionTag,
+            icon: "thread"
+          });
+        }
+
+        return tags;
+      }
+
+      function createDetailTag(def) {
+        const tag = document.createElement("span");
+        tag.className = "detail-tag";
+        tag.title = def.title || def.text;
+
+        if (def.accent) {
+          tag.classList.add("detail-tag--accent");
+          tag.style.setProperty("--tag-accent", def.accent);
+          tag.style.borderColor = def.accent;
+          tag.style.color = def.accent;
+        }
+
+        if (def.icon) {
+          const iconWrap = document.createElement("span");
+          iconWrap.className = "detail-tag__icon";
+          iconWrap.appendChild(createHtmlIcon(def.icon, { size: 14 }));
+          tag.appendChild(iconWrap);
+        }
+
+        const text = document.createElement("span");
+        text.className = "detail-tag__text";
+        text.textContent = def.text;
+        tag.appendChild(text);
+        return tag;
+      }
+
+      function getVisibleSelectedEvent(visible) {
+        if (!state.selectedEventId) return null;
+        return visible.find((evt) => evt.id === state.selectedEventId) || null;
+      }
+
+      function renderDetailPanel(visible) {
+        const selected = getVisibleSelectedEvent(visible);
+        if (!selected) {
+          state.selectedEventId = null;
+          boardShell.classList.add("is-detail-collapsed");
+          detailPanel.classList.add("is-empty");
+          detailPanel.classList.add("is-collapsed");
+          detailPanel.dataset.eventId = "";
+          detailPanel.setAttribute("aria-hidden", "true");
+          detailTitleEl.textContent = "未选择事件";
+          detailSubtitleEl.textContent = "点击任意事件卡片，在这里查看完整正文并进行复制。";
+          detailTagsEl.textContent = "";
+          detailBodyEl.innerHTML = "";
+          detailCopyBtn.disabled = true;
+          detailClearBtn.disabled = true;
+          detailCopyBtn.dataset.copyText = "";
+          return;
+        }
+
+        const previousEventId = detailPanel.dataset.eventId || "";
+        boardShell.classList.remove("is-detail-collapsed");
+        detailPanel.classList.remove("is-empty");
+        detailPanel.classList.remove("is-collapsed");
+        detailPanel.dataset.eventId = selected.id;
+        detailPanel.setAttribute("aria-hidden", "false");
+        detailTitleEl.textContent = detailTitleText(selected);
+        detailSubtitleEl.textContent = `${displayAgent(selected.from)} → ${displayAgent(selected.to)} · ${modeSpec(selected).description}`;
+        detailTagsEl.textContent = "";
+        buildDetailTags(selected).forEach((tagDef) => {
+          detailTagsEl.appendChild(createDetailTag(tagDef));
+        });
+        detailBodyEl.innerHTML = renderMarkdown(selected.text);
+        detailCopyBtn.disabled = false;
+        detailClearBtn.disabled = false;
+        detailCopyBtn.dataset.copyText = selected.text;
+
+        if (previousEventId !== selected.id) {
+          detailContentEl.scrollTop = 0;
+        }
+      }
+
+      function buildMetaChipLayout(evt, maxWidth) {
+        const chipMaxWidth = Math.max(96, Math.min(220, Math.floor(maxWidth * 0.82)));
+        const chips = [
+          { text: formatTime(evt.ts), icon: "clock" },
+          {
+            text: modeName(evt),
+            icon: modeIconName(evt.mode),
+            accent: modeColor[evt.mode] || "",
+            title: modeSpec(evt).description
+          }
+        ].map((chip) => {
+          const iconWidth = chip.icon ? 18 : 0;
+          const fittedText = fitText(chip.text, chipMaxWidth - 22 - iconWidth);
+          return {
+            ...chip,
+            text: fittedText,
+            width: clamp(Math.ceil(measureTextWidth(fittedText) + 22 + iconWidth), 74, chipMaxWidth)
+          };
+        });
+
+        const rows = [];
+        let current = [];
+        let currentWidth = 0;
+
+        chips.forEach((chip) => {
+          const nextWidth = current.length ? currentWidth + 8 + chip.width : chip.width;
+          if (current.length && nextWidth > maxWidth) {
+            rows.push({ chips: current, width: currentWidth });
+            current = [chip];
+            currentWidth = chip.width;
+            return;
+          }
+          current.push(chip);
+          currentWidth = nextWidth;
+        });
+
+        if (current.length) rows.push({ chips: current, width: currentWidth });
+
+        return {
+          rows,
+          width: rows.length ? Math.max(...rows.map((row) => row.width)) : 0,
+          height: rows.length ? rows.length * 22 + (rows.length - 1) * 8 : 0
+        };
       }
 
       function buildEventMetrics(evt, y, labelMaxW, totalLines) {
-        const metaText = `${formatTime(evt.ts)} · ${modeName(evt.mode)} · ${displayAgent(evt.from)} -> ${displayAgent(evt.to)}`;
-        const shortBody = evt.text.length > 320 ? `${evt.text.slice(0, 317)}...` : evt.text;
-        const metaLines = wrapText(metaText, labelMaxW - 18, 2);
-        const bodyLines = wrapText(shortBody, labelMaxW - 18, Math.max(2, totalLines - metaLines.length));
-        const lines = [...metaLines, ...bodyLines];
-        const textH = lines.length * 15 + 12;
+        const collapsed = isEventCollapsed(evt);
+        const metaText = `${formatTime(evt.ts)} · ${modeName(evt)} · ${displayAgent(evt.from)} → ${displayAgent(evt.to)}`;
+        const toggleText = collapsed ? "展开" : "收起";
+        const toggleW = clamp(Math.ceil(measureTextWidth(toggleText) + 26), 58, 74);
+        const visualIconName = eventVisualIconName(evt);
+
+        if (collapsed) {
+          const compactTitle = fitText(detailTitleText(evt) || modeName(evt), labelMaxW - 118);
+          const compactTime = formatTime(evt.ts);
+          const titleW = measureTextWidth(compactTitle);
+          const timeW = measureTextWidth(compactTime);
+          const iconW = visualIconName ? 16 : 0;
+          const boxW = clamp(Math.ceil(iconW + titleW + timeW + toggleW + 48), 154, Math.min(labelMaxW, 320));
+          const boxH = 36;
+          return {
+            evt,
+            collapsed: true,
+            compactTitle,
+            compactTime,
+            bodyIconName: visualIconName,
+            toggleText,
+            toggleW,
+            y,
+            textH: boxH,
+            arrowY: y + boxH + 9,
+            h: boxH + 24,
+            boxW,
+            metaText
+          };
+        }
+
+        const displayParts = extractDisplayTitle(evt);
+        const metaChipLayout = buildMetaChipLayout(evt, labelMaxW - 18);
+        const titleIconName = displayParts.title ? eventVisualIconName(evt) : "";
+        const bodyIconName = displayParts.title ? "" : eventVisualIconName(evt);
+        const bodyIconWidth = bodyIconName ? 18 : 0;
+        const gapAfterMeta = displayParts.title ? 12 : 14;
+        const shortBody =
+          displayParts.body.length > 320 ? `${displayParts.body.slice(0, 317)}...` : displayParts.body;
+        const bodyLines = wrapText(shortBody, labelMaxW - 18 - bodyIconWidth, Math.max(2, totalLines - (displayParts.title ? 1 : 0)));
+        const titleText = displayParts.title ? fitText(displayParts.title, labelMaxW - 26 - (titleIconName ? 18 : 0)) : "";
+        const titleW = titleText ? clamp(Math.ceil(measureTextWidth(titleText) + 18 + (titleIconName ? 18 : 0)), 74, labelMaxW - 18) : 0;
+        const bodyBlockH = bodyLines.length * 15;
+        const titleBlockH = titleText ? 34 : 0;
+        const toggleBlockH = 22;
+        const toggleGap = 10;
+        const textH = 10 + metaChipLayout.height + gapAfterMeta + titleBlockH + bodyBlockH + toggleGap + toggleBlockH + 12;
         const arrowY = y + textH + 9;
         const rowH = textH + 24;
-        const lineW = Math.max(...lines.map((line) => measureCtx.measureText(line).width));
-        const boxW = clamp(Math.ceil(lineW + 22), 170, labelMaxW);
-        return { evt, lines, y, textH, arrowY, h: rowH, boxW, metaText };
+        const measuredLineW = Math.max(
+          metaChipLayout.width,
+          ...bodyLines.map((line) => measureTextWidth(line) + bodyIconWidth),
+          titleText ? titleW - 18 : 0,
+          toggleW
+        );
+        const boxW = clamp(Math.ceil(measuredLineW + 22), 170, labelMaxW);
+        return {
+          evt,
+          collapsed,
+          metaChipLayout,
+          titleText,
+          titleIconName,
+          titleW,
+          bodyIconName,
+          gapAfterMeta,
+          bodyLines,
+          toggleText,
+          toggleW,
+          y,
+          textH,
+          arrowY,
+          h: rowH,
+          boxW,
+          metaText
+        };
       }
 
       function isParallelSpawnSeed(evt) {
@@ -617,35 +2830,64 @@
         );
       }
 
-      function hideHoverPop() {
-        hoverPop.style.display = "none";
+      function selectEvent(eventId) {
+        const nextId = typeof eventId === "string" && eventId ? eventId : null;
+        if (state.selectedEventId === nextId) return;
+        state.selectedEventId = nextId;
+        render({ preserveScroll: true });
       }
 
-      function positionHoverPop(e) {
-        if (hoverPop.style.display !== "block") return;
-        const rect = diagramScroll.getBoundingClientRect();
-        const sx = diagramScroll.scrollLeft;
-        const sy = diagramScroll.scrollTop;
-        const margin = 12;
+      function collapseSidePanels() {
+        const needsSidebarCollapse = !state.sidebarCollapsed;
+        const needsDetailCollapse = Boolean(state.selectedEventId);
+        if (!needsSidebarCollapse && !needsDetailCollapse) return;
 
-        let left = sx + (e.clientX - rect.left) + 14;
-        let top = sy + (e.clientY - rect.top) + 14;
-
-        const maxLeft = sx + rect.width - hoverPop.offsetWidth - margin;
-        const maxTop = sy + rect.height - hoverPop.offsetHeight - margin;
-
-        if (left > maxLeft) left = Math.max(sx + margin, maxLeft);
-        if (top > maxTop) top = Math.max(sy + margin, maxTop);
-
-        hoverPop.style.left = `${left}px`;
-        hoverPop.style.top = `${top}px`;
+        state.sidebarCollapsed = true;
+        state.selectedEventId = null;
+        writeStorage(SIDEBAR_STORAGE_KEY, "1");
+        syncShellState();
+        scheduleRelayout();
       }
 
-      function showHoverPop(e, meta, body) {
-        hoverPopMeta.textContent = meta;
-        hoverPopBody.textContent = body;
-        hoverPop.style.display = "block";
-        positionHoverPop(e);
+      function isBlankBoardClickTarget(target) {
+        if (!(target instanceof Element)) return false;
+        if (target.closest('[role="button"], button, a, input, select, textarea, label, summary')) return false;
+        if (target.closest("#detail-panel, .sidebar, .copy-toast")) return false;
+        return Boolean(target.closest("#diagram, #diagram-header, #diagram-header-svg"));
+      }
+
+      async function copyEventText(text) {
+        const value = String(text || "").trim();
+        if (!value) return;
+
+        try {
+          if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+            await navigator.clipboard.writeText(value);
+          } else {
+            const input = document.createElement("textarea");
+            input.value = value;
+            input.setAttribute("readonly", "true");
+            input.style.position = "fixed";
+            input.style.top = "-9999px";
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand("copy");
+            document.body.removeChild(input);
+          }
+          showCopyToast("已复制全文");
+        } catch {
+          showCopyToast("复制失败");
+        }
+      }
+
+      function showCopyToast(text) {
+        copyToast.textContent = text;
+        copyToast.style.display = "block";
+        if (copyToastTimer) clearTimeout(copyToastTimer);
+        copyToastTimer = setTimeout(() => {
+          copyToast.style.display = "none";
+          copyToastTimer = null;
+        }, 1500);
       }
 
       function clamp(num, min, max) {
@@ -665,7 +2907,7 @@
         if (atTail) {
           const nextTotal = getFilteredTimeline().length;
           state.cursor = nextTotal;
-          if (eventMatchesCurrentFilter(evt)) {
+          if (nextTotal > previousTotal) {
             state.forceBottom = true;
           }
         }
@@ -686,6 +2928,7 @@
           state.allTimeline.push(evt);
         });
 
+        pruneEventCollapseState();
         syncSessionFilterOptions();
         state.cursor = getFilteredTimeline().length;
         state.forceBottom = true;
@@ -695,7 +2938,7 @@
       async function loadHistory() {
         const query = new URLSearchParams({
           limit: "1200",
-          includeInternal: state.showInternal ? "1" : "0"
+          includeInternal: "1"
         });
         const res = await fetch(`/api/history?${query.toString()}`, { cache: "no-store" });
         if (!res.ok) throw new Error(`history:${res.status}`);
@@ -703,17 +2946,36 @@
         return Array.isArray(payload.items) ? payload.items : [];
       }
 
-      function computeLayout(visible) {
+      function computeLayout(visible, options = {}) {
         const agents = buildAgentList(visible);
-        const viewportW = Math.max(760, diagramScroll.clientWidth || 1020);
-        const viewportH = Math.max(460, diagramScroll.clientHeight || 560);
+        const viewportW = Math.max(760, options.viewportWidth || diagramScroll.clientWidth || 1020);
+        const viewportH = Math.max(460, options.viewportHeight || diagramScroll.clientHeight || 560);
+        const headerLabelMaxW = 172;
+        const headerMetrics = new Map();
+
+        let maxHeaderBoxW = 136;
+        let maxHeaderLines = 1;
+
+        agents.forEach((agentId) => {
+          const wrapped = wrapTextWithEllipsis(displayAgent(agentId), headerLabelMaxW, 2, HEADER_TEXT_FONT);
+          const widestLine = wrapped.lines.length
+            ? Math.max(...wrapped.lines.map((line) => measureTextWidth(line, HEADER_TEXT_FONT)))
+            : 0;
+          maxHeaderBoxW = Math.max(maxHeaderBoxW, Math.ceil(widestLine + 28));
+          maxHeaderLines = Math.max(maxHeaderLines, wrapped.lines.length);
+          headerMetrics.set(agentId, wrapped);
+        });
+
+        const headerBoxW = clamp(maxHeaderBoxW, 136, 200);
+        const headerBoxH = maxHeaderLines > 1 ? 48 : 36;
+        const headerHeight = headerBoxH + 28;
 
         const side = 110;
         let gap = 0;
 
         if (agents.length > 1) {
           const adaptive = Math.floor((viewportW - side * 2) / (agents.length - 1));
-          gap = Math.max(180, adaptive);
+          gap = Math.max(182, adaptive, headerBoxW + 48);
         }
 
         const width = Math.max(viewportW, side * 2 + gap * Math.max(agents.length - 1, 0) + 10);
@@ -723,7 +2985,7 @@
           xMap.set(agentId, side + idx * gap);
         });
 
-        const labelMaxW = Math.min(420, Math.max(220, agents.length > 1 ? gap * 1.3 : 320));
+        const labelMaxW = Math.min(440, Math.max(220, agents.length > 1 ? gap * 1.3 : 320));
 
         const rows = [];
         let y = 14;
@@ -789,66 +3051,96 @@
           i += 1;
         }
 
-        const height = Math.max(viewportH - HEADER_H, y + 36);
+        const height = Math.max(viewportH - headerHeight, y + 36);
 
         return {
           agents,
           width,
           height,
           xMap,
-          rows
+          rows,
+          headerMetrics,
+          headerBoxW,
+          headerBoxH,
+          headerHeight
         };
       }
 
-      function drawHeader(layout) {
-        const { agents, width, xMap } = layout;
+      function createSvgRoot() {
+        const svg = document.createElementNS(NS, "svg");
+        svg.setAttribute("xmlns", NS);
+        return svg;
+      }
 
-        diagramHeaderSvg.setAttribute("width", String(width));
-        diagramHeaderSvg.setAttribute("height", String(HEADER_H));
-        diagramHeaderSvg.setAttribute("viewBox", `0 0 ${width} ${HEADER_H}`);
-        diagramHeaderSvg.textContent = "";
+      function serializeSvg(svgEl) {
+        svgEl.setAttribute("xmlns", NS);
+        return new XMLSerializer().serializeToString(svgEl);
+      }
+
+      function drawHeader(layout, targetSvg = diagramHeaderSvg) {
+        const { agents, width, xMap, headerMetrics, headerBoxW, headerBoxH, headerHeight } = layout;
+        const palette = getDiagramPalette();
+
+        targetSvg.setAttribute("width", String(width));
+        targetSvg.setAttribute("height", String(headerHeight));
+        targetSvg.setAttribute("viewBox", `0 0 ${width} ${headerHeight}`);
+        targetSvg.style.height = `${headerHeight}px`;
+        targetSvg.textContent = "";
 
         const bg = document.createElementNS(NS, "rect");
         bg.setAttribute("x", "0");
         bg.setAttribute("y", "0");
         bg.setAttribute("width", String(width));
-        bg.setAttribute("height", String(HEADER_H));
-        bg.setAttribute("fill", "rgba(8, 20, 34, 0.88)");
-        diagramHeaderSvg.appendChild(bg);
+        bg.setAttribute("height", String(headerHeight));
+        bg.setAttribute("fill", palette.headerBg);
+        targetSvg.appendChild(bg);
 
         agents.forEach((agentId) => {
           const x = xMap.get(agentId);
+          const badge = headerMetrics.get(agentId) || wrapTextWithEllipsis(displayAgent(agentId), 160, 2, HEADER_TEXT_FONT);
+          const boxY = 14;
+          const lineGap = 16;
+          const firstLineY = boxY + (headerBoxH - (badge.lines.length - 1) * lineGap) / 2 + 5;
 
           const box = document.createElementNS(NS, "rect");
-          box.setAttribute("x", String(x - 68));
-          box.setAttribute("y", "14");
-          box.setAttribute("width", "136");
-          box.setAttribute("height", "36");
-          box.setAttribute("rx", "10");
-          box.setAttribute("fill", "rgba(11, 35, 54, 0.86)");
-          box.setAttribute("stroke", "rgba(149, 227, 240, 0.42)");
-          diagramHeaderSvg.appendChild(box);
+          box.setAttribute("x", String(x - headerBoxW / 2));
+          box.setAttribute("y", String(boxY));
+          box.setAttribute("width", String(headerBoxW));
+          box.setAttribute("height", String(headerBoxH));
+          box.setAttribute("rx", "12");
+          box.setAttribute("fill", palette.headerBox);
+          box.setAttribute("stroke", palette.headerStroke);
+          const title = document.createElementNS(NS, "title");
+          title.textContent = displayAgent(agentId);
+          box.appendChild(title);
+          targetSvg.appendChild(box);
 
-          const label = document.createElementNS(NS, "text");
-          label.setAttribute("x", String(x));
-          label.setAttribute("y", "37");
-          label.setAttribute("text-anchor", "middle");
-          label.setAttribute("fill", "#e9f8ff");
-          label.setAttribute("font-size", "14");
-          label.setAttribute("font-weight", "700");
-          label.textContent = displayAgent(agentId);
-          diagramHeaderSvg.appendChild(label);
+          badge.lines.forEach((line, lineIdx) => {
+            const label = document.createElementNS(NS, "text");
+            label.setAttribute("x", String(x));
+            label.setAttribute("y", String(firstLineY + lineIdx * lineGap));
+            label.setAttribute("text-anchor", "middle");
+            label.setAttribute("fill", palette.headerText);
+            label.setAttribute("font-size", "13.5");
+            label.setAttribute("font-weight", "700");
+            label.textContent = line;
+            targetSvg.appendChild(label);
+          });
         });
       }
 
-      function drawBody(layout) {
+      function drawBody(layout, options = {}) {
         const { agents, width, height, xMap, rows } = layout;
-        hideHoverPop();
+        const targetSvg = options.targetSvg || diagram;
+        const interactive = options.interactive !== false;
+        const includeDataAttrs = Boolean(options.includeDataAttrs);
+        const selectedEventId = options.selectedEventId !== undefined ? options.selectedEventId : state.selectedEventId;
+        const palette = getDiagramPalette();
 
-        diagram.setAttribute("width", String(width));
-        diagram.setAttribute("height", String(height));
-        diagram.setAttribute("viewBox", `0 0 ${width} ${height}`);
-        diagram.textContent = "";
+        targetSvg.setAttribute("width", String(width));
+        targetSvg.setAttribute("height", String(height));
+        targetSvg.setAttribute("viewBox", `0 0 ${width} ${height}`);
+        targetSvg.textContent = "";
 
         const defs = document.createElementNS(NS, "defs");
         const markerData = [
@@ -874,7 +3166,7 @@
           defs.appendChild(marker);
         });
 
-        diagram.appendChild(defs);
+        targetSvg.appendChild(defs);
 
         agents.forEach((agentId) => {
           const x = xMap.get(agentId);
@@ -884,10 +3176,10 @@
           lane.setAttribute("x2", String(x));
           lane.setAttribute("y1", "0");
           lane.setAttribute("y2", String(height));
-          lane.setAttribute("stroke", "rgba(148, 224, 240, 0.28)");
+          lane.setAttribute("stroke", palette.lane);
           lane.setAttribute("stroke-width", "1.4");
           lane.setAttribute("stroke-dasharray", "6 6");
-          diagram.appendChild(lane);
+          targetSvg.appendChild(lane);
         });
 
         let alt = false;
@@ -900,15 +3192,51 @@
           bg.setAttribute("y", String(row.y - 6));
           bg.setAttribute("width", String(width));
           bg.setAttribute("height", String(row.h + 12));
-          bg.setAttribute("fill", "rgba(120, 208, 230, 0.03)");
-          diagram.appendChild(bg);
+          bg.setAttribute("fill", palette.rowAlt);
+          targetSvg.appendChild(bg);
         });
 
         let lastEventAnchor = null;
 
-        const drawMechanismBadge = (x, y, text, color) => {
+        const drawInlineIconText = ({
+          iconName = "",
+          text = "",
+          x = 0,
+          baselineY = 0,
+          color = palette.chipText,
+          fontSize = 11,
+          fontWeight = "700",
+          iconSize = 12
+        }) => {
+          const iconGap = iconName ? iconSize + 5 : 0;
+          const textWidth = measureTextWidth(text);
+          const totalWidth = textWidth + iconGap;
+          const startX = x - totalWidth / 2;
+          if (iconName) {
+            appendSvgIcon(targetSvg, iconName, {
+              x: startX,
+              y: baselineY - iconSize + 2,
+              size: iconSize,
+              color,
+              strokeWidth: 1.85
+            });
+          }
+          const label = document.createElementNS(NS, "text");
+          label.setAttribute("x", String(startX + iconGap));
+          label.setAttribute("y", String(baselineY));
+          label.setAttribute("text-anchor", "start");
+          label.setAttribute("fill", color);
+          label.setAttribute("font-size", String(fontSize));
+          label.setAttribute("font-weight", fontWeight);
+          label.setAttribute("pointer-events", "none");
+          label.textContent = text;
+          targetSvg.appendChild(label);
+          return totalWidth;
+        };
+
+        const drawMechanismBadge = (x, y, text, color, iconName) => {
           if (!text) return;
-          const w = Math.ceil(measureCtx.measureText(text).width + 14);
+          const w = Math.ceil(measureTextWidth(text) + 14 + (iconName ? 16 : 0));
           const rx = x - w / 2;
           const badge = document.createElementNS(NS, "rect");
           badge.setAttribute("x", String(rx));
@@ -916,25 +3244,26 @@
           badge.setAttribute("width", String(w));
           badge.setAttribute("height", "16");
           badge.setAttribute("rx", "8");
-          badge.setAttribute("fill", "rgba(8, 22, 35, 0.94)");
+          badge.setAttribute("fill", palette.badgeBg);
           badge.setAttribute("stroke", color);
           badge.setAttribute("stroke-width", "1");
-          diagram.appendChild(badge);
+          targetSvg.appendChild(badge);
 
-          const label = document.createElementNS(NS, "text");
-          label.setAttribute("x", String(x));
-          label.setAttribute("y", String(y - 7));
-          label.setAttribute("text-anchor", "middle");
-          label.setAttribute("fill", color);
-          label.setAttribute("font-size", "10.5");
-          label.setAttribute("font-weight", "700");
-          label.textContent = text;
-          diagram.appendChild(label);
+          drawInlineIconText({
+            iconName,
+            text,
+            x,
+            baselineY: y - 7,
+            color,
+            fontSize: 10.5,
+            iconSize: 11
+          });
         };
 
         const drawEventItem = (item, options = {}) => {
           const evt = item.evt;
           const color = modeColor[evt.mode] || "#67e6c7";
+          const isSelected = evt.id === selectedEventId;
           const fromX = xMap.get(evt.from);
           const toX = xMap.get(evt.to);
           const markerId =
@@ -953,32 +3282,344 @@
             boxX = clamp((fromX + toX) / 2 - item.boxW / 2, 8, width - item.boxW - 8);
           }
 
+          if (isSelected) {
+            const halo = document.createElementNS(NS, "rect");
+            halo.setAttribute("x", String(boxX - 4));
+            halo.setAttribute("y", String(item.y - 4));
+            halo.setAttribute("width", String(item.boxW + 8));
+            halo.setAttribute("height", String(item.textH + 8));
+            halo.setAttribute("rx", "11");
+            halo.setAttribute("fill", color);
+            halo.setAttribute("fill-opacity", "0.09");
+            halo.setAttribute("stroke", color);
+            halo.setAttribute("stroke-opacity", "0.34");
+            halo.setAttribute("pointer-events", "none");
+            targetSvg.appendChild(halo);
+          }
+
           const labelBox = document.createElementNS(NS, "rect");
           labelBox.setAttribute("x", String(boxX));
           labelBox.setAttribute("y", String(item.y));
           labelBox.setAttribute("width", String(item.boxW));
           labelBox.setAttribute("height", String(item.textH));
           labelBox.setAttribute("rx", "8");
-          labelBox.setAttribute("fill", "rgba(7, 24, 39, 0.9)");
-          labelBox.setAttribute("stroke", "rgba(150, 225, 240, 0.25)");
+          labelBox.setAttribute("fill", isSelected ? palette.titleFill : palette.cardFill);
+          labelBox.setAttribute("stroke", isSelected ? color : palette.cardStroke);
+          labelBox.setAttribute("stroke-width", isSelected ? "1.4" : "1");
           labelBox.style.cursor = "pointer";
 
-          const fullMeta = `${formatTime(evt.ts)} · ${modeName(evt.mode)} · ${displayAgent(evt.from)} -> ${displayAgent(evt.to)}`;
-          labelBox.addEventListener("mouseenter", (e) => showHoverPop(e, fullMeta, evt.text));
-          labelBox.addEventListener("mousemove", positionHoverPop);
-          labelBox.addEventListener("mouseleave", hideHoverPop);
-          diagram.appendChild(labelBox);
+          const fullMeta = `${formatDateTime(evt.ts)} · ${modeName(evt)} · ${displayAgent(evt.from)} → ${displayAgent(evt.to)} · 点击查看完整正文`;
+          if (includeDataAttrs) {
+            labelBox.setAttribute("data-hover-meta", fullMeta);
+            labelBox.setAttribute("data-hover-body", evt.text);
+          }
 
-          item.lines.forEach((line, lineIdx) => {
+          const applyCardState = (hovered) => {
+            const active = hovered || isSelected;
+            labelBox.setAttribute("fill", active ? palette.titleFill : palette.cardFill);
+            labelBox.setAttribute("stroke", active ? color : palette.cardStroke);
+            labelBox.setAttribute("stroke-width", active ? "1.4" : "1");
+          };
+
+          if (interactive) {
+            labelBox.setAttribute("tabindex", "0");
+            labelBox.setAttribute("focusable", "true");
+            labelBox.setAttribute("role", "button");
+            labelBox.setAttribute("aria-pressed", isSelected ? "true" : "false");
+            labelBox.setAttribute("aria-label", `${detailTitleText(evt)}，点击查看完整正文`);
+            labelBox.addEventListener("mouseenter", () => applyCardState(true));
+            labelBox.addEventListener("mouseleave", () => applyCardState(false));
+            labelBox.addEventListener("focus", () => applyCardState(true));
+            labelBox.addEventListener("blur", () => applyCardState(false));
+            labelBox.addEventListener("click", () => {
+              selectEvent(evt.id);
+            });
+            labelBox.addEventListener("keydown", (event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                selectEvent(evt.id);
+              }
+            });
+          }
+          targetSvg.appendChild(labelBox);
+
+          if (item.collapsed) {
+            const compactIconX = boxX + 12;
+            const compactTitleX = boxX + (item.bodyIconName ? 29 : 14);
+            const compactTitleText = fitText(
+              item.compactTitle,
+              Math.max(48, item.boxW - item.toggleW - (item.bodyIconName ? 78 : 62))
+            );
+
+            if (item.bodyIconName) {
+              appendSvgIcon(targetSvg, item.bodyIconName, {
+                x: compactIconX,
+                y: item.y + 12,
+                size: 12,
+                color,
+                strokeWidth: 1.85
+              });
+            }
+
+            const compactTitle = document.createElementNS(NS, "text");
+            compactTitle.setAttribute("x", String(compactTitleX));
+            compactTitle.setAttribute("y", String(item.y + 20));
+            compactTitle.setAttribute("fill", palette.bodyText);
+            compactTitle.setAttribute("font-size", "12");
+            compactTitle.setAttribute("font-weight", "700");
+            compactTitle.setAttribute("pointer-events", "none");
+            compactTitle.textContent = compactTitleText;
+            targetSvg.appendChild(compactTitle);
+
+            const compactTime = document.createElementNS(NS, "text");
+            compactTime.setAttribute("x", String(compactTitleX));
+            compactTime.setAttribute("y", String(item.y + 31));
+            compactTime.setAttribute("fill", palette.chipText);
+            compactTime.setAttribute("font-size", "10.5");
+            compactTime.setAttribute("pointer-events", "none");
+            compactTime.textContent = item.compactTime;
+            targetSvg.appendChild(compactTime);
+
+            const toggleX = boxX + item.boxW - item.toggleW - 10;
+            const toggleY = item.y + 7;
+            const toggleBg = document.createElementNS(NS, "rect");
+            toggleBg.setAttribute("x", String(toggleX));
+            toggleBg.setAttribute("y", String(toggleY));
+            toggleBg.setAttribute("width", String(item.toggleW));
+            toggleBg.setAttribute("height", "22");
+            toggleBg.setAttribute("rx", "11");
+            toggleBg.setAttribute("fill", palette.chipFill);
+            toggleBg.setAttribute("stroke", color);
+            toggleBg.setAttribute("stroke-width", "1.15");
+            toggleBg.style.cursor = interactive ? "pointer" : "default";
+
+            const setToggleState = (hovered) => {
+              toggleBg.setAttribute("fill", hovered ? palette.titleFill : palette.chipFill);
+              toggleBg.setAttribute("stroke-width", hovered ? "1.3" : "1.15");
+            };
+
+            if (interactive) {
+              toggleBg.setAttribute("tabindex", "0");
+              toggleBg.setAttribute("focusable", "true");
+              toggleBg.setAttribute("role", "button");
+              toggleBg.setAttribute("aria-label", `展开 ${detailTitleText(evt)}`);
+              toggleBg.addEventListener("mouseenter", () => setToggleState(true));
+              toggleBg.addEventListener("mouseleave", () => setToggleState(false));
+              toggleBg.addEventListener("focus", () => setToggleState(true));
+              toggleBg.addEventListener("blur", () => setToggleState(false));
+              toggleBg.addEventListener("click", (event) => {
+                event.stopPropagation();
+                toggleEventCollapsed(evt.id);
+              });
+              toggleBg.addEventListener("keydown", (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  toggleEventCollapsed(evt.id);
+                }
+              });
+            }
+            targetSvg.appendChild(toggleBg);
+
+            const toggleText = document.createElementNS(NS, "text");
+            toggleText.setAttribute("x", String(toggleX + item.toggleW / 2));
+            toggleText.setAttribute("y", String(toggleY + 14));
+            toggleText.setAttribute("text-anchor", "middle");
+            toggleText.setAttribute("fill", color);
+            toggleText.setAttribute("font-size", "11");
+            toggleText.setAttribute("font-weight", "700");
+            toggleText.setAttribute("pointer-events", "none");
+            toggleText.textContent = item.toggleText;
+            targetSvg.appendChild(toggleText);
+
+            if (fromX === toX) {
+              const loopPath = document.createElementNS(NS, "path");
+              const d = `M ${fromX} ${item.arrowY} H ${fromX + 52} V ${item.arrowY + 22} H ${fromX + 7}`;
+              loopPath.setAttribute("d", d);
+              loopPath.setAttribute("fill", "none");
+              loopPath.setAttribute("stroke", color);
+              loopPath.setAttribute("stroke-width", "2");
+              loopPath.setAttribute("marker-end", `url(#${markerId})`);
+              targetSvg.appendChild(loopPath);
+              drawMechanismBadge(fromX + 30, item.arrowY, mechanismLabel(evt), color, mechanismIconName(evt.mechanism));
+            } else {
+              const arrow = document.createElementNS(NS, "line");
+              arrow.setAttribute("x1", String(fromX));
+              arrow.setAttribute("y1", String(item.arrowY));
+              arrow.setAttribute("x2", String(toX));
+              arrow.setAttribute("y2", String(item.arrowY));
+              arrow.setAttribute("stroke", color);
+              arrow.setAttribute("stroke-width", "2");
+              arrow.setAttribute("marker-end", `url(#${markerId})`);
+              targetSvg.appendChild(arrow);
+              drawMechanismBadge((fromX + toX) / 2, item.arrowY, mechanismLabel(evt), color, mechanismIconName(evt.mechanism));
+            }
+
+            const dot = document.createElementNS(NS, "circle");
+            dot.setAttribute("cx", String(fromX));
+            dot.setAttribute("cy", String(item.arrowY));
+            dot.setAttribute("r", "3.2");
+            dot.setAttribute("fill", color);
+            targetSvg.appendChild(dot);
+
+            if (options.markAsLast) {
+              lastEventAnchor = { y: item.y, h: item.h };
+            }
+            return;
+          }
+
+          let textY = item.y + 16;
+
+          item.metaChipLayout.rows.forEach((row, rowIdx) => {
+            let chipX = boxX + Math.max(10, (item.boxW - row.width) / 2);
+            row.chips.forEach((chip) => {
+              const chipRect = document.createElementNS(NS, "rect");
+              chipRect.setAttribute("x", String(chipX));
+              chipRect.setAttribute("y", String(textY));
+              chipRect.setAttribute("width", String(chip.width));
+              chipRect.setAttribute("height", "22");
+              chipRect.setAttribute("rx", "11");
+              chipRect.setAttribute("fill", palette.chipFill);
+              chipRect.setAttribute("stroke", chip.accent || palette.chipStroke);
+              chipRect.setAttribute("stroke-width", chip.accent ? "1.2" : "1");
+              chipRect.setAttribute("pointer-events", "none");
+              if (chip.title) {
+                const title = document.createElementNS(NS, "title");
+                title.textContent = chip.title;
+                chipRect.appendChild(title);
+              }
+              targetSvg.appendChild(chipRect);
+
+              drawInlineIconText({
+                iconName: chip.icon || "",
+                text: chip.text,
+                x: chipX + chip.width / 2,
+                baselineY: textY + 14,
+                color: chip.accent || palette.chipText,
+                fontSize: 11,
+                fontWeight: chip.accent ? "700" : "600",
+                iconSize: 11
+              });
+
+              chipX += chip.width + 8;
+            });
+            textY += 22;
+            if (rowIdx < item.metaChipLayout.rows.length - 1) textY += 8;
+          });
+
+          if (item.titleText) {
+            textY += item.gapAfterMeta;
+            const titleBox = document.createElementNS(NS, "rect");
+            titleBox.setAttribute("x", String(boxX + (item.boxW - item.titleW) / 2));
+            titleBox.setAttribute("y", String(textY));
+            titleBox.setAttribute("width", String(item.titleW));
+            titleBox.setAttribute("height", "20");
+            titleBox.setAttribute("rx", "10");
+            titleBox.setAttribute("fill", palette.titleFill);
+            titleBox.setAttribute("stroke", color);
+            titleBox.setAttribute("stroke-width", "1.2");
+            titleBox.setAttribute("pointer-events", "none");
+            targetSvg.appendChild(titleBox);
+
+            const titleContentW = measureTextWidth(item.titleText) + (item.titleIconName ? 16 : 0);
+            const titleStartX = boxX + item.boxW / 2 - titleContentW / 2;
+            if (item.titleIconName) {
+              appendSvgIcon(targetSvg, item.titleIconName, {
+                x: titleStartX,
+                y: textY + 3,
+                size: 12,
+                color,
+                strokeWidth: 1.9
+              });
+            }
+            const titleText = document.createElementNS(NS, "text");
+            titleText.setAttribute("x", String(titleStartX + (item.titleIconName ? 16 : 0)));
+            titleText.setAttribute("y", String(textY + 13));
+            titleText.setAttribute("text-anchor", "start");
+            titleText.setAttribute("fill", color);
+            titleText.setAttribute("font-size", "11");
+            titleText.setAttribute("font-weight", "700");
+            titleText.setAttribute("pointer-events", "none");
+            titleText.textContent = item.titleText;
+            targetSvg.appendChild(titleText);
+
+            textY += 34;
+          } else {
+            textY += item.gapAfterMeta;
+          }
+          const bodyStartX = boxX + 10 + (item.bodyIconName ? 18 : 0);
+          if (item.bodyIconName) {
+            appendSvgIcon(targetSvg, item.bodyIconName, {
+              x: boxX + 10,
+              y: textY - 10,
+              size: 12,
+              color,
+              strokeWidth: 1.85
+            });
+          }
+
+          item.bodyLines.forEach((line, lineIdx) => {
             const t = document.createElementNS(NS, "text");
-            t.setAttribute("x", String(boxX + 10));
-            t.setAttribute("y", String(item.y + 16 + lineIdx * 15));
-            t.setAttribute("fill", lineIdx === 0 ? "#dff5ff" : "#f5fcff");
-            t.setAttribute("font-size", lineIdx === 0 ? "11" : "12");
+            t.setAttribute("x", String(bodyStartX));
+            t.setAttribute("y", String(textY + lineIdx * 15));
+            t.setAttribute("fill", palette.bodyText);
+            t.setAttribute("font-size", "12");
             t.setAttribute("pointer-events", "none");
             t.textContent = line;
-            diagram.appendChild(t);
+            targetSvg.appendChild(t);
           });
+
+          const toggleX = boxX + item.boxW - item.toggleW - 10;
+          const toggleY = item.y + item.textH - 34;
+          const toggleBg = document.createElementNS(NS, "rect");
+          toggleBg.setAttribute("x", String(toggleX));
+          toggleBg.setAttribute("y", String(toggleY));
+          toggleBg.setAttribute("width", String(item.toggleW));
+          toggleBg.setAttribute("height", "22");
+          toggleBg.setAttribute("rx", "11");
+          toggleBg.setAttribute("fill", palette.chipFill);
+          toggleBg.setAttribute("stroke", color);
+          toggleBg.setAttribute("stroke-width", item.collapsed ? "1.15" : "1");
+          toggleBg.style.cursor = interactive ? "pointer" : "default";
+
+          const setToggleState = (hovered) => {
+            toggleBg.setAttribute("fill", hovered ? palette.titleFill : palette.chipFill);
+            toggleBg.setAttribute("stroke-width", hovered ? "1.3" : item.collapsed ? "1.15" : "1");
+          };
+
+          if (interactive) {
+            toggleBg.setAttribute("tabindex", "0");
+            toggleBg.setAttribute("focusable", "true");
+            toggleBg.setAttribute("role", "button");
+            toggleBg.setAttribute("aria-label", `${item.collapsed ? "展开" : "收起"} ${detailTitleText(evt)}`);
+            toggleBg.addEventListener("mouseenter", () => setToggleState(true));
+            toggleBg.addEventListener("mouseleave", () => setToggleState(false));
+            toggleBg.addEventListener("focus", () => setToggleState(true));
+            toggleBg.addEventListener("blur", () => setToggleState(false));
+            toggleBg.addEventListener("click", (event) => {
+              event.stopPropagation();
+              toggleEventCollapsed(evt.id);
+            });
+            toggleBg.addEventListener("keydown", (event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                event.stopPropagation();
+                toggleEventCollapsed(evt.id);
+              }
+            });
+          }
+          targetSvg.appendChild(toggleBg);
+
+          const toggleText = document.createElementNS(NS, "text");
+          toggleText.setAttribute("x", String(toggleX + item.toggleW / 2));
+          toggleText.setAttribute("y", String(toggleY + 14));
+          toggleText.setAttribute("text-anchor", "middle");
+          toggleText.setAttribute("fill", color);
+          toggleText.setAttribute("font-size", "11");
+          toggleText.setAttribute("font-weight", "700");
+          toggleText.setAttribute("pointer-events", "none");
+          toggleText.textContent = item.toggleText;
+          targetSvg.appendChild(toggleText);
 
           if (fromX === toX) {
             const loopPath = document.createElementNS(NS, "path");
@@ -988,8 +3629,8 @@
             loopPath.setAttribute("stroke", color);
             loopPath.setAttribute("stroke-width", "2");
             loopPath.setAttribute("marker-end", `url(#${markerId})`);
-            diagram.appendChild(loopPath);
-            drawMechanismBadge(fromX + 30, item.arrowY, mechanismLabel(evt), color);
+            targetSvg.appendChild(loopPath);
+            drawMechanismBadge(fromX + 30, item.arrowY, mechanismLabel(evt), color, mechanismIconName(evt.mechanism));
           } else {
             const arrow = document.createElementNS(NS, "line");
             arrow.setAttribute("x1", String(fromX));
@@ -999,8 +3640,8 @@
             arrow.setAttribute("stroke", color);
             arrow.setAttribute("stroke-width", "2");
             arrow.setAttribute("marker-end", `url(#${markerId})`);
-            diagram.appendChild(arrow);
-            drawMechanismBadge((fromX + toX) / 2, item.arrowY, mechanismLabel(evt), color);
+            targetSvg.appendChild(arrow);
+            drawMechanismBadge((fromX + toX) / 2, item.arrowY, mechanismLabel(evt), color, mechanismIconName(evt.mechanism));
           }
 
           const dot = document.createElementNS(NS, "circle");
@@ -1008,7 +3649,7 @@
           dot.setAttribute("cy", String(item.arrowY));
           dot.setAttribute("r", "3.2");
           dot.setAttribute("fill", color);
-          diagram.appendChild(dot);
+          targetSvg.appendChild(dot);
 
           if (options.markAsLast) {
             lastEventAnchor = { y: item.y, h: item.h };
@@ -1024,30 +3665,31 @@
             sep.setAttribute("x2", String(width - 16));
             sep.setAttribute("y1", String(sepY));
             sep.setAttribute("y2", String(sepY));
-            sep.setAttribute("stroke", "rgba(255, 204, 122, 0.55)");
+            sep.setAttribute("stroke", palette.separatorStroke);
             sep.setAttribute("stroke-width", "1.4");
             sep.setAttribute("stroke-dasharray", "8 6");
-            diagram.appendChild(sep);
+            targetSvg.appendChild(sep);
 
+            const labelW = Math.ceil(measureTextWidth(row.text) + 34);
             const labelBg = document.createElementNS(NS, "rect");
-            labelBg.setAttribute("x", String(width / 2 - 40));
+            labelBg.setAttribute("x", String(width / 2 - labelW / 2));
             labelBg.setAttribute("y", String(sepY - 10));
-            labelBg.setAttribute("width", "80");
+            labelBg.setAttribute("width", String(labelW));
             labelBg.setAttribute("height", "20");
             labelBg.setAttribute("rx", "8");
-            labelBg.setAttribute("fill", "rgba(33, 24, 10, 0.9)");
-            labelBg.setAttribute("stroke", "rgba(255, 204, 122, 0.45)");
-            diagram.appendChild(labelBg);
+            labelBg.setAttribute("fill", palette.separatorBg);
+            labelBg.setAttribute("stroke", palette.separatorStroke);
+            targetSvg.appendChild(labelBg);
 
-            const label = document.createElementNS(NS, "text");
-            label.setAttribute("x", String(width / 2));
-            label.setAttribute("y", String(sepY + 4));
-            label.setAttribute("text-anchor", "middle");
-            label.setAttribute("fill", "#ffe7bf");
-            label.setAttribute("font-size", "11");
-            label.setAttribute("font-weight", "700");
-            label.textContent = row.text;
-            diagram.appendChild(label);
+            drawInlineIconText({
+              iconName: "thread",
+              text: row.text,
+              x: width / 2,
+              baselineY: sepY + 4,
+              color: palette.separatorText,
+              fontSize: 11,
+              iconSize: 11
+            });
             return;
           }
 
@@ -1058,19 +3700,26 @@
             block.setAttribute("width", String(width - 12));
             block.setAttribute("height", String(row.h - 4));
             block.setAttribute("rx", "10");
-            block.setAttribute("fill", "rgba(66, 49, 18, 0.18)");
-            block.setAttribute("stroke", "rgba(255, 204, 122, 0.45)");
+            block.setAttribute("fill", palette.parallelFill);
+            block.setAttribute("stroke", palette.parallelStroke);
             block.setAttribute("stroke-dasharray", "5 4");
-            diagram.appendChild(block);
+            targetSvg.appendChild(block);
 
+            appendSvgIcon(targetSvg, "parallel", {
+              x: 16,
+              y: row.y + 7,
+              size: 12,
+              color: palette.separatorText,
+              strokeWidth: 1.85
+            });
             const pLabel = document.createElementNS(NS, "text");
-            pLabel.setAttribute("x", "16");
+            pLabel.setAttribute("x", "33");
             pLabel.setAttribute("y", String(row.y + 18));
-            pLabel.setAttribute("fill", "#ffe6bc");
+            pLabel.setAttribute("fill", palette.separatorText);
             pLabel.setAttribute("font-size", "11.5");
             pLabel.setAttribute("font-weight", "700");
             pLabel.textContent = row.title;
-            diagram.appendChild(pLabel);
+            targetSvg.appendChild(pLabel);
 
             row.items.forEach((item, idx) => {
               const markAsLast =
@@ -1094,10 +3743,10 @@
           focus.setAttribute("width", String(width - 4));
           focus.setAttribute("height", String(lastEventAnchor.h + 16));
           focus.setAttribute("fill", "none");
-          focus.setAttribute("stroke", "rgba(110, 225, 245, 0.32)");
+          focus.setAttribute("stroke", palette.focus);
           focus.setAttribute("stroke-width", "1");
           focus.setAttribute("rx", "8");
-          diagram.appendChild(focus);
+          targetSvg.appendChild(focus);
         }
 
         const hasEvent = rows.some((row) => row.type === "event" || row.type === "parallel");
@@ -1106,43 +3755,419 @@
           hint.setAttribute("x", "50%");
           hint.setAttribute("y", "50%");
           hint.setAttribute("text-anchor", "middle");
-          hint.setAttribute("fill", "rgba(212, 238, 251, 0.72)");
+          hint.setAttribute("fill", palette.empty);
           hint.setAttribute("font-size", "15");
           hint.textContent = "暂无可视化事件，等待历史加载或新消息...";
-          diagram.appendChild(hint);
+          targetSvg.appendChild(hint);
         }
+      }
+
+      function downloadTextFile(filename, content, mimeType = "text/html;charset=utf-8") {
+        const blob = new Blob([content], { type: mimeType });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setTimeout(() => URL.revokeObjectURL(url), 0);
+      }
+
+      function buildSnapshotHtml(options) {
+        const {
+          headerSvgMarkup,
+          bodySvgMarkup,
+          exportedAt,
+          filterLabel,
+          timeLabel,
+          thinkingExpanded,
+          eventCount
+        } = options;
+        const title = "OpenClaw 时序图快照";
+        const summaryProcess = thinkingExpanded ? "思考信息已展开" : "思考信息已折叠";
+
+        return `<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>${escapeHtml(title)}</title>
+  <style>
+    :root {
+      --bg-0: #091320;
+      --bg-1: #0f2338;
+      --line: rgba(145, 220, 236, 0.28);
+      --line-soft: rgba(145, 220, 236, 0.14);
+      --text: #ecf8ff;
+      --text-soft: #c7dbeb;
+      --shadow: 0 18px 48px rgba(0, 0, 0, 0.45);
+      --header-h: 66px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: radial-gradient(circle at 12% 8%, #122943 0%, var(--bg-0) 46%), var(--bg-0);
+      color: var(--text);
+      font-family: var(--font-ui);
+    }
+
+    body {
+      padding: 18px;
+    }
+
+    svg text {
+      font-family: var(--font-ui);
+    }
+
+    :root {
+      --font-ui: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    .snapshot {
+      max-width: 1560px;
+      margin: 0 auto;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background: linear-gradient(180deg, rgba(10, 25, 42, 0.95), rgba(6, 15, 25, 0.95));
+    }
+
+    .snapshot-head {
+      padding: 16px 18px 14px;
+      border-bottom: 1px solid var(--line-soft);
+      background: linear-gradient(90deg, rgba(10, 30, 48, 0.94), rgba(8, 22, 38, 0.9));
+    }
+
+    .snapshot-title {
+      margin: 0 0 5px;
+      font-size: 28px;
+      line-height: 1.2;
+      font-family: var(--font-ui);
+      font-weight: 700;
+    }
+
+    .snapshot-note {
+      margin: 0;
+      color: var(--text-soft);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .snapshot-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 12px 18px 0;
+    }
+
+    .meta-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(149, 227, 240, 0.35);
+      background: rgba(11, 35, 54, 0.58);
+      font-size: 12px;
+      color: #def6ff;
+      white-space: nowrap;
+    }
+
+    .diagram-wrap {
+      padding: 14px 14px 18px;
+      overflow-x: auto;
+      overflow-y: visible;
+    }
+
+    .diagram-stage {
+      min-width: fit-content;
+    }
+
+    .diagram-header {
+      border: 1px solid var(--line-soft);
+      border-bottom: none;
+      border-radius: 14px 14px 0 0;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(7, 20, 34, 0.96), rgba(7, 20, 34, 0.88));
+    }
+
+    .diagram-body {
+      border: 1px solid var(--line-soft);
+      border-top: none;
+      border-radius: 0 0 14px 14px;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(7, 18, 30, 0.96), rgba(5, 12, 21, 0.98));
+    }
+
+    .diagram-header svg,
+    .diagram-body svg {
+      display: block;
+      height: auto;
+      max-width: none;
+    }
+
+    .hover-pop {
+      position: fixed;
+      z-index: 10;
+      display: none;
+      max-width: min(520px, calc(100vw - 24px));
+      max-height: min(60vh, calc(100vh - 24px));
+      overflow: auto;
+      border: 1px solid rgba(149, 227, 240, 0.4);
+      border-radius: 10px;
+      background: rgba(7, 24, 39, 0.96);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.52);
+      padding: 10px 10px 9px;
+      pointer-events: none;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .hover-pop-meta {
+      font-size: 11px;
+      color: #cde8f7;
+      opacity: 0.9;
+      margin-bottom: 6px;
+    }
+
+    .hover-pop-body {
+      font-size: 12px;
+      line-height: 1.48;
+      color: #f2fbff;
+    }
+
+    .copy-toast {
+      position: fixed;
+      right: 18px;
+      bottom: 18px;
+      z-index: 11;
+      display: none;
+      padding: 7px 11px;
+      border: 1px solid rgba(103, 230, 199, 0.42);
+      border-radius: 999px;
+      background: rgba(13, 48, 42, 0.92);
+      color: #d9fff4;
+      font-size: 12px;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.32);
+      white-space: nowrap;
+    }
+
+    @media (max-width: 760px) {
+      body { padding: 10px; }
+      .snapshot-head { padding: 14px 14px 12px; }
+      .snapshot-meta { padding: 10px 14px 0; }
+      .diagram-wrap { padding: 12px 10px 14px; }
+      .snapshot-title { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="snapshot">
+    <section class="snapshot-head">
+      <h1 class="snapshot-title">${escapeHtml(title)}</h1>
+      <p class="snapshot-note">这是一个导出的静态 HTML 快照，不连接服务端，保留 hover 查看全文与单击复制全文能力。</p>
+      <div class="snapshot-meta">
+        <span class="meta-chip">当前筛选：${escapeHtml(filterLabel)}</span>
+        <span class="meta-chip">时间范围：${escapeHtml(timeLabel)}</span>
+        <span class="meta-chip">${escapeHtml(summaryProcess)}</span>
+        <span class="meta-chip">事件数：${escapeHtml(String(eventCount))}</span>
+        <span class="meta-chip">导出时间：${escapeHtml(formatDateTime(exportedAt))}</span>
+      </div>
+    </section>
+    <section class="diagram-wrap">
+      <div class="diagram-stage">
+        <div class="diagram-header">${headerSvgMarkup}</div>
+        <div class="diagram-body">${bodySvgMarkup}</div>
+      </div>
+    </section>
+  </div>
+  <div class="hover-pop" id="hover-pop" aria-hidden="true">
+    <div class="hover-pop-meta" id="hover-pop-meta"></div>
+    <div class="hover-pop-body" id="hover-pop-body"></div>
+  </div>
+  <div class="copy-toast" id="copy-toast" aria-live="polite">已复制全文</div>
+  <script>
+    (() => {
+      const hoverPop = document.getElementById("hover-pop");
+      const hoverPopMeta = document.getElementById("hover-pop-meta");
+      const hoverPopBody = document.getElementById("hover-pop-body");
+      const copyToast = document.getElementById("copy-toast");
+      let copyToastTimer = null;
+
+      function hideHoverPop() {
+        hoverPop.style.display = "none";
+      }
+
+      function positionHoverPop(event) {
+        if (hoverPop.style.display !== "block") return;
+        const margin = 12;
+        let left = event.clientX + 14;
+        let top = event.clientY + 14;
+        const maxLeft = window.innerWidth - hoverPop.offsetWidth - margin;
+        const maxTop = window.innerHeight - hoverPop.offsetHeight - margin;
+        if (left > maxLeft) left = Math.max(margin, maxLeft);
+        if (top > maxTop) top = Math.max(margin, maxTop);
+        hoverPop.style.left = left + "px";
+        hoverPop.style.top = top + "px";
+      }
+
+      function showHoverPop(event, meta, body) {
+        hoverPopMeta.textContent = meta;
+        hoverPopBody.textContent = body;
+        hoverPop.style.display = "block";
+        positionHoverPop(event);
+      }
+
+      function showCopyToast(text) {
+        copyToast.textContent = text;
+        copyToast.style.display = "block";
+        if (copyToastTimer) clearTimeout(copyToastTimer);
+        copyToastTimer = setTimeout(() => {
+          copyToast.style.display = "none";
+          copyToastTimer = null;
+        }, 1500);
+      }
+
+      async function copyEventText(text) {
+        const value = String(text || "").trim();
+        if (!value) return;
+
+        try {
+          if (navigator.clipboard && typeof navigator.clipboard.writeText === "function") {
+            await navigator.clipboard.writeText(value);
+          } else {
+            const input = document.createElement("textarea");
+            input.value = value;
+            input.setAttribute("readonly", "true");
+            input.style.position = "fixed";
+            input.style.top = "-9999px";
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand("copy");
+            document.body.removeChild(input);
+          }
+          showCopyToast("已复制全文");
+        } catch {
+          showCopyToast("复制失败");
+        }
+      }
+
+      document.querySelectorAll("[data-hover-body]").forEach((node) => {
+        node.addEventListener("mouseenter", (event) => {
+          showHoverPop(event, node.getAttribute("data-hover-meta") || "", node.getAttribute("data-hover-body") || "");
+        });
+        node.addEventListener("mousemove", positionHoverPop);
+        node.addEventListener("mouseleave", hideHoverPop);
+        node.addEventListener("click", () => {
+          void copyEventText(node.getAttribute("data-hover-body") || "");
+        });
+      });
+
+      window.addEventListener("scroll", hideHoverPop, { passive: true });
+      window.addEventListener("resize", hideHoverPop);
+    })();
+  <\/script>
+</body>
+</html>`;
+      }
+
+      function exportHtmlSnapshot() {
+        const filtered = getFilteredTimeline();
+        if (!filtered.length) {
+          showCopyToast("当前筛选下无事件");
+          return;
+        }
+
+        const layout = computeLayout(filtered, {
+          viewportWidth: Math.max(760, diagramScroll.clientWidth || 1020),
+          viewportHeight: Math.max(460, diagramScroll.clientHeight || 560)
+        });
+        const headerSvg = createSvgRoot();
+        const bodySvg = createSvgRoot();
+        drawHeader(layout, headerSvg);
+        drawBody(layout, {
+          targetSvg: bodySvg,
+          interactive: false,
+          includeDataAttrs: true,
+          selectedEventId: null
+        });
+
+        const exportedAt = Date.now();
+        const html = buildSnapshotHtml({
+          headerSvgMarkup: serializeSvg(headerSvg),
+          bodySvgMarkup: serializeSvg(bodySvg),
+          exportedAt,
+          filterLabel: getSessionFilterLabel(),
+          timeLabel: getTimeFilterLabel(),
+          thinkingExpanded: state.showInternal,
+          eventCount: filtered.length
+        });
+        const filename = `openclaw-timeline-${formatFileTimestamp(exportedAt)}.html`;
+        downloadTextFile(filename, html);
       }
 
       function renderControls() {
         const total = getFilteredTimeline().length;
         const shown = state.cursor;
+        const timeRange = getTimeFilterRange();
 
         progressInput.max = String(Math.max(0, total));
         progressInput.value = String(shown);
         progressTextEl.textContent = `${shown} / ${total}`;
+        timeStartInput.value = String(timeRange.startHour);
+        timeEndInput.value = String(timeRange.endHour);
+        timeFilterTextEl.textContent = getTimeFilterLabel(timeRange);
+        timeStartTextEl.textContent = formatHourLabel(timeRange.startHour);
+        timeEndTextEl.textContent = formatHourLabel(timeRange.endHour);
+        timeFilterNoteEl.textContent = getTimeFilterRangeLabel();
 
         prevBtn.disabled = shown <= 0;
         nextBtn.disabled = shown >= total;
-        processBtn.textContent = state.showInternal ? "隐藏过程信息" : "显示过程信息";
-        processBtn.classList.toggle("is-primary", state.showInternal);
+        exportBtn.disabled = total <= 0;
+        thinkingBtn.textContent = state.showInternal ? "折叠思考信息" : "展开思考信息";
+        thinkingBtn.classList.toggle("is-primary", state.showInternal);
         sessionFilterEl.value = state.sessionFilter;
+        syncShellState();
       }
 
-      function render() {
+      function render(options = {}) {
+        const preserveScroll = Boolean(options.preserveScroll);
+        const shouldAutoScroll = Boolean(options.autoScroll || state.forceBottom);
+        const previousScrollTop = diagramScroll.scrollTop;
+        const previousScrollLeft = diagramScroll.scrollLeft;
         const filtered = getFilteredTimeline();
         state.cursor = clamp(state.cursor, 0, filtered.length);
         renderControls();
 
         const visible = filtered.slice(0, state.cursor);
+        if (state.selectedEventId && !visible.some((evt) => evt.id === state.selectedEventId)) {
+          state.selectedEventId = null;
+        }
+        renderDetailPanel(visible);
         const layout = computeLayout(visible);
         drawHeader(layout);
         drawBody(layout);
 
-        if (state.forceBottom || state.cursor >= filtered.length) {
+        if (shouldAutoScroll) {
           requestAnimationFrame(() => {
             diagramScroll.scrollTop = diagramScroll.scrollHeight;
           });
           state.forceBottom = false;
+          return;
+        }
+
+        if (preserveScroll) {
+          requestAnimationFrame(() => {
+            const maxScrollTop = Math.max(0, diagramScroll.scrollHeight - diagramScroll.clientHeight);
+            const maxScrollLeft = Math.max(0, diagramScroll.scrollWidth - diagramScroll.clientWidth);
+            diagramScroll.scrollTop = Math.min(previousScrollTop, maxScrollTop);
+            diagramScroll.scrollLeft = Math.min(previousScrollLeft, maxScrollLeft);
+          });
         }
       }
 
@@ -1151,13 +4176,13 @@
         if (!total) return;
 
         state.cursor = clamp(state.cursor + delta, 0, total);
-        render();
+        render({ autoScroll: delta > 0 && state.cursor >= total });
       }
 
       function seekTo(target) {
         const total = getFilteredTimeline().length;
         state.cursor = clamp(target, 0, total);
-        render();
+        render({ autoScroll: state.cursor >= total });
       }
 
       function connectEvents() {
@@ -1168,7 +4193,7 @@
 
         setLiveState("connecting", "连接中");
 
-        const source = new EventSource(`/api/events?includeInternal=${state.showInternal ? "1" : "0"}`);
+        const source = new EventSource("/api/events?includeInternal=1");
         state.source = source;
 
         source.onopen = () => setLiveState("online", "已连接");
@@ -1203,6 +4228,19 @@
       prevBtn.addEventListener("click", () => stepBy(-1));
       nextBtn.addEventListener("click", () => stepBy(1));
 
+      themeToggleBtn.addEventListener("click", () => {
+        applyTheme(state.theme === "dark" ? "light" : "dark");
+        writeStorage(THEME_STORAGE_KEY, state.theme);
+        scheduleRelayout();
+      });
+
+      sidebarToggleBtn.addEventListener("click", () => {
+        state.sidebarCollapsed = !state.sidebarCollapsed;
+        writeStorage(SIDEBAR_STORAGE_KEY, state.sidebarCollapsed ? "1" : "0");
+        syncShellState();
+        scheduleRelayout();
+      });
+
       reloadBtn.addEventListener("click", async () => {
         try {
           const items = await loadHistory();
@@ -1212,35 +4250,65 @@
         }
       });
 
-      processBtn.addEventListener("click", async () => {
+      exportBtn.addEventListener("click", () => {
+        exportHtmlSnapshot();
+      });
+
+      detailCopyBtn.addEventListener("click", () => {
+        void copyEventText(detailCopyBtn.dataset.copyText || "");
+      });
+
+      detailClearBtn.addEventListener("click", () => {
+        selectEvent(null);
+      });
+
+      thinkingBtn.addEventListener("click", () => {
         state.showInternal = !state.showInternal;
-        try {
-          const items = await loadHistory();
-          rebuildFromHistory(items);
-          connectEvents();
-        } catch {
-          setLiveState("reconnecting", "历史读取失败");
-          renderControls();
-        }
+        resetEventCollapseState();
+        render({ preserveScroll: true });
       });
 
       sessionFilterEl.addEventListener("change", () => {
         state.sessionFilter = sessionFilterEl.value || "all";
+        state.sessionFilterTouched = true;
         state.cursor = getFilteredTimeline().length;
         state.forceBottom = true;
         render();
+      });
+
+      timeStartInput.addEventListener("input", () => {
+        const previousTotal = getFilteredTimeline().length;
+        const atTail = state.cursor >= previousTotal;
+        const nextStart = clamp(Math.round(Number(timeStartInput.value || 0)), 0, 23);
+        state.timeStartHour = nextStart;
+        state.timeEndHour = Math.max(nextStart + 1, Number(state.timeEndHour) || 24);
+        const nextTotal = getFilteredTimeline().length;
+        state.cursor = atTail ? nextTotal : clamp(state.cursor, 0, nextTotal);
+        render({ autoScroll: atTail, preserveScroll: !atTail });
+      });
+
+      timeEndInput.addEventListener("input", () => {
+        const previousTotal = getFilteredTimeline().length;
+        const atTail = state.cursor >= previousTotal;
+        const nextEnd = clamp(Math.round(Number(timeEndInput.value || 24)), 1, 24);
+        state.timeEndHour = nextEnd;
+        state.timeStartHour = Math.min(Number(state.timeStartHour) || 0, nextEnd - 1);
+        const nextTotal = getFilteredTimeline().length;
+        state.cursor = atTail ? nextTotal : clamp(state.cursor, 0, nextTotal);
+        render({ autoScroll: atTail, preserveScroll: !atTail });
       });
 
       progressInput.addEventListener("input", () => {
         seekTo(Number(progressInput.value || 0));
       });
 
-      diagramScroll.addEventListener("scroll", () => {
-        hideHoverPop();
+      window.addEventListener("resize", () => {
+        scheduleRelayout();
       });
 
-      window.addEventListener("resize", () => {
-        render();
+      diagramScroll.addEventListener("dblclick", (event) => {
+        if (!isBlankBoardClickTarget(event.target)) return;
+        collapseSidePanels();
       });
 
       syncSessionFilterOptions();
