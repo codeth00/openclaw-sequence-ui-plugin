@@ -8,6 +8,8 @@
 - `运行总览`：执行分组、问题列表、Agent 活跃度、会话摘要
 - `时序图`：按执行分组回放 `user -> main`、`sessions_spawn`、`sessions_send`
 
+![OpenClaw 运行看板](docs/images/sequence-dashboard.png)
+
 ## 能力
 
 - 读取 `agents/*/sessions/*.jsonl` 历史并实时渲染

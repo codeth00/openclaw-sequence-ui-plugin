@@ -8,6 +8,8 @@ The dashboard currently provides two read-only views:
 - `Overview`: execution groups, issue list, agent activity, and session summary
 - `Timeline`: grouped playback for `user -> main`, `sessions_spawn`, and `sessions_send`
 
+![OpenClaw Sequence Dashboard](docs/images/sequence-dashboard.png)
+
 ## Highlights
 
 - Reads historical data from `agents/*/sessions/*.jsonl` and updates in real time
