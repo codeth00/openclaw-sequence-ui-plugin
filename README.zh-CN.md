@@ -1,15 +1,26 @@
 # OpenClaw 运行看板插件
 
-这是一个可直接发布到 GitHub 的 OpenClaw 插件，用于自动启动本地运行看板，展示多智能体执行流程。
+[English](./README.md) | [简体中文](./README.zh-CN.md)
+
+这是一个 OpenClaw 插件，用于自动启动本地运行看板，展示多智能体执行流程。
+
+当前看板提供两个只读视图：
+- `运行总览`：执行分组、问题列表、Agent 活跃度、会话摘要
+- `时序图`：按执行分组回放 `user -> main`、`sessions_spawn`、`sessions_send`
 
 ## 能力
 
 - 读取 `agents/*/sessions/*.jsonl` 历史并实时渲染
-- 展示执行总览、问题列表、Agent 活跃度和会话摘要
-- 展示 `user -> main`、`sessions_spawn`、`sessions_send` 的组内时序回放
+- 基于事件自动聚合执行分组，生成总览摘要
 - 支持按 `groupId`、Agent、模式、关键词过滤历史
-- 可切换 `显示过程信息`（工具调用/结果等过程事件）
-- 修复子任务回传漏显（spawn completion fallback）
+- 提供只读接口：
+  - `GET /api/overview`
+  - `GET /api/executions`
+  - `GET /api/executions/:id`
+  - `GET /api/history`
+  - `GET /api/events`
+- 支持展开或折叠过程信息，例如工具调用、工具结果和内部步骤
+- 包含 spawn completion fallback，减少子任务回传漏显
 
 ## 安装步骤
 
@@ -29,6 +40,7 @@ openclaw gateway restart
 ## 使用
 
 完成后访问：
+
 - `http://127.0.0.1:8787`
 
 ## 验证
@@ -36,13 +48,16 @@ openclaw gateway restart
 ```bash
 curl http://127.0.0.1:8787/healthz
 curl http://127.0.0.1:8787/api/overview
+curl 'http://127.0.0.1:8787/api/executions?limit=5'
 openclaw gateway status
 ```
 
 预期结果：
 - `healthz` 返回 `{"ok":true,...}`
+- `/api/overview` 返回总览 JSON
+- `/api/executions` 返回执行分组列表
 - Gateway 监听 `127.0.0.1:18789`
-- 插件看板监听 `127.0.0.1:8787`
+- 看板监听 `127.0.0.1:8787`
 
 ## 配置
 
@@ -69,29 +84,44 @@ openclaw gateway status
 }
 ```
 
-说明：安装时若提示 `child_process` 风险告警，这是预期行为，因为插件需要启动本地 Node 侧车服务。
+配置项说明：
+- `host`：看板监听地址
+- `port`：看板监听端口
+- `openclawHome`：OpenClaw 根目录
+- `agentsDir`：可选，直接指定 `agents` 目录
+
+安装时如果提示 `child_process` 风险告警，这是预期行为，因为插件会启动本地 Node 侧车服务。
 
 ## 本地开发
 
 ```bash
-npm run check
 npm --prefix dashboard-ui install
-npm --prefix dashboard-ui run build
+npm run check
 node dashboard/live-dashboard-server.js
+```
+
+如果只想单独构建前端：
+
+```bash
+npm run build:ui
 ```
 
 ## 仓库结构
 
 - `openclaw.plugin.json`：插件元数据与配置 schema
-- `index.js`：插件入口，负责启动/停止侧车服务
+- `index.js`：插件入口，负责启动和停止侧车服务
 - `dashboard/live-dashboard-server.js`：会话解析、执行分组、只读 API、静态资源托管
-- `dashboard/dist`：构建后的运行看板静态资源
+- `dashboard/dist`：构建后的看板静态资源
 - `dashboard-ui`：React + Vite 前端源码
+- `tests/live-dashboard-server.test.js`：分组和 API 契约测试
 - `examples/openclaw.json`：示例配置
 
 ## 故障排查
 
 - 如果出现 `EADDRINUSE`，说明端口被占用。先停止已有进程，或修改 `plugins.entries.openclaw-sequence-dashboard-plugin.config.port` 后重启 Gateway。
+- 如果页面显示的是旧版时序图，通常是当前跑的是旧插件副本；重新安装插件或直接用当前仓库启动服务。
+- 如果 `/api/overview` 返回 `404`，说明当前运行的不是这版看板服务。
+- 如果看板为空，先确认 `openclawHome` 或 `agentsDir` 指向有效的 `agents/*/sessions`。
 - 如果 Gateway 重启后插件没有加载，执行 `openclaw gateway status`，并查看 `~/.openclaw/logs/gateway.log` 和 `~/.openclaw/logs/gateway.err.log`。
 
 ## 官方文档

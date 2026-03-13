@@ -4,6 +4,61 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>OpenClaw 执行时序图</title>
+  <link id="app-favicon" rel="icon" type="image/svg+xml" href="" />
+  <script>
+    (() => {
+      const faviconSvg = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+          <defs>
+            <style>
+              .navy-fill{fill:#1c4e9c}
+              .orange-fill{fill:#ff6a00}
+              .white-fill{fill:#ffffff}
+              .blush-fill{fill:#ff4f4f}
+              .navy-stroke{stroke:#1c4e9c;stroke-width:4.2;stroke-linecap:round;stroke-linejoin:round}
+              .orange-stroke{stroke:#ff6a00;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+            </style>
+          </defs>
+          <path class="orange-fill" d="M13 9c3.5 1 5.8 3.6 6.6 7.1-2.4-.4-4.7.2-6.4 1.8-2.2-2.8-2.2-5.8-.2-8.9z"/>
+          <path class="navy-stroke" fill="none" d="M13 9c3.5 1 5.8 3.6 6.6 7.1-2.4-.4-4.7.2-6.4 1.8-2.2-2.8-2.2-5.8-.2-8.9z"/>
+          <path class="orange-fill" d="M51 9c-3.5 1-5.8 3.6-6.6 7.1 2.4-.4 4.7.2 6.4 1.8 2.2-2.8 2.2-5.8.2-8.9z"/>
+          <path class="navy-stroke" fill="none" d="M51 9c-3.5 1-5.8 3.6-6.6 7.1 2.4-.4 4.7.2 6.4 1.8 2.2-2.8 2.2-5.8.2-8.9z"/>
+          <path class="orange-fill" d="M24 17c0-4.8 3.6-8.5 8-8.5s8 3.7 8 8.5v5H24z"/>
+          <path class="navy-stroke" fill="none" d="M24 17c0-4.8 3.6-8.5 8-8.5s8 3.7 8 8.5v5H24z"/>
+          <circle class="white-fill" cx="27" cy="20.5" r="6.5"/>
+          <circle class="white-fill" cx="37" cy="20.5" r="6.5"/>
+          <circle class="navy-stroke" fill="none" cx="27" cy="20.5" r="6.5"/>
+          <circle class="navy-stroke" fill="none" cx="37" cy="20.5" r="6.5"/>
+          <circle class="navy-fill" cx="28.3" cy="21.6" r="1.9"/>
+          <circle class="navy-fill" cx="35.7" cy="21.6" r="1.9"/>
+          <path class="orange-fill" d="M22 27c0-6 4.5-10.8 10-10.8S42 21 42 27v7.2c0 8.2-4.5 15.3-10 15.3s-10-7.1-10-15.3V27z"/>
+          <path class="navy-stroke" fill="none" d="M22 27c0-6 4.5-10.8 10-10.8S42 21 42 27v7.2c0 8.2-4.5 15.3-10 15.3s-10-7.1-10-15.3V27z"/>
+          <path class="orange-fill" d="M25.5 48.6c1.9 3.8 4.2 5.9 6.5 5.9s4.6-2.1 6.5-5.9z"/>
+          <path class="navy-stroke" fill="none" d="M25.5 48.6c1.9 3.8 4.2 5.9 6.5 5.9s4.6-2.1 6.5-5.9z"/>
+          <path class="navy-stroke" fill="none" d="M20 30.5c-4 1-6.7 3.3-8.2 6.8"/>
+          <path class="orange-stroke" fill="none" d="M20 30.5c-4 1-6.7 3.3-8.2 6.8"/>
+          <path class="navy-stroke" fill="none" d="M19.4 35.6c-4.4.6-7.4 2.8-9 6.4"/>
+          <path class="orange-stroke" fill="none" d="M19.4 35.6c-4.4.6-7.4 2.8-9 6.4"/>
+          <path class="navy-stroke" fill="none" d="M20 40.9c-3.9 1.2-6.1 3.6-6.7 7.1"/>
+          <path class="orange-stroke" fill="none" d="M20 40.9c-3.9 1.2-6.1 3.6-6.7 7.1"/>
+          <path class="navy-stroke" fill="none" d="M44 30.5c4 1 6.7 3.3 8.2 6.8"/>
+          <path class="orange-stroke" fill="none" d="M44 30.5c4 1 6.7 3.3 8.2 6.8"/>
+          <path class="navy-stroke" fill="none" d="M44.6 35.6c4.4.6 7.4 2.8 9 6.4"/>
+          <path class="orange-stroke" fill="none" d="M44.6 35.6c4.4.6 7.4 2.8 9 6.4"/>
+          <path class="navy-stroke" fill="none" d="M44 40.9c3.9 1.2 6.1 3.6 6.7 7.1"/>
+          <path class="orange-stroke" fill="none" d="M44 40.9c3.9 1.2 6.1 3.6 6.7 7.1"/>
+          <path class="navy-stroke" fill="none" d="M18.2 23.3c-2.3-.8-4.3-.2-6.1 1.7"/>
+          <path class="orange-stroke" fill="none" d="M18.2 23.3c-2.3-.8-4.3-.2-6.1 1.7"/>
+          <path class="navy-stroke" fill="none" d="M45.8 23.3c2.3-.8 4.3-.2 6.1 1.7"/>
+          <path class="orange-stroke" fill="none" d="M45.8 23.3c2.3-.8 4.3-.2 6.1 1.7"/>
+          <ellipse class="blush-fill" cx="24.7" cy="31.1" rx="3.1" ry="1.9"/>
+          <ellipse class="blush-fill" cx="39.3" cy="31.1" rx="3.1" ry="1.9"/>
+          <path class="navy-stroke" fill="none" d="M28.8 35.6c1.8 2 4.6 2 6.4 0"/>
+        </svg>`;
+      const faviconEl = document.getElementById("app-favicon");
+      if (faviconEl) faviconEl.href = `data:image/svg+xml,${encodeURIComponent(faviconSvg)}`;
+    })();
+  </script>
   <style>
     @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap");
 
@@ -69,10 +124,10 @@
       --dock-border: rgba(154, 219, 239, 0.2);
       --dock-shadow: 0 10px 18px rgba(0, 0, 0, 0.18);
       --dock-icon: #dff5ff;
-      --brand-glow: rgba(97, 220, 186, 0.18);
-      --brand-shell: rgba(255, 134, 94, 0.94);
-      --brand-shell-dark: rgba(236, 96, 64, 0.96);
-      --brand-accent: rgba(255, 230, 166, 0.96);
+      --brand-blue: #1c4e9c;
+      --brand-orange: #ff6a00;
+      --brand-white: #ffffff;
+      --brand-blush: #ff5b5b;
       --font-ui: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
     }
 
@@ -248,20 +303,44 @@
       display: block;
     }
 
-    .brand-mark__glow {
-      fill: var(--brand-glow);
+    .brand-mark__outline {
+      stroke: var(--brand-blue);
+      stroke-width: 4.2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
     }
 
-    .brand-mark__shell {
-      fill: var(--brand-shell);
+    .brand-mark__outline--thin {
+      stroke: var(--brand-blue);
+      stroke-width: 3.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
     }
 
-    .brand-mark__shell-dark {
-      fill: var(--brand-shell-dark);
+    .brand-mark__body {
+      fill: var(--brand-orange);
     }
 
-    .brand-mark__accent {
-      fill: var(--brand-accent);
+    .brand-mark__line {
+      stroke: var(--brand-orange);
+      stroke-width: 2.4;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+    }
+
+    .brand-mark__eye {
+      fill: var(--brand-white);
+    }
+
+    .brand-mark__pupil {
+      fill: var(--brand-blue);
+    }
+
+    .brand-mark__blush {
+      fill: var(--brand-blush);
     }
 
     .sidebar-actions {
@@ -1241,16 +1320,41 @@
           <span class="brand-pill" data-tooltip="OpenClaw">
             <span class="brand-mark" aria-hidden="true">
               <svg viewBox="0 0 24 24">
-                <ellipse class="brand-mark__glow" cx="12" cy="12" rx="10.5" ry="10"></ellipse>
-                <path class="brand-mark__shell-dark" d="M11.8 6.2c-1.7 0-3.2 1-3.8 2.5-.7-.5-1.5-.8-2.4-.8-1.5 0-2.8.8-3.6 2l2 1.2c.4-.7 1.1-1.1 1.8-1.1.8 0 1.6.5 1.9 1.3l.3.8-.9.3c-1.2.4-2 1.5-2 2.7 0 1.7 1.4 3.1 3.1 3.1h7.7c2.3 0 4.2-1.8 4.2-4.1 0-1.9-1.4-3.6-3.2-4-.5-2.2-2.4-3.9-4.9-3.9z"></path>
-                <path class="brand-mark__shell" d="M12.1 7.1c-1.5 0-2.8 1-3.3 2.4l-.3.8-.8-.4c-.6-.3-1.2-.5-1.8-.5-1 0-2 .4-2.7 1.2l1 .6c.5-.4 1.1-.7 1.7-.7.9 0 1.8.5 2.2 1.4l.5 1 1-.4c.5-.2 1-.3 1.5-.3 1.8 0 3.2 1.4 3.2 3.1 0 .6-.2 1.2-.5 1.7h2.4c1.7 0 3.1-1.3 3.1-3 0-1.5-1.1-2.7-2.5-3l-.8-.2-.1-.8c-.3-1.7-1.8-2.9-3.6-2.9z"></path>
-                <circle class="brand-mark__accent" cx="9.5" cy="13.4" r="1"></circle>
-                <circle class="brand-mark__accent" cx="13" cy="13.4" r="1"></circle>
-                <path class="brand-mark__accent" d="M11.1 15.6c.5.4 1.3.4 1.8 0l.5.6c-.8.8-2 .8-2.8 0z"></path>
-                <path class="brand-mark__accent" d="M18.9 7.1l1.6-1.2.7.9-1.8 1.4z"></path>
-                <path class="brand-mark__accent" d="M19.3 9.4l2-.4.2 1.1-2.1.4z"></path>
-                <path class="brand-mark__accent" d="M5.1 7.1 3.5 5.9l-.7.9 1.8 1.4z"></path>
-                <path class="brand-mark__accent" d="M4.7 9.4 2.7 9l-.2 1.1 2.1.4z"></path>
+                <path class="brand-mark__body" d="M5.1 3.6c1.8.5 3 1.8 3.4 3.7-1.2-.2-2.4.1-3.3.9-1.1-1.4-1.1-3 .1-4.6z"></path>
+                <path class="brand-mark__outline--thin" d="M5.1 3.6c1.8.5 3 1.8 3.4 3.7-1.2-.2-2.4.1-3.3.9-1.1-1.4-1.1-3 .1-4.6z"></path>
+                <path class="brand-mark__body" d="M18.9 3.6c-1.8.5-3 1.8-3.4 3.7 1.2-.2 2.4.1 3.3.9 1.1-1.4 1.1-3-.1-4.6z"></path>
+                <path class="brand-mark__outline--thin" d="M18.9 3.6c-1.8.5-3 1.8-3.4 3.7 1.2-.2 2.4.1 3.3.9 1.1-1.4 1.1-3-.1-4.6z"></path>
+                <path class="brand-mark__body" d="M9 7.2c0-2.3 1.3-4.1 3-4.1s3 1.8 3 4.1V9H9z"></path>
+                <path class="brand-mark__outline--thin" d="M9 7.2c0-2.3 1.3-4.1 3-4.1s3 1.8 3 4.1V9H9z"></path>
+                <circle class="brand-mark__eye" cx="10.2" cy="8.5" r="2.4"></circle>
+                <circle class="brand-mark__eye" cx="13.8" cy="8.5" r="2.4"></circle>
+                <circle class="brand-mark__outline--thin" cx="10.2" cy="8.5" r="2.4"></circle>
+                <circle class="brand-mark__outline--thin" cx="13.8" cy="8.5" r="2.4"></circle>
+                <circle class="brand-mark__pupil" cx="10.8" cy="8.9" r="0.75"></circle>
+                <circle class="brand-mark__pupil" cx="13.2" cy="8.9" r="0.75"></circle>
+                <path class="brand-mark__body" d="M8.3 11.1c0-3.3 1.7-5.8 3.7-5.8s3.7 2.5 3.7 5.8V15c0 4.5-1.7 8.3-3.7 8.3S8.3 19.5 8.3 15v-3.9z"></path>
+                <path class="brand-mark__outline--thin" d="M8.3 11.1c0-3.3 1.7-5.8 3.7-5.8s3.7 2.5 3.7 5.8V15c0 4.5-1.7 8.3-3.7 8.3S8.3 19.5 8.3 15v-3.9z"></path>
+                <path class="brand-mark__body" d="M9.6 22.2c.8 1.1 1.6 1.8 2.4 1.8s1.6-.7 2.4-1.8z"></path>
+                <path class="brand-mark__outline--thin" d="M9.6 22.2c.8 1.1 1.6 1.8 2.4 1.8s1.6-.7 2.4-1.8z"></path>
+                <path class="brand-mark__outline" d="M7.2 13.2c-2 .4-3.4 1.6-4.1 3.4"></path>
+                <path class="brand-mark__line" d="M7.2 13.2c-2 .4-3.4 1.6-4.1 3.4"></path>
+                <path class="brand-mark__outline" d="M7 15.9c-2.2.4-3.7 1.5-4.5 3.3"></path>
+                <path class="brand-mark__line" d="M7 15.9c-2.2.4-3.7 1.5-4.5 3.3"></path>
+                <path class="brand-mark__outline" d="M7.4 18.7c-1.9.6-3 1.8-3.3 3.6"></path>
+                <path class="brand-mark__line" d="M7.4 18.7c-1.9.6-3 1.8-3.3 3.6"></path>
+                <path class="brand-mark__outline" d="M16.8 13.2c2 .4 3.4 1.6 4.1 3.4"></path>
+                <path class="brand-mark__line" d="M16.8 13.2c2 .4 3.4 1.6 4.1 3.4"></path>
+                <path class="brand-mark__outline" d="M17 15.9c2.2.4 3.7 1.5 4.5 3.3"></path>
+                <path class="brand-mark__line" d="M17 15.9c2.2.4 3.7 1.5 4.5 3.3"></path>
+                <path class="brand-mark__outline" d="M16.6 18.7c1.9.6 3 1.8 3.3 3.6"></path>
+                <path class="brand-mark__line" d="M16.6 18.7c1.9.6 3 1.8 3.3 3.6"></path>
+                <path class="brand-mark__outline" d="M7.9 10.3c-1.1-.4-2.2-.1-3.1.9"></path>
+                <path class="brand-mark__line" d="M7.9 10.3c-1.1-.4-2.2-.1-3.1.9"></path>
+                <path class="brand-mark__outline" d="M16.1 10.3c1.1-.4 2.2-.1 3.1.9"></path>
+                <path class="brand-mark__line" d="M16.1 10.3c1.1-.4 2.2-.1 3.1.9"></path>
+                <ellipse class="brand-mark__blush" cx="9" cy="12.7" rx="1.5" ry="0.95"></ellipse>
+                <ellipse class="brand-mark__blush" cx="15" cy="12.7" rx="1.5" ry="0.95"></ellipse>
+                <path class="brand-mark__outline--thin" d="M10.6 14.4c.8.8 2 .8 2.8 0"></path>
               </svg>
             </span>
             <span class="brand-pill__full">OpenClaw</span>
@@ -1351,7 +1455,7 @@
         </div>
 
         <div class="control-panel">
-          <button class="dock-button" type="button" data-tooltip="思考信息" aria-label="思考信息">
+          <button class="dock-button" type="button" data-tooltip="过程信息" aria-label="过程信息">
             <span class="dock-button__icon" aria-hidden="true">
               <svg viewBox="0 0 20 20">
                 <path d="M10 4.7a4.3 4.3 0 0 0-2.9 7.4c.7.5 1.1 1.2 1.3 2h3.2c.2-.8.6-1.5 1.3-2A4.3 4.3 0 0 0 10 4.7z"></path>
@@ -1363,10 +1467,10 @@
           </button>
           <div class="control-panel-body">
             <div class="control-panel-head">
-              <span class="control-panel-title">思考信息</span>
+              <span class="control-panel-title">过程信息</span>
             </div>
             <div class="button-grid button-grid--single">
-              <button class="button" id="toggle-thinking">展开思考信息</button>
+              <button class="button" id="toggle-thinking">展开过程信息</button>
             </div>
           </div>
         </div>
@@ -2183,10 +2287,8 @@
         return true;
       }
 
-      function isThinkingEvent(evt) {
-        if (!evt || evt.mode !== "internal") return false;
-        const mechanism = typeof evt.mechanism === "string" ? evt.mechanism.trim().toLowerCase() : "";
-        return evt.stage === "thinking" || mechanism.includes("thinking");
+      function isProcessEvent(evt) {
+        return Boolean(evt && evt.mode === "internal");
       }
 
       function getSessionFilterTimeline() {
@@ -2230,7 +2332,7 @@
 
       function isEventCollapsed(evt) {
         if (!evt) return false;
-        if (isThinkingEvent(evt)) {
+        if (isProcessEvent(evt)) {
           if (state.showInternal) {
             return state.collapsedEventIds.has(evt.id);
           }
@@ -2244,7 +2346,7 @@
         if (!state.collapsedEventIds.size) return;
         state.collapsedEventIds.forEach((id) => {
           const evt = findTimelineEvent(id);
-          if (evt && isThinkingEvent(evt)) {
+          if (evt && isProcessEvent(evt)) {
             state.collapsedEventIds.delete(id);
           }
         });
@@ -2268,7 +2370,7 @@
         const evt = findTimelineEvent(targetId);
         if (!evt) return;
 
-        if (isThinkingEvent(evt)) {
+        if (isProcessEvent(evt)) {
           if (state.showInternal) {
             if (state.collapsedEventIds.has(targetId)) {
               state.collapsedEventIds.delete(targetId);
@@ -3785,7 +3887,7 @@
           eventCount
         } = options;
         const title = "OpenClaw 时序图快照";
-        const summaryProcess = thinkingExpanded ? "思考信息已展开" : "思考信息已折叠";
+        const summaryProcess = thinkingExpanded ? "过程信息已展开" : "过程信息已折叠";
 
         return `<!doctype html>
 <html lang="zh-CN">
@@ -4129,7 +4231,7 @@
         prevBtn.disabled = shown <= 0;
         nextBtn.disabled = shown >= total;
         exportBtn.disabled = total <= 0;
-        thinkingBtn.textContent = state.showInternal ? "折叠思考信息" : "展开思考信息";
+        thinkingBtn.textContent = state.showInternal ? "折叠过程信息" : "展开过程信息";
         thinkingBtn.classList.toggle("is-primary", state.showInternal);
         sessionFilterEl.value = state.sessionFilter;
         syncShellState();
