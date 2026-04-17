@@ -1,0 +1,70 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - link "🦞 OPENCLAW BOT DASHBOARD" [ref=e7] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e8]: 🦞
+            - generic [ref=e9]:
+              - generic [ref=e10]: OPENCLAW
+              - generic [ref=e11]: BOT DASHBOARD
+          - button "«" [ref=e12]
+        - generic [ref=e13]:
+          - combobox [ref=e14] [cursor=pointer]:
+            - option "繁體中文"
+            - option "简体中文" [selected]
+            - option "English"
+          - button "☀️" [ref=e15] [cursor=pointer]
+      - navigation [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - generic [ref=e19]:
+              - text: 总览
+              - generic [ref=e20]: —
+            - generic [ref=e21]:
+              - link "机器人" [ref=e22] [cursor=pointer]:
+                - /url: /
+                - img [ref=e24]
+                - text: 机器人
+              - link "像素办公室" [ref=e36] [cursor=pointer]:
+                - /url: /pixel-office
+                - img [ref=e38]
+                - text: 像素办公室
+              - link "模型列表" [ref=e47] [cursor=pointer]:
+                - /url: /models
+                - img [ref=e49]
+                - text: 模型列表
+          - generic [ref=e62]:
+            - generic [ref=e63]:
+              - text: 监控
+              - generic [ref=e64]: —
+            - generic [ref=e65]:
+              - link "会话列表" [ref=e66] [cursor=pointer]:
+                - /url: /sessions
+                - img [ref=e68]
+                - text: 会话列表
+              - link "消息统计" [ref=e76] [cursor=pointer]:
+                - /url: /stats
+                - img [ref=e78]
+                - text: 消息统计
+              - link "告警中心" [ref=e85] [cursor=pointer]:
+                - /url: /alerts
+                - img [ref=e87]
+                - text: 告警中心
+          - generic [ref=e95]:
+            - generic [ref=e96]:
+              - text: 配置
+              - generic [ref=e97]: —
+            - link "技能管理" [ref=e99] [cursor=pointer]:
+              - /url: /skills
+              - img [ref=e101]
+              - text: 技能管理
+          - button "🧪 实验功能 ⌄" [ref=e110]:
+            - generic [ref=e111]:
+              - generic [ref=e112]: 🧪
+              - generic [ref=e113]: 实验功能
+            - generic [ref=e114]: ⌄
+    - main [ref=e116]:
+      - paragraph [ref=e118]: 思考中...
+  - alert [ref=e119]

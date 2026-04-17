@@ -1,0 +1,462 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e3]:
+      - generic [ref=e5]:
+        - generic [ref=e6]:
+          - link "🦞 OPENCLAW BOT DASHBOARD" [ref=e7] [cursor=pointer]:
+            - /url: /
+            - generic [ref=e8]: 🦞
+            - generic [ref=e9]:
+              - generic [ref=e10]: OPENCLAW
+              - generic [ref=e11]: BOT DASHBOARD
+          - button "«" [ref=e12]
+        - generic [ref=e13]:
+          - combobox [ref=e14] [cursor=pointer]:
+            - option "繁體中文"
+            - option "简体中文" [selected]
+            - option "English"
+          - button "☀️" [ref=e15] [cursor=pointer]
+      - navigation [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]:
+            - generic [ref=e19]:
+              - text: 总览
+              - generic [ref=e20]: —
+            - generic [ref=e21]:
+              - link "机器人" [ref=e22] [cursor=pointer]:
+                - /url: /
+                - img [ref=e24]
+                - text: 机器人
+              - link "像素办公室" [ref=e36] [cursor=pointer]:
+                - /url: /pixel-office
+                - img [ref=e38]
+                - text: 像素办公室
+              - link "模型列表" [ref=e47] [cursor=pointer]:
+                - /url: /models
+                - img [ref=e49]
+                - text: 模型列表
+          - generic [ref=e62]:
+            - generic [ref=e63]:
+              - text: 监控
+              - generic [ref=e64]: —
+            - generic [ref=e65]:
+              - link "会话列表" [ref=e66] [cursor=pointer]:
+                - /url: /sessions
+                - img [ref=e68]
+                - text: 会话列表
+              - link "消息统计" [ref=e76] [cursor=pointer]:
+                - /url: /stats
+                - img [ref=e78]
+                - text: 消息统计
+              - link "告警中心" [ref=e85] [cursor=pointer]:
+                - /url: /alerts
+                - img [ref=e87]
+                - text: 告警中心
+          - generic [ref=e95]:
+            - generic [ref=e96]:
+              - text: 配置
+              - generic [ref=e97]: —
+            - link "技能管理" [ref=e99] [cursor=pointer]:
+              - /url: /skills
+              - img [ref=e101]
+              - text: 技能管理
+          - button "🧪 实验功能 ⌄" [ref=e110]:
+            - generic [ref=e111]:
+              - generic [ref=e112]: 🧪
+              - generic [ref=e113]: 实验功能
+            - generic [ref=e114]: ⌄
+    - main [ref=e116]:
+      - generic [ref=e117]:
+        - generic [ref=e120]:
+          - generic [ref=e121]:
+            - heading "🤖 OpenClaw 机器人" [level=1] [ref=e122]
+            - paragraph [ref=e123]: "共 6 个机器人 · 默认模型: qwen/qwen3.5-plus"
+          - generic [ref=e124]:
+            - button "测试已绑定模型" [ref=e125] [cursor=pointer]
+            - button "测试平台连通" [ref=e126] [cursor=pointer]
+            - button "测试 Agent 会话" [ref=e127] [cursor=pointer]
+            - button "测试 DM Session" [ref=e128] [cursor=pointer]
+        - generic [ref=e129]:
+          - generic [ref=e131]:
+            - generic "OpenClaw" [ref=e132] [cursor=pointer]:
+              - generic [ref=e133]: 🦞 Gateway
+              - generic [ref=e134]: ↗
+            - generic [ref=e135]: "--"
+          - generic [ref=e136]:
+            - combobox [ref=e137] [cursor=pointer]:
+              - option "🔄 手动刷新" [selected]
+              - option "⏱️ 10 秒"
+              - option "⏱️ 30 秒"
+              - option "⏱️ 1 分钟"
+              - option "⏱️ 5 分钟"
+              - option "⏱️ 10 分钟"
+            - button "🔄" [ref=e138]
+            - generic [ref=e139]: 更新于 21:12:04
+        - generic [ref=e140]:
+          - generic [ref=e141]:
+            - generic [ref=e142]:
+              - generic [ref=e143]: 🤖
+              - heading "智奇 (main)" [level=3] [ref=e145]:
+                - text: 智奇
+                - generic [ref=e146]: (main)
+              - generic [ref=e147]: 在线
+            - generic [ref=e149]:
+              - generic [ref=e150]:
+                - generic [ref=e151]: Agent ID
+                - generic [ref=e152]:
+                  - link "main ↗" [ref=e153] [cursor=pointer]:
+                    - /url: http://127.0.0.1:18789/chat?session=agent%3Amain%3Amain&token=clawx-acd35a1a6cf32e3031dfe9b6231d5b75
+                    - text: main
+                    - generic [ref=e154]: ↗
+                  - generic [ref=e155]: "--"
+              - generic [ref=e156]:
+                - generic [ref=e157]: 模型
+                - generic [ref=e158]:
+                  - generic [ref=e159]: qwen3.5-plus (api_key)
+                  - generic [ref=e160]: "--"
+                  - button "切换模型" [ref=e161]
+              - generic [ref=e163]: 平台
+              - generic [ref=e164]:
+                - generic [ref=e165]:
+                  - generic [ref=e166]: 会话数
+                  - generic [ref=e167]:
+                    - link "4 →" [ref=e168] [cursor=pointer]:
+                      - /url: /sessions?agent=main
+                    - link "📊 统计" [ref=e169] [cursor=pointer]:
+                      - /url: /stats?agent=main
+                - generic [ref=e170]:
+                  - generic [ref=e171]: 消息数
+                  - generic [ref=e172]: "36"
+                - generic [ref=e173]:
+                  - generic [ref=e174]: Token 用量
+                  - generic "总 Token 使用量" [ref=e175]: "0"
+                - generic [ref=e176]:
+                  - generic [ref=e177]: 最近活跃
+                  - generic [ref=e178]: 7 分钟前
+                - generic [ref=e179]:
+                  - generic [ref=e180]: 平均响应
+                  - img "- → - → - → - → - → - → 33.2s" [ref=e182]
+                  - generic "今日平均响应时间" [ref=e185]: 33.2s
+          - generic [ref=e186]:
+            - generic [ref=e187]:
+              - generic [ref=e188]: 🤖
+              - heading "伊芙 (eve_agent)" [level=3] [ref=e190]:
+                - text: 伊芙
+                - generic [ref=e191]: (eve_agent)
+              - generic [ref=e192]: 离线
+            - generic [ref=e194]:
+              - generic [ref=e195]:
+                - generic [ref=e196]: Agent ID
+                - generic [ref=e197]:
+                  - link "eve_agent ↗" [ref=e198] [cursor=pointer]:
+                    - /url: http://127.0.0.1:18789/chat?session=agent%3Aeve_agent%3Amain&token=clawx-acd35a1a6cf32e3031dfe9b6231d5b75
+                    - text: eve_agent
+                    - generic [ref=e199]: ↗
+                  - generic [ref=e200]: "--"
+              - generic [ref=e201]:
+                - generic [ref=e202]: 模型
+                - generic [ref=e203]:
+                  - generic [ref=e204]: qwen3.5-plus (api_key)
+                  - generic [ref=e205]: "--"
+                  - button "切换模型" [ref=e206]
+              - generic [ref=e208]: 平台
+              - generic [ref=e209]:
+                - generic [ref=e210]:
+                  - generic [ref=e211]: 会话数
+                  - generic [ref=e212]:
+                    - link "1 →" [ref=e213] [cursor=pointer]:
+                      - /url: /sessions?agent=eve_agent
+                    - link "📊 统计" [ref=e214] [cursor=pointer]:
+                      - /url: /stats?agent=eve_agent
+                - generic [ref=e215]:
+                  - generic [ref=e216]: 消息数
+                  - generic [ref=e217]: "1"
+                - generic [ref=e218]:
+                  - generic [ref=e219]: Token 用量
+                  - generic "总 Token 使用量" [ref=e220]: "0"
+                - generic [ref=e221]:
+                  - generic [ref=e222]: 最近活跃
+                  - generic [ref=e223]: 1 天前
+                - generic [ref=e224]:
+                  - generic [ref=e225]: 平均响应
+                  - generic "今日平均响应时间" [ref=e226]: "--"
+          - generic [ref=e227]:
+            - generic [ref=e228]:
+              - generic [ref=e229]: 🤖
+              - heading "Lily (lily_agent)" [level=3] [ref=e231]:
+                - text: Lily
+                - generic [ref=e232]: (lily_agent)
+              - generic [ref=e233]: 离线
+            - generic [ref=e235]:
+              - generic [ref=e236]:
+                - generic [ref=e237]: Agent ID
+                - generic [ref=e238]:
+                  - link "lily_agent ↗" [ref=e239] [cursor=pointer]:
+                    - /url: http://127.0.0.1:18789/chat?session=agent%3Alily_agent%3Amain&token=clawx-acd35a1a6cf32e3031dfe9b6231d5b75
+                    - text: lily_agent
+                    - generic [ref=e240]: ↗
+                  - generic [ref=e241]: "--"
+              - generic [ref=e242]:
+                - generic [ref=e243]: 模型
+                - generic [ref=e244]:
+                  - generic [ref=e245]: qwen3.5-plus (api_key)
+                  - generic [ref=e246]: "--"
+                  - button "切换模型" [ref=e247]
+              - generic [ref=e249]: 平台
+              - generic [ref=e250]:
+                - generic [ref=e251]:
+                  - generic [ref=e252]: 会话数
+                  - generic [ref=e253]:
+                    - link "1 →" [ref=e254] [cursor=pointer]:
+                      - /url: /sessions?agent=lily_agent
+                    - link "📊 统计" [ref=e255] [cursor=pointer]:
+                      - /url: /stats?agent=lily_agent
+                - generic [ref=e256]:
+                  - generic [ref=e257]: 消息数
+                  - generic [ref=e258]: "1"
+                - generic [ref=e259]:
+                  - generic [ref=e260]: Token 用量
+                  - generic "总 Token 使用量" [ref=e261]: "0"
+                - generic [ref=e262]:
+                  - generic [ref=e263]: 最近活跃
+                  - generic [ref=e264]: 1 天前
+                - generic [ref=e265]:
+                  - generic [ref=e266]: 平均响应
+                  - generic "今日平均响应时间" [ref=e267]: "--"
+          - generic [ref=e268]:
+            - generic [ref=e269]:
+              - generic [ref=e270]: 🤖
+              - heading "米特尔 (meteer_agent)" [level=3] [ref=e272]:
+                - text: 米特尔
+                - generic [ref=e273]: (meteer_agent)
+              - generic [ref=e274]: 离线
+            - generic [ref=e276]:
+              - generic [ref=e277]:
+                - generic [ref=e278]: Agent ID
+                - generic [ref=e279]:
+                  - link "meteer_agent ↗" [ref=e280] [cursor=pointer]:
+                    - /url: http://127.0.0.1:18789/chat?session=agent%3Ameteer_agent%3Amain&token=clawx-acd35a1a6cf32e3031dfe9b6231d5b75
+                    - text: meteer_agent
+                    - generic [ref=e281]: ↗
+                  - generic [ref=e282]: "--"
+              - generic [ref=e283]:
+                - generic [ref=e284]: 模型
+                - generic [ref=e285]:
+                  - generic [ref=e286]: qwen3.5-plus (api_key)
+                  - generic [ref=e287]: "--"
+                  - button "切换模型" [ref=e288]
+              - generic [ref=e290]: 平台
+              - generic [ref=e291]:
+                - generic [ref=e292]:
+                  - generic [ref=e293]: 会话数
+                  - generic [ref=e294]:
+                    - link "1 →" [ref=e295] [cursor=pointer]:
+                      - /url: /sessions?agent=meteer_agent
+                    - link "📊 统计" [ref=e296] [cursor=pointer]:
+                      - /url: /stats?agent=meteer_agent
+                - generic [ref=e297]:
+                  - generic [ref=e298]: 消息数
+                  - generic [ref=e299]: "1"
+                - generic [ref=e300]:
+                  - generic [ref=e301]: Token 用量
+                  - generic "总 Token 使用量" [ref=e302]: "0"
+                - generic [ref=e303]:
+                  - generic [ref=e304]: 最近活跃
+                  - generic [ref=e305]: 1 天前
+                - generic [ref=e306]:
+                  - generic [ref=e307]: 平均响应
+                  - generic "今日平均响应时间" [ref=e308]: "--"
+          - generic [ref=e309]:
+            - generic [ref=e310]:
+              - generic [ref=e311]: 🤖
+              - heading "Panda (panda_agent)" [level=3] [ref=e313]:
+                - text: Panda
+                - generic [ref=e314]: (panda_agent)
+              - generic [ref=e315]: 离线
+            - generic [ref=e317]:
+              - generic [ref=e318]:
+                - generic [ref=e319]: Agent ID
+                - generic [ref=e320]:
+                  - link "panda_agent ↗" [ref=e321] [cursor=pointer]:
+                    - /url: http://127.0.0.1:18789/chat?session=agent%3Apanda_agent%3Amain&token=clawx-acd35a1a6cf32e3031dfe9b6231d5b75
+                    - text: panda_agent
+                    - generic [ref=e322]: ↗
+                  - generic [ref=e323]: "--"
+              - generic [ref=e324]:
+                - generic [ref=e325]: 模型
+                - generic [ref=e326]:
+                  - generic [ref=e327]: qwen3.5-plus (api_key)
+                  - generic [ref=e328]: "--"
+                  - button "切换模型" [ref=e329]
+              - generic [ref=e331]: 平台
+              - generic [ref=e332]:
+                - generic [ref=e333]:
+                  - generic [ref=e334]: 会话数
+                  - generic [ref=e335]:
+                    - link "1 →" [ref=e336] [cursor=pointer]:
+                      - /url: /sessions?agent=panda_agent
+                    - link "📊 统计" [ref=e337] [cursor=pointer]:
+                      - /url: /stats?agent=panda_agent
+                - generic [ref=e338]:
+                  - generic [ref=e339]: 消息数
+                  - generic [ref=e340]: "1"
+                - generic [ref=e341]:
+                  - generic [ref=e342]: Token 用量
+                  - generic "总 Token 使用量" [ref=e343]: "0"
+                - generic [ref=e344]:
+                  - generic [ref=e345]: 最近活跃
+                  - generic [ref=e346]: 1 天前
+                - generic [ref=e347]:
+                  - generic [ref=e348]: 平均响应
+                  - generic "今日平均响应时间" [ref=e349]: "--"
+          - generic [ref=e350]:
+            - generic [ref=e351]:
+              - generic [ref=e352]: 🤖
+              - heading "阿木 (arm_agent)" [level=3] [ref=e354]:
+                - text: 阿木
+                - generic [ref=e355]: (arm_agent)
+              - generic [ref=e356]: 离线
+            - generic [ref=e358]:
+              - generic [ref=e359]:
+                - generic [ref=e360]: Agent ID
+                - generic [ref=e361]:
+                  - link "arm_agent ↗" [ref=e362] [cursor=pointer]:
+                    - /url: http://127.0.0.1:18789/chat?session=agent%3Aarm_agent%3Amain&token=clawx-acd35a1a6cf32e3031dfe9b6231d5b75
+                    - text: arm_agent
+                    - generic [ref=e363]: ↗
+                  - generic [ref=e364]: "--"
+              - generic [ref=e365]:
+                - generic [ref=e366]: 模型
+                - generic [ref=e367]:
+                  - generic [ref=e368]: qwen3.5-plus (api_key)
+                  - generic [ref=e369]: "--"
+                  - button "切换模型" [ref=e370]
+              - generic [ref=e372]: 平台
+              - generic [ref=e373]:
+                - generic [ref=e374]:
+                  - generic [ref=e375]: 会话数
+                  - generic [ref=e376]:
+                    - link "1 →" [ref=e377] [cursor=pointer]:
+                      - /url: /sessions?agent=arm_agent
+                    - link "📊 统计" [ref=e378] [cursor=pointer]:
+                      - /url: /stats?agent=arm_agent
+                - generic [ref=e379]:
+                  - generic [ref=e380]: 消息数
+                  - generic [ref=e381]: "1"
+                - generic [ref=e382]:
+                  - generic [ref=e383]: Token 用量
+                  - generic "总 Token 使用量" [ref=e384]: "0"
+                - generic [ref=e385]:
+                  - generic [ref=e386]: 最近活跃
+                  - generic [ref=e387]: 1 天前
+                - generic [ref=e388]:
+                  - generic [ref=e389]: 平均响应
+                  - generic "今日平均响应时间" [ref=e390]: "--"
+        - generic [ref=e391]:
+          - heading "📋 Agent 任务追踪" [level=2] [ref=e392]
+          - generic [ref=e394]:
+            - generic [ref=e395]: 🤖
+            - generic [ref=e396]:
+              - generic [ref=e397]:
+                - generic [ref=e398]: 耀仔
+                - generic [ref=e399]: 闲置
+              - generic [ref=e400]: 无进行中的子任务
+              - generic [ref=e401]:
+                - generic [ref=e402]: 定时任务
+                - generic [ref=e403]:
+                  - generic [ref=e404]:
+                    - generic [ref=e405]: ⏰
+                    - generic [ref=e406]: Daily Pandaily Claw Search
+                    - generic [ref=e407]: 失败
+                  - generic [ref=e408]: Unknown target "heartbeat" for openclaw-weixin.
+                  - generic [ref=e409]:
+                    - generic [ref=e410]: 耗时 250s
+                    - generic [ref=e411]: 下次执行 21:00
+            - generic [ref=e412]: 21:04
+        - generic [ref=e413]:
+          - generic [ref=e414]:
+            - heading "📊 全局统计趋势" [level=2] [ref=e415]
+            - generic [ref=e416]:
+              - button "按天" [ref=e417]
+              - button "按周" [ref=e418]
+              - button "按月" [ref=e419]
+          - generic [ref=e420]:
+            - generic [ref=e421]:
+              - generic [ref=e422]: 总 Input Token
+              - generic [ref=e423]: 2.5M
+            - generic [ref=e424]:
+              - generic [ref=e425]: 总 Output Token
+              - generic [ref=e426]: 30.3k
+            - generic [ref=e427]:
+              - generic [ref=e428]: 总消息数
+              - generic [ref=e429]: "285"
+          - generic [ref=e430]:
+            - generic [ref=e431]:
+              - generic [ref=e432]: 🔢 Token 消耗趋势
+              - generic [ref=e433]:
+                - generic [ref=e434]: Input
+                - generic [ref=e436]: Output
+            - img [ref=e439]:
+              - generic [ref=e441]: "0"
+              - generic [ref=e443]: 488.2k
+              - generic [ref=e445]: 976.3k
+              - generic [ref=e447]: 1.5M
+              - generic [ref=e449]: 2.0M
+              - 'generic "2026-03-11 Input: 550.9k" [ref=e452]'
+              - 'generic "2026-03-12 Input: 2.0M" [ref=e453]'
+              - 'generic "2026-03-15 Input: 0" [ref=e454]'
+              - 'generic "2026-03-16 Input: 0" [ref=e455]'
+              - 'generic "2026-03-17 Input: 0" [ref=e456]'
+              - 'generic "2026-03-18 Input: 0" [ref=e457]'
+              - 'generic "2026-03-19 Input: 0" [ref=e458]'
+              - 'generic "2026-03-23 Input: 0" [ref=e459]'
+              - 'generic "2026-03-25 Input: 0" [ref=e460]'
+              - 'generic "2026-03-29 Input: 0" [ref=e461]'
+              - 'generic "2026-03-30 Input: 0" [ref=e462]'
+              - 'generic "2026-03-11 Output: 7.2k" [ref=e463]'
+              - 'generic "2026-03-12 Output: 23.1k" [ref=e464]'
+              - 'generic "2026-03-15 Output: 0" [ref=e465]'
+              - 'generic "2026-03-16 Output: 0" [ref=e466]'
+              - 'generic "2026-03-17 Output: 0" [ref=e467]'
+              - 'generic "2026-03-18 Output: 0" [ref=e468]'
+              - 'generic "2026-03-19 Output: 0" [ref=e469]'
+              - 'generic "2026-03-23 Output: 0" [ref=e470]'
+              - 'generic "2026-03-25 Output: 0" [ref=e471]'
+              - 'generic "2026-03-29 Output: 0" [ref=e472]'
+              - 'generic "2026-03-30 Output: 0" [ref=e473]'
+              - generic [ref=e474]: 03-11
+              - generic [ref=e475]: 03-12
+              - generic [ref=e476]: 03-15
+              - generic [ref=e477]: 03-16
+              - generic [ref=e478]: 03-17
+              - generic [ref=e479]: 03-18
+              - generic [ref=e480]: 03-19
+              - generic [ref=e481]: 03-23
+              - generic [ref=e482]: 03-25
+              - generic [ref=e483]: 03-29
+              - generic [ref=e484]: 03-30
+          - generic [ref=e485]:
+            - text: ⏱️ 平均响应时间趋势
+            - img [ref=e487]:
+              - generic [ref=e489]: "-"
+              - generic [ref=e491]: 23.0s
+              - generic [ref=e493]: 46.0s
+              - generic [ref=e495]: 69.1s
+              - generic [ref=e497]: 92.1s
+              - 'generic "2026-03-11: 11.5s" [ref=e499]'
+              - 'generic "2026-03-12: 21.1s" [ref=e500]'
+              - 'generic "2026-03-15: 6.6s" [ref=e501]'
+              - 'generic "2026-03-16: 19.5s" [ref=e502]'
+              - 'generic "2026-03-17: 69.1s" [ref=e503]'
+              - 'generic "2026-03-18: 27.5s" [ref=e504]'
+              - 'generic "2026-03-19: 92.1s" [ref=e505]'
+              - 'generic "2026-03-30: 33.2s" [ref=e506]'
+              - generic [ref=e507]: 03-11
+              - generic [ref=e508]: 03-12
+              - generic [ref=e509]: 03-15
+              - generic [ref=e510]: 03-16
+              - generic [ref=e511]: 03-17
+              - generic [ref=e512]: 03-18
+              - generic [ref=e513]: 03-19
+              - generic [ref=e514]: 03-30
+  - alert [ref=e119]

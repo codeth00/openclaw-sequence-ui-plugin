@@ -913,6 +913,155 @@
       user-select: text;
     }
 
+    .detail-lead {
+      display: grid;
+      gap: 8px;
+      padding: 14px 15px;
+      border-radius: 18px;
+      border: 1px solid var(--panel-border);
+      background: linear-gradient(180deg, rgba(118, 183, 255, 0.1), rgba(118, 183, 255, 0.04));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    html[data-theme="light"] .detail-lead {
+      background: linear-gradient(180deg, rgba(118, 183, 255, 0.12), rgba(118, 183, 255, 0.06));
+    }
+
+    .detail-lead__label,
+    .detail-section__label {
+      font-size: 11px;
+      line-height: 1.2;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      font-weight: 700;
+    }
+
+    .detail-lead__text {
+      font-size: 13px;
+      line-height: 1.72;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .detail-section {
+      display: grid;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .detail-rendered {
+      display: grid;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .detail-rendered--process {
+      gap: 12px;
+    }
+
+    .detail-process-pane,
+    .detail-thinking-pane {
+      display: grid;
+      gap: 12px;
+      min-width: 0;
+      padding: 14px 15px;
+      border-radius: 18px;
+      border: 1px solid var(--panel-border);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .detail-process-pane {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.015));
+    }
+
+    .detail-thinking-pane {
+      background: linear-gradient(180deg, rgba(255, 154, 193, 0.12), rgba(255, 154, 193, 0.045));
+      border-color: rgba(255, 154, 193, 0.24);
+    }
+
+    html[data-theme="light"] .detail-process-pane {
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.9), rgba(242, 247, 252, 0.95));
+    }
+
+    html[data-theme="light"] .detail-thinking-pane {
+      background: linear-gradient(180deg, rgba(255, 154, 193, 0.15), rgba(255, 154, 193, 0.06));
+    }
+
+    .detail-pane-head {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .detail-pane-badge {
+      --pane-accent: rgba(149, 227, 240, 0.26);
+      --pane-accent-bg: rgba(255, 255, 255, 0.05);
+      --pane-accent-text: var(--text-soft);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 24px;
+      padding: 0 10px;
+      border-radius: 999px;
+      border: 1px solid var(--pane-accent);
+      background: var(--pane-accent-bg);
+      color: var(--pane-accent-text);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      flex: 0 0 auto;
+    }
+
+    .detail-pane-badge--thinking {
+      border-color: rgba(255, 154, 193, 0.32);
+      background: rgba(255, 154, 193, 0.13);
+      color: #ffd5e2;
+    }
+
+    html[data-theme="light"] .detail-pane-badge {
+      background: rgba(255, 255, 255, 0.88);
+    }
+
+    html[data-theme="light"] .detail-pane-badge--thinking {
+      color: #c34777;
+    }
+
+    .detail-pane-note {
+      min-width: 0;
+      font-size: 12px;
+      line-height: 1.5;
+      color: var(--text-muted);
+      word-break: break-word;
+    }
+
+    .detail-plain-block {
+      margin: 0;
+      padding: 14px 15px;
+      border-radius: 16px;
+      border: 1px solid var(--panel-border);
+      background: rgba(7, 18, 29, 0.52);
+      overflow: auto;
+      max-height: 460px;
+      white-space: pre-wrap;
+      word-break: break-word;
+      font-family: ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.68;
+      color: var(--text);
+    }
+
+    html[data-theme="light"] .detail-plain-block {
+      background: rgba(240, 246, 252, 0.92);
+    }
+
+    .detail-rendered > * {
+      margin: 0;
+    }
+
     .detail-body > * {
       margin: 0;
     }
@@ -1000,8 +1149,9 @@
       border: 1px solid var(--panel-border);
       background: rgba(7, 18, 29, 0.58);
       overflow: auto;
-      white-space: pre-wrap;
-      word-break: break-word;
+      max-height: 420px;
+      white-space: pre;
+      word-break: normal;
     }
 
     html[data-theme="light"] .detail-body pre {
@@ -1014,6 +1164,91 @@
       border-radius: 0;
       background: transparent;
       color: inherit;
+    }
+
+    .detail-json-collapse {
+      border: 1px solid var(--panel-border);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.03);
+      overflow: hidden;
+    }
+
+    html[data-theme="light"] .detail-json-collapse {
+      background: rgba(255, 255, 255, 0.82);
+    }
+
+    .detail-json-summary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      list-style: none;
+      user-select: none;
+      color: var(--text-soft);
+      transition: background 150ms ease, color 150ms ease;
+    }
+
+    .detail-json-summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .detail-json-summary::before {
+      content: "▸";
+      font-size: 10px;
+      color: var(--text-muted);
+      transition: transform 150ms ease;
+      flex: 0 0 auto;
+    }
+
+    .detail-json-collapse[open] .detail-json-summary::before {
+      transform: rotate(90deg);
+    }
+
+    .detail-json-summary:hover {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text);
+    }
+
+    html[data-theme="light"] .detail-json-summary:hover {
+      background: rgba(93, 142, 178, 0.06);
+    }
+
+    .detail-json-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 22px;
+      padding: 0 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(120, 183, 255, 0.34);
+      background: rgba(118, 183, 255, 0.12);
+      color: var(--user);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      flex: 0 0 auto;
+    }
+
+    .detail-json-label {
+      min-width: 0;
+      font-size: 12.5px;
+      line-height: 1.5;
+      color: inherit;
+      word-break: break-word;
+    }
+
+    .detail-json-content {
+      margin: 0;
+      padding: 0 14px 14px;
+    }
+
+    .detail-json-content pre {
+      margin: 0;
+      max-height: 460px;
+      white-space: pre;
+      word-break: normal;
     }
 
     .detail-panel.is-empty .detail-tags,
@@ -1562,6 +1797,9 @@
       const NS = "http://www.w3.org/2000/svg";
       const THEME_STORAGE_KEY = "openclaw-sequence-theme";
       const SIDEBAR_STORAGE_KEY = "openclaw-sequence-sidebar-collapsed";
+      const COLLAPSED_PREVIEW_MAX_LINES = 2;
+      const COLLAPSED_PREVIEW_MAX_CHARS = 108;
+      const DETAIL_LEAD_MAX_CHARS = 220;
 
       const appShell = document.getElementById("app-shell");
       const themeToggleBtn = document.getElementById("toggle-theme");
@@ -1965,6 +2203,27 @@
                   ? (typeof meta.module === "string" && meta.module.trim() ? meta.module.trim() : "process")
                   : "user_message";
         const stage = typeof meta.stage === "string" ? meta.stage.trim() : "";
+        const rawMetrics = meta.metrics && typeof meta.metrics === "object" ? meta.metrics : null;
+        const metrics = rawMetrics
+          ? {
+              sourceMessageId:
+                typeof rawMetrics.sourceMessageId === "string" ? rawMetrics.sourceMessageId.trim() : "",
+              model:
+                typeof rawMetrics.model === "string" && rawMetrics.model.trim()
+                  ? rawMetrics.model.trim()
+                  : "",
+              input: normalizeMetricNumber(rawMetrics.input),
+              output: normalizeMetricNumber(rawMetrics.output),
+              cacheRead: normalizeMetricNumber(rawMetrics.cacheRead),
+              cacheWrite: normalizeMetricNumber(rawMetrics.cacheWrite),
+              totalTokens: normalizeMetricNumber(rawMetrics.totalTokens),
+              contextWindow: normalizeMetricNumber(rawMetrics.contextWindow),
+              contextPercent:
+                rawMetrics.contextPercent === null || rawMetrics.contextPercent === undefined
+                  ? null
+                  : normalizeMetricNumber(rawMetrics.contextPercent)
+            }
+          : null;
 
         return {
           id,
@@ -1981,8 +2240,74 @@
                 ? meta.sessionAgent.trim()
                 : "",
           mechanism,
-          stage
+          stage,
+          metrics
         };
+      }
+
+      function normalizeMetricNumber(value) {
+        const num = Number(value);
+        return Number.isFinite(num) && num >= 0 ? num : 0;
+      }
+
+      function formatMetricCompact(value) {
+        const num = Number(value) || 0;
+        if (num >= 1000000) return `${(num / 1000000).toFixed(1).replace(/\.0$/, "")}M`;
+        if (num >= 1000) return `${(num / 1000).toFixed(1).replace(/\.0$/, "")}k`;
+        return String(Math.round(num));
+      }
+
+      function shortModelLabel(model) {
+        const clean = typeof model === "string" ? model.trim() : "";
+        if (!clean) return "";
+        const leaf = clean.includes("/") ? clean.split("/").pop() : clean;
+        return leaf || clean;
+      }
+
+      function colorWithAlpha(color, alpha) {
+        const clean = String(color || "").trim();
+        if (!clean) return "";
+        const clampedAlpha = clamp(Number(alpha) || 0, 0, 1);
+        const hexMatch = /^#([0-9a-f]{6}|[0-9a-f]{3})$/i.exec(clean);
+        if (hexMatch) {
+          const hex = hexMatch[1].length === 3
+            ? hexMatch[1].split("").map((ch) => ch + ch).join("")
+            : hexMatch[1];
+          const r = parseInt(hex.slice(0, 2), 16);
+          const g = parseInt(hex.slice(2, 4), 16);
+          const b = parseInt(hex.slice(4, 6), 16);
+          return `rgba(${r}, ${g}, ${b}, ${clampedAlpha})`;
+        }
+        const rgbMatch = /^rgba?\(([^)]+)\)$/i.exec(clean);
+        if (rgbMatch) {
+          const parts = rgbMatch[1].split(",").map((part) => part.trim());
+          if (parts.length >= 3) {
+            return `rgba(${parts[0]}, ${parts[1]}, ${parts[2]}, ${clampedAlpha})`;
+          }
+        }
+        return clean;
+      }
+
+      function getEventMetricSourceId(evt) {
+        return evt && evt.metrics && typeof evt.metrics.sourceMessageId === "string"
+          ? evt.metrics.sourceMessageId.trim()
+          : "";
+      }
+
+      function hasMetricValue(value) {
+        return Number(value) > 0;
+      }
+
+      function hasEventUsageMetrics(evt) {
+        return Boolean(
+          evt &&
+          evt.metrics &&
+          (hasMetricValue(evt.metrics.input) ||
+            hasMetricValue(evt.metrics.output) ||
+            hasMetricValue(evt.metrics.cacheRead) ||
+            hasMetricValue(evt.metrics.cacheWrite) ||
+            hasMetricValue(evt.metrics.totalTokens))
+        );
       }
 
       function displayAgent(id) {
@@ -2242,6 +2567,48 @@
         return blocks.join("");
       }
 
+      function normalizePreviewText(text, maxChars = COLLAPSED_PREVIEW_MAX_CHARS) {
+        const clean = String(text ?? "")
+          .replace(/\r\n?/g, "\n")
+          .replace(/[ \t]+\n/g, "\n")
+          .replace(/\n{3,}/g, "\n\n")
+          .replace(/[ \t]{2,}/g, " ")
+          .trim();
+
+        if (!clean) return "(空消息)";
+        const collapsed = clean.replace(/\s+/g, " ").trim();
+        if (collapsed.length <= maxChars) return collapsed;
+        return `${collapsed.slice(0, Math.max(0, maxChars - 1)).trimEnd()}…`;
+      }
+
+      function detectJsonPayload(text) {
+        const trimmed = String(text ?? "").trim();
+        if (!trimmed || (!trimmed.startsWith("{") && !trimmed.startsWith("["))) return null;
+        try {
+          const parsed = JSON.parse(trimmed);
+          return {
+            parsed,
+            pretty: JSON.stringify(parsed, null, 2)
+          };
+        } catch {
+          return null;
+        }
+      }
+
+      function summarizeJsonValue(value) {
+        if (Array.isArray(value)) {
+          return `数组 · ${value.length} 项`;
+        }
+        if (value && typeof value === "object") {
+          return `对象 · ${Object.keys(value).length} 个键`;
+        }
+        if (typeof value === "string") return `字符串 · ${value.length} 字`;
+        if (typeof value === "number") return "数字";
+        if (typeof value === "boolean") return value ? "布尔值 · true" : "布尔值 · false";
+        if (value == null) return "null";
+        return typeof value;
+      }
+
       function measureTextWidth(text, font = BASE_TEXT_FONT) {
         const previousFont = measureCtx.font;
         if (font && previousFont !== font) measureCtx.font = font;
@@ -2273,6 +2640,26 @@
         });
 
         return agents.length ? agents : ["main"];
+      }
+
+      function buildMetricVisibilityMap(events) {
+        const visibility = new Map();
+        let previousSourceId = "";
+
+        events.forEach((evt) => {
+          const sourceId = getEventMetricSourceId(evt);
+          if (!sourceId) {
+            visibility.set(evt.id, true);
+            previousSourceId = "";
+            return;
+          }
+
+          const showFullMetrics = sourceId !== previousSourceId;
+          visibility.set(evt.id, showFullMetrics);
+          previousSourceId = sourceId;
+        });
+
+        return visibility;
       }
 
       function eventMatchesCurrentFilter(evt) {
@@ -2615,6 +3002,28 @@
         return "process";
       }
 
+      function mechanismAccentColor(evtOrMechanism) {
+        const raw =
+          typeof evtOrMechanism === "string"
+            ? evtOrMechanism
+            : evtOrMechanism && typeof evtOrMechanism.mechanism === "string"
+              ? evtOrMechanism.mechanism
+              : "";
+        const clean = String(raw || "").trim().toLowerCase();
+        if (!clean) return "";
+        if (clean === "sessions_spawn") return "#f3b862";
+        if (clean === "sessions_send") return "#57d3c0";
+        if (clean.includes("thinking") || clean === "process") return "#ff8eb8";
+        if (clean.includes("exec") || clean.includes("shell") || clean.includes("bash") || clean.includes("terminal")) return "#ffad66";
+        if (clean.includes("read")) return "#69a8ff";
+        if (clean.includes("write") || clean.includes("edit")) return "#57c89a";
+        if (clean.includes("grep") || clean.includes("search")) return "#d6bb5f";
+        if (clean.includes("fetch") || clean.includes("browser") || clean.includes("web")) return "#5fbfe2";
+        if (clean.includes("cron") || clean.includes("schedule")) return "#b38bff";
+        if (clean.includes("message")) return "#7bc7ff";
+        return "";
+      }
+
       function eventVisualIconName(evt) {
         if (!evt) return "";
         const text = String(evt.text || "");
@@ -2669,6 +3078,15 @@
         };
       }
 
+      function getEventBodyPreview(evt, maxChars = COLLAPSED_PREVIEW_MAX_CHARS) {
+        const displayParts = extractDisplayTitle(evt);
+        const jsonPayload = detectJsonPayload(displayParts.body);
+        if (jsonPayload) {
+          return `JSON · ${summarizeJsonValue(jsonPayload.parsed)}`;
+        }
+        return normalizePreviewText(displayParts.body, maxChars);
+      }
+
       function mechanismLabel(evt) {
         if (!evt || typeof evt.mechanism !== "string") return "";
         if (!evt.mechanism.startsWith("sessions_")) return "";
@@ -2698,6 +3116,84 @@
         return modeSpec(evt).titleLabel;
       }
 
+      function buildMetricChipDefs(evt, options = {}) {
+        if (!evt || !evt.metrics) return [];
+        const defs = [];
+        const metrics = evt.metrics;
+        const includeUsage = options.includeUsage !== false;
+        const includeSource = options.includeSource !== false;
+        const includeModel = options.includeModel !== false;
+
+        if (includeUsage) {
+          if (hasMetricValue(metrics.input)) defs.push({ text: `↑${formatMetricCompact(metrics.input)}` });
+          if (hasMetricValue(metrics.output)) defs.push({ text: `↓${formatMetricCompact(metrics.output)}` });
+          if (hasMetricValue(metrics.cacheRead)) defs.push({ text: `R${formatMetricCompact(metrics.cacheRead)}` });
+          if (hasMetricValue(metrics.cacheWrite)) defs.push({ text: `W${formatMetricCompact(metrics.cacheWrite)}` });
+          if (metrics.contextPercent !== null && metrics.contextPercent !== undefined) {
+            defs.push({
+              text: `${Math.round(metrics.contextPercent)}% ctx`,
+              accent:
+                metrics.contextPercent >= 90
+                  ? "#ff8f98"
+                  : metrics.contextPercent >= 75
+                    ? "#ffd17a"
+                    : ""
+            });
+          }
+        }
+
+        if (includeModel) {
+          const modelLabel = shortModelLabel(metrics.model);
+          if (modelLabel) defs.push({ text: modelLabel });
+        }
+
+        if (includeSource && metrics.sourceMessageId) {
+          defs.push({
+            text: fitText(metrics.sourceMessageId, 108),
+            icon: "thread",
+            title: metrics.sourceMessageId
+          });
+        }
+
+        return defs;
+      }
+
+      function buildCardMetaChips(evt, options = {}) {
+        const chips = [];
+        const showFullMetrics = options.showFullMetrics !== false;
+
+        chips.push({ text: formatTime(evt.ts), icon: "clock" });
+
+        if (showFullMetrics) {
+          chips.push({
+            text: modeName(evt),
+            icon: modeIconName(evt.mode),
+            accent: modeColor[evt.mode] || "",
+            title: modeSpec(evt).description
+          });
+        }
+
+        const mechanism = detailMechanismLabel(evt);
+        if (mechanism) {
+          chips.push({
+            text: fitText(mechanism, showFullMetrics ? 140 : 182),
+            icon: mechanismIconName(evt.mechanism),
+            accent: mechanismAccentColor(evt),
+            title: mechanism
+          });
+        }
+
+        buildMetricChipDefs(evt, {
+          includeUsage: showFullMetrics,
+          includeModel: showFullMetrics,
+          includeSource: false
+        }).forEach((chip) => {
+          chips.push(chip);
+        });
+
+        return chips;
+      }
+
       function buildDetailTags(evt) {
         const tags = [
           { text: formatDateTime(evt.ts), icon: "clock" },
@@ -2713,9 +3209,17 @@
         if (mechanism) {
           tags.push({
             text: mechanism,
-            icon: mechanismIconName(evt.mechanism)
+            icon: mechanismIconName(evt.mechanism),
+            accent: mechanismAccentColor(evt)
           });
         }
+
+        buildMetricChipDefs(evt, {
+          includeUsage: true,
+          includeSource: true
+        }).forEach((chip) => {
+          tags.push(chip);
+        });
 
         if (evt.sessionTag) {
           tags.push({
@@ -2737,6 +3241,7 @@
           tag.style.setProperty("--tag-accent", def.accent);
           tag.style.borderColor = def.accent;
           tag.style.color = def.accent;
+          tag.style.background = colorWithAlpha(def.accent, document.documentElement.dataset.theme === "light" ? 0.14 : 0.18);
         }
 
         if (def.icon) {
@@ -2789,7 +3294,7 @@
         buildDetailTags(selected).forEach((tagDef) => {
           detailTagsEl.appendChild(createDetailTag(tagDef));
         });
-        detailBodyEl.innerHTML = renderMarkdown(selected.text);
+        detailBodyEl.innerHTML = renderDetailBodyHtml(selected);
         detailCopyBtn.disabled = false;
         detailClearBtn.disabled = false;
         detailCopyBtn.dataset.copyText = selected.text;
@@ -2799,17 +3304,95 @@
         }
       }
 
+      function isThinkingProcessEvent(evt) {
+        return Boolean(evt && evt.mode === "internal" && internalModeLabel(evt) === "THINKING");
+      }
+
+      function shouldRenderPlainProcessBody(evt, body) {
+        if (!isProcessEvent(evt) || isThinkingProcessEvent(evt)) return false;
+        if (detectJsonPayload(body)) return false;
+        if (/^\s*```/.test(body)) return false;
+        return String(body || "").split(/\r?\n/).filter(Boolean).length >= 3;
+      }
+
+      function renderProcessSectionHtml(evt, body) {
+        const label = detailMechanismLabel(evt) || internalModeLabel(evt);
+        const thinking = isThinkingProcessEvent(evt);
+        const paneClass = thinking ? "detail-thinking-pane" : "detail-process-pane";
+        const badgeClass = thinking ? "detail-pane-badge detail-pane-badge--thinking" : "detail-pane-badge";
+        const accent = mechanismAccentColor(evt) || (thinking ? "#ff8eb8" : "");
+        const renderedBody = shouldRenderPlainProcessBody(evt, body)
+          ? `<pre class="detail-plain-block">${escapeHtml(body)}</pre>`
+          : `<div class="detail-rendered detail-rendered--process">${renderMarkdown(body)}</div>`;
+        const badgeStyle = accent
+          ? ` style="--pane-accent:${accent};--pane-accent-bg:${thinking ? colorWithAlpha(accent, 0.18) : colorWithAlpha(accent, document.documentElement.dataset.theme === "light" ? 0.14 : 0.18)};--pane-accent-text:${thinking ? "#ffd5e2" : accent};"`
+          : "";
+
+        return (
+          `<section class="detail-section">` +
+            `<div class="detail-section__label">${thinking ? "思考信息" : "过程正文"}</div>` +
+            `<div class="${paneClass}">` +
+              `<div class="detail-pane-head">` +
+                `<span class="${badgeClass}"${badgeStyle}>${escapeHtml(label || "PROCESS")}</span>` +
+                `<span class="detail-pane-note">${thinking ? "思考内容单独分层展示，避免和普通回复混排。" : "过程输出保留原有结构，长文本支持滚动查看。"}</span>` +
+              `</div>` +
+              `${renderedBody}` +
+            `</div>` +
+          `</section>`
+        );
+      }
+
+      function renderDetailBodyHtml(evt) {
+        const displayParts = extractDisplayTitle(evt);
+        const leadText = getEventBodyPreview(evt, DETAIL_LEAD_MAX_CHARS);
+        const jsonPayload = detectJsonPayload(displayParts.body);
+        const blocks = [];
+
+        if (leadText && leadText !== "(空消息)") {
+          blocks.push(
+            `<div class="detail-lead">` +
+              `<div class="detail-lead__label">${isProcessEvent(evt) ? "过程摘要" : "内容摘要"}</div>` +
+              `<div class="detail-lead__text">${escapeHtml(leadText)}</div>` +
+            `</div>`
+          );
+        }
+
+        if (jsonPayload) {
+          blocks.push(
+            `<section class="detail-section">` +
+              `<div class="detail-section__label">结构化内容</div>` +
+              `<details class="detail-json-collapse" open>` +
+                `<summary class="detail-json-summary">` +
+                  `<span class="detail-json-badge">JSON</span>` +
+                  `<span class="detail-json-label">${escapeHtml(summarizeJsonValue(jsonPayload.parsed))}</span>` +
+                `</summary>` +
+                `<div class="detail-json-content"><pre><code>${escapeHtml(jsonPayload.pretty)}</code></pre></div>` +
+              `</details>` +
+            `</section>`
+          );
+          return blocks.join("");
+        }
+
+        if (isProcessEvent(evt)) {
+          blocks.push(renderProcessSectionHtml(evt, displayParts.body));
+          return blocks.join("");
+        }
+
+        blocks.push(
+          `<section class="detail-section">` +
+            `<div class="detail-section__label">正文</div>` +
+            `<div class="detail-rendered">${renderMarkdown(displayParts.body)}</div>` +
+          `</section>`
+        );
+
+        return blocks.join("");
+      }
+
       function buildMetaChipLayout(evt, maxWidth) {
         const chipMaxWidth = Math.max(96, Math.min(220, Math.floor(maxWidth * 0.82)));
-        const chips = [
-          { text: formatTime(evt.ts), icon: "clock" },
-          {
-            text: modeName(evt),
-            icon: modeIconName(evt.mode),
-            accent: modeColor[evt.mode] || "",
-            title: modeSpec(evt).description
-          }
-        ].map((chip) => {
+        const chips = buildCardMetaChips(evt, {
+          showFullMetrics: evt.showFullMetrics !== false
+        }).map((chip) => {
           const iconWidth = chip.icon ? 18 : 0;
           const fittedText = fitText(chip.text, chipMaxWidth - 22 - iconWidth);
           return {
@@ -2846,7 +3429,11 @@
 
       function buildEventMetrics(evt, y, labelMaxW, totalLines) {
         const collapsed = isEventCollapsed(evt);
-        const metaText = `${formatTime(evt.ts)} · ${modeName(evt)} · ${displayAgent(evt.from)} → ${displayAgent(evt.to)}`;
+        const mechanism = detailMechanismLabel(evt);
+        const metaParts = [formatTime(evt.ts)];
+        if (evt.showFullMetrics !== false) metaParts.push(modeName(evt));
+        if (mechanism) metaParts.push(mechanism);
+        const metaText = metaParts.join(" · ");
         const toggleText = collapsed ? "展开" : "收起";
         const toggleW = clamp(Math.ceil(measureTextWidth(toggleText) + 26), 58, 74);
         const visualIconName = eventVisualIconName(evt);
@@ -2854,16 +3441,23 @@
         if (collapsed) {
           const compactTitle = fitText(detailTitleText(evt) || modeName(evt), labelMaxW - 118);
           const compactTime = formatTime(evt.ts);
+          const compactMetaText = fitText(mechanism || modeName(evt), Math.max(72, labelMaxW - 36));
           const titleW = measureTextWidth(compactTitle);
           const timeW = measureTextWidth(compactTime);
+          const metaW = measureTextWidth(compactMetaText);
           const iconW = visualIconName ? 16 : 0;
-          const boxW = clamp(Math.ceil(iconW + titleW + timeW + toggleW + 48), 154, Math.min(labelMaxW, 320));
-          const boxH = 36;
+          const boxW = clamp(
+            Math.ceil(Math.max(iconW + titleW + toggleW + 56, timeW + 34, metaW + 28)),
+            172,
+            Math.min(labelMaxW, 340)
+          );
+          const boxH = 58;
           return {
             evt,
             collapsed: true,
             compactTitle,
             compactTime,
+            compactMetaText,
             bodyIconName: visualIconName,
             toggleText,
             toggleW,
@@ -2882,8 +3476,11 @@
         const bodyIconName = displayParts.title ? "" : eventVisualIconName(evt);
         const bodyIconWidth = bodyIconName ? 18 : 0;
         const gapAfterMeta = displayParts.title ? 12 : 14;
-        const shortBody =
-          displayParts.body.length > 320 ? `${displayParts.body.slice(0, 317)}...` : displayParts.body;
+        const jsonPayload = detectJsonPayload(displayParts.body);
+        const titleAccent = mechanismAccentColor(evt) || modeColor[evt.mode] || "";
+        const shortBody = jsonPayload
+          ? `JSON · ${summarizeJsonValue(jsonPayload.parsed)}`
+          : normalizePreviewText(displayParts.body, 320);
         const bodyLines = wrapText(shortBody, labelMaxW - 18 - bodyIconWidth, Math.max(2, totalLines - (displayParts.title ? 1 : 0)));
         const titleText = displayParts.title ? fitText(displayParts.title, labelMaxW - 26 - (titleIconName ? 18 : 0)) : "";
         const titleW = titleText ? clamp(Math.ceil(measureTextWidth(titleText) + 18 + (titleIconName ? 18 : 0)), 74, labelMaxW - 18) : 0;
@@ -2891,7 +3488,7 @@
         const titleBlockH = titleText ? 34 : 0;
         const toggleBlockH = 22;
         const toggleGap = 10;
-        const textH = 10 + metaChipLayout.height + gapAfterMeta + titleBlockH + bodyBlockH + toggleGap + toggleBlockH + 12;
+        const textH = 12 + metaChipLayout.height + gapAfterMeta + titleBlockH + bodyBlockH + toggleGap + toggleBlockH + 14;
         const arrowY = y + textH + 9;
         const rowH = textH + 24;
         const measuredLineW = Math.max(
@@ -2906,6 +3503,7 @@
           collapsed,
           metaChipLayout,
           titleText,
+          titleAccent,
           titleIconName,
           titleW,
           bodyIconName,
@@ -3050,6 +3648,7 @@
 
       function computeLayout(visible, options = {}) {
         const agents = buildAgentList(visible);
+        const metricVisibility = buildMetricVisibilityMap(visible);
         const viewportW = Math.max(760, options.viewportWidth || diagramScroll.clientWidth || 1020);
         const viewportH = Math.max(460, options.viewportHeight || diagramScroll.clientHeight || 560);
         const headerLabelMaxW = 172;
@@ -3126,7 +3725,12 @@
               const gapY = 8;
               let gy = y + 26;
               const items = group.map((entry) => {
-                const metrics = buildEventMetrics(entry, gy, labelMaxW, 5);
+                const metrics = buildEventMetrics(
+                  { ...entry, showFullMetrics: metricVisibility.get(entry.id) !== false },
+                  gy,
+                  labelMaxW,
+                  5
+                );
                 gy += metrics.h + gapY;
                 return metrics;
               });
@@ -3144,7 +3748,12 @@
             }
           }
 
-          const metrics = buildEventMetrics(evt, y, labelMaxW, 6);
+          const metrics = buildEventMetrics(
+            { ...evt, showFullMetrics: metricVisibility.get(evt.id) !== false },
+            y,
+            labelMaxW,
+            6
+          );
           rows.push({
             type: "event",
             ...metrics
@@ -3410,7 +4019,16 @@
           labelBox.setAttribute("stroke-width", isSelected ? "1.4" : "1");
           labelBox.style.cursor = "pointer";
 
-          const fullMeta = `${formatDateTime(evt.ts)} · ${modeName(evt)} · ${displayAgent(evt.from)} → ${displayAgent(evt.to)} · 点击查看完整正文`;
+          const metricSummary = buildMetricChipDefs(evt, {
+            includeUsage: true,
+            includeSource: false
+          }).map((chip) => chip.text).join(" · ");
+          const fullMeta = [
+            formatDateTime(evt.ts),
+            modeName(evt),
+            `${displayAgent(evt.from)} → ${displayAgent(evt.to)}`,
+            metricSummary
+          ].filter(Boolean).join(" · ");
           if (includeDataAttrs) {
             labelBox.setAttribute("data-hover-meta", fullMeta);
             labelBox.setAttribute("data-hover-body", evt.text);
@@ -3452,35 +4070,48 @@
               item.compactTitle,
               Math.max(48, item.boxW - item.toggleW - (item.bodyIconName ? 78 : 62))
             );
+            const compactMetaText = fitText(item.compactMetaText || "", Math.max(52, item.boxW - 28));
 
             if (item.bodyIconName) {
               appendSvgIcon(targetSvg, item.bodyIconName, {
                 x: compactIconX,
-                y: item.y + 12,
+                y: item.y + 23,
                 size: 12,
                 color,
                 strokeWidth: 1.85
               });
             }
 
+            const compactTime = document.createElementNS(NS, "text");
+            compactTime.setAttribute("x", String(boxX + 12));
+            compactTime.setAttribute("y", String(item.y + 16));
+            compactTime.setAttribute("fill", palette.chipText);
+            compactTime.setAttribute("font-size", "10.5");
+            compactTime.setAttribute("pointer-events", "none");
+            compactTime.textContent = item.compactTime;
+            targetSvg.appendChild(compactTime);
+
+            if (compactMetaText) {
+              const compactMeta = document.createElementNS(NS, "text");
+              compactMeta.setAttribute("x", String(boxX + 12));
+              compactMeta.setAttribute("y", String(item.y + 29));
+              compactMeta.setAttribute("fill", palette.chipText);
+              compactMeta.setAttribute("font-size", "10.5");
+              compactMeta.setAttribute("font-weight", "600");
+              compactMeta.setAttribute("pointer-events", "none");
+              compactMeta.textContent = compactMetaText;
+              targetSvg.appendChild(compactMeta);
+            }
+
             const compactTitle = document.createElementNS(NS, "text");
             compactTitle.setAttribute("x", String(compactTitleX));
-            compactTitle.setAttribute("y", String(item.y + 20));
+            compactTitle.setAttribute("y", String(item.y + 43));
             compactTitle.setAttribute("fill", palette.bodyText);
             compactTitle.setAttribute("font-size", "12");
             compactTitle.setAttribute("font-weight", "700");
             compactTitle.setAttribute("pointer-events", "none");
             compactTitle.textContent = compactTitleText;
             targetSvg.appendChild(compactTitle);
-
-            const compactTime = document.createElementNS(NS, "text");
-            compactTime.setAttribute("x", String(compactTitleX));
-            compactTime.setAttribute("y", String(item.y + 31));
-            compactTime.setAttribute("fill", palette.chipText);
-            compactTime.setAttribute("font-size", "10.5");
-            compactTime.setAttribute("pointer-events", "none");
-            compactTime.textContent = item.compactTime;
-            targetSvg.appendChild(compactTime);
 
             const toggleX = boxX + item.boxW - item.toggleW - 10;
             const toggleY = item.y + 7;
@@ -3581,7 +4212,10 @@
               chipRect.setAttribute("width", String(chip.width));
               chipRect.setAttribute("height", "22");
               chipRect.setAttribute("rx", "11");
-              chipRect.setAttribute("fill", palette.chipFill);
+              chipRect.setAttribute(
+                "fill",
+                chip.accent ? colorWithAlpha(chip.accent, document.documentElement.dataset.theme === "light" ? 0.14 : 0.18) : palette.chipFill
+              );
               chipRect.setAttribute("stroke", chip.accent || palette.chipStroke);
               chipRect.setAttribute("stroke-width", chip.accent ? "1.2" : "1");
               chipRect.setAttribute("pointer-events", "none");
@@ -3617,8 +4251,13 @@
             titleBox.setAttribute("width", String(item.titleW));
             titleBox.setAttribute("height", "20");
             titleBox.setAttribute("rx", "10");
-            titleBox.setAttribute("fill", palette.titleFill);
-            titleBox.setAttribute("stroke", color);
+            titleBox.setAttribute(
+              "fill",
+              item.titleAccent
+                ? colorWithAlpha(item.titleAccent, document.documentElement.dataset.theme === "light" ? 0.14 : 0.18)
+                : palette.titleFill
+            );
+            titleBox.setAttribute("stroke", item.titleAccent || color);
             titleBox.setAttribute("stroke-width", "1.2");
             titleBox.setAttribute("pointer-events", "none");
             targetSvg.appendChild(titleBox);
@@ -3630,7 +4269,7 @@
                 x: titleStartX,
                 y: textY + 3,
                 size: 12,
-                color,
+                color: item.titleAccent || color,
                 strokeWidth: 1.9
               });
             }
@@ -3638,7 +4277,7 @@
             titleText.setAttribute("x", String(titleStartX + (item.titleIconName ? 16 : 0)));
             titleText.setAttribute("y", String(textY + 13));
             titleText.setAttribute("text-anchor", "start");
-            titleText.setAttribute("fill", color);
+            titleText.setAttribute("fill", item.titleAccent || color);
             titleText.setAttribute("font-size", "11");
             titleText.setAttribute("font-weight", "700");
             titleText.setAttribute("pointer-events", "none");

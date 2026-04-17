@@ -18,6 +18,7 @@ const OPENCLAW_HOME =
   process.env.OPENCLAW_HOME || path.join(os.homedir(), ".openclaw");
 const AGENTS_DIR =
   process.env.OPENCLAW_AGENTS_DIR || path.join(OPENCLAW_HOME, "agents");
+const OPENCLAW_CONFIG_FILE = path.join(OPENCLAW_HOME, "openclaw.json");
 
 const HISTORY_LIMIT = 2400;
 const HISTORY_BOOTSTRAP_LIMIT = 1200;
@@ -48,6 +49,22 @@ const trackedFiles = new Map();
 const sessionIdToAgent = new Map();
 let polling = false;
 
+function readDefaultContextWindow() {
+  try {
+    const source = fs.readFileSync(OPENCLAW_CONFIG_FILE, "utf8");
+    const match =
+      /["']?contextWindow["']?\s*:\s*(\d+)/.exec(source) ||
+      /["']?contextTokens["']?\s*:\s*(\d+)/.exec(source);
+    if (!match) return null;
+    const value = Number(match[1]);
+    return Number.isFinite(value) && value > 0 ? value : null;
+  } catch {
+    return null;
+  }
+}
+
+const DEFAULT_CONTEXT_WINDOW = readDefaultContextWindow();
+
 function asEpochMs(value) {
   if (typeof value === "number" && Number.isFinite(value)) return value;
   if (typeof value === "string") {
@@ -55,6 +72,11 @@ function asEpochMs(value) {
     if (Number.isFinite(parsed)) return parsed;
   }
   return Date.now();
+}
+
+function asOptionalMetric(value) {
+  const num = Number(value);
+  return Number.isFinite(num) && num >= 0 ? num : null;
 }
 
 function clamp(value, min, max) {
@@ -178,6 +200,72 @@ function summarizePromptTitle(text) {
     clean;
 
   return truncateText(candidate, 84) || "用户发起执行";
+}
+
+function resolveContextWindow(entry, msg) {
+  const candidates = [
+    msg && msg.contextWindow,
+    msg && msg.contextTokens,
+    entry && entry.contextWindow,
+    entry && entry.contextTokens,
+    entry && entry.session && entry.session.contextWindow,
+    entry && entry.session && entry.session.contextTokens,
+    msg && msg.session && msg.session.contextWindow,
+    msg && msg.session && msg.session.contextTokens,
+    DEFAULT_CONTEXT_WINDOW
+  ];
+
+  for (const candidate of candidates) {
+    const value = asOptionalMetric(candidate);
+    if (value && value > 0) return value;
+  }
+
+  return null;
+}
+
+function extractMessageMetrics(entry, msg) {
+  if (!entry || !msg || msg.role !== "assistant") return null;
+
+  const usage = msg.usage && typeof msg.usage === "object" ? msg.usage : {};
+  const input = asOptionalMetric(usage.input ?? usage.inputTokens) || 0;
+  const output = asOptionalMetric(usage.output ?? usage.outputTokens) || 0;
+  const cacheRead =
+    asOptionalMetric(usage.cacheRead ?? usage.cache_read_input_tokens) || 0;
+  const cacheWrite =
+    asOptionalMetric(usage.cacheWrite ?? usage.cache_creation_input_tokens) || 0;
+  const totalTokens =
+    asOptionalMetric(usage.totalTokens ?? usage.total_tokens) ||
+    input + output + cacheRead + cacheWrite ||
+    0;
+  const contextWindow = resolveContextWindow(entry, msg);
+  const contextPercent =
+    contextWindow && input > 0
+      ? clamp(Math.round((input / contextWindow) * 100), 0, 100)
+      : null;
+  const model =
+    typeof msg.model === "string" && msg.model.trim() && msg.model !== "gateway-injected"
+      ? msg.model.trim()
+      : null;
+
+  return {
+    sourceMessageId: String(entry.id || ""),
+    model,
+    input,
+    output,
+    cacheRead,
+    cacheWrite,
+    totalTokens,
+    contextWindow,
+    contextPercent
+  };
+}
+
+function withMetrics(meta, metrics) {
+  if (!metrics) return meta || {};
+  return {
+    ...(meta || {}),
+    metrics: { ...metrics }
+  };
 }
 
 function parseSessionIdFromText(text) {
@@ -1027,6 +1115,7 @@ function parseEventsFromMessage(entry, currentAgent, fileKey) {
   const root = `${fileKey}:${entry.id || asEpochMs(entry.timestamp || msg.timestamp)}`;
   const ts = asEpochMs(entry.timestamp || msg.timestamp);
   const role = msg.role;
+  const messageMetrics = extractMessageMetrics(entry, msg);
   const events = [];
 
   if (role === "assistant" && Array.isArray(msg.content)) {
@@ -1043,7 +1132,10 @@ function parseEventsFromMessage(entry, currentAgent, fileKey) {
             from: currentAgent,
             to: currentAgent,
             text: `【思考模块】\n${part.thinking.trim()}`,
-            meta: { stage: "thinking", internal: true, module: "思考模块" }
+            meta: withMetrics(
+              { stage: "thinking", internal: true, module: "思考模块" },
+              messageMetrics
+            )
           })
         );
         continue;
@@ -1062,13 +1154,16 @@ function parseEventsFromMessage(entry, currentAgent, fileKey) {
             from: currentAgent,
             to: currentAgent,
             text: `【${name || "未知"}工具】\n调用: ${summarizeToolArgs(args)}`,
-            meta: {
-              stage: "call",
-              tool: name || "unknown",
-              internal: true,
-              module: `${name || "未知"}工具`,
-              status: "call"
-            }
+            meta: withMetrics(
+              {
+                stage: "call",
+                tool: name || "unknown",
+                internal: true,
+                module: `${name || "未知"}工具`,
+                status: "call"
+              },
+              messageMetrics
+            )
           })
         );
       }
@@ -1088,13 +1183,16 @@ function parseEventsFromMessage(entry, currentAgent, fileKey) {
             from: currentAgent,
             to: target,
             text: task ? `派发任务: ${task}` : "派发子任务",
-            meta: {
-              stage: "call",
-              tool: "sessions_spawn",
-              status: "call",
-              childSessionKey: args.childSessionKey || "",
-              relatedSessionRef
-            }
+            meta: withMetrics(
+              {
+                stage: "call",
+                tool: "sessions_spawn",
+                status: "call",
+                childSessionKey: args.childSessionKey || "",
+                relatedSessionRef
+              },
+              messageMetrics
+            )
           })
         );
       }
@@ -1112,13 +1210,16 @@ function parseEventsFromMessage(entry, currentAgent, fileKey) {
             from: currentAgent,
             to: target,
             text: body || "A2A 消息",
-            meta: {
-              stage: "call",
-              tool: "sessions_send",
-              status: "call",
-              sessionKey: args.sessionKey || "",
-              relatedSessionRef
-            }
+            meta: withMetrics(
+              {
+                stage: "call",
+                tool: "sessions_send",
+                status: "call",
+                sessionKey: args.sessionKey || "",
+                relatedSessionRef
+              },
+              messageMetrics
+            )
           })
         );
       }
@@ -1136,7 +1237,10 @@ function parseEventsFromMessage(entry, currentAgent, fileKey) {
             from: "main",
             to: "user",
             text,
-            meta: { stage: "reply", channel: "main-webchat", status: "reply" }
+            meta: withMetrics(
+              { stage: "reply", channel: "main-webchat", status: "reply" },
+              messageMetrics
+            )
           })
         );
       }

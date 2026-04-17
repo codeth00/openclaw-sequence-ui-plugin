@@ -10,7 +10,7 @@ The dashboard currently provides two read-only views:
 
 ![OpenClaw Sequence Dashboard](docs/images/sequence-dashboard.png)
 
-## Highlights
+## Highlights 
 
 - Reads historical data from `agents/*/sessions/*.jsonl` and updates in real time
 - Automatically groups events into executions and generates overview summaries
